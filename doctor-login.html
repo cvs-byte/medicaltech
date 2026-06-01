@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Login | Medicares</title>
+  <meta name="description" content="Doctor login portal for Medicares." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="navbar">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>Medicares</a>
+      <div class="nav-actions">
+        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="button button--ghost hide-mobile" href="login.html">Patient Login</a>
+        <a class="button button--primary hide-mobile" href="register.html">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-page">
+    <div class="auth-shell">
+      <section class="auth-visual" data-animate>
+        <span class="eyebrow" style="background:rgba(255,255,255,0.14);color:#fff;border-color:rgba(255,255,255,0.16);">Doctor Access</span>
+        <h1>Clinical workspace for providers</h1>
+        <p>Securely view patient appointments, accept or reject requests, and manage schedules through the doctor portal.</p>
+        <ul class="feature-list">
+          <li>Patient appointment visibility</li>
+          <li>Medicine plan access</li>
+          <li>Unified JWT login route</li>
+        </ul>
+        <div class="auth-visual-art">
+          <svg viewBox="0 0 560 360" role="img" aria-label="Doctor login illustration">
+            <rect width="560" height="360" rx="28" fill="rgba(255,255,255,0.12)" />
+            <rect x="40" y="46" width="480" height="74" rx="22" fill="rgba(255,255,255,0.14)" />
+            <rect x="40" y="138" width="240" height="176" rx="22" fill="rgba(255,255,255,0.18)" />
+            <rect x="300" y="138" width="220" height="176" rx="22" fill="rgba(255,255,255,0.10)" />
+            <path d="M72 82h110M72 102h82" stroke="#fff" stroke-width="12" stroke-linecap="round" />
+            <circle cx="160" cy="224" r="44" fill="rgba(255,255,255,0.26)" />
+            <path d="M140 224h40M160 204v40" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+            <path d="M326 186h140M326 220h126M326 254h108" stroke="rgba(255,255,255,0.7)" stroke-width="12" stroke-linecap="round" />
+          </svg>
+        </div>
+      </section>
+      <section class="auth-card card" data-animate>
+        <h2>Doctor login</h2>
+        <p class="subtext">Use your doctor credentials to access the clinical dashboard.</p>
+        <form id="doctorLoginForm" class="auth-form">
+          <div class="field-group"><label for="doctorEmail">Email</label><input class="input" id="doctorEmail" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field-group"><label for="doctorPassword">Password</label><div class="input-wrap"><input class="input" id="doctorPassword" name="password" type="password" autocomplete="current-password" required /><button class="password-toggle" type="button" data-toggle-password="#doctorPassword">Show</button></div></div>
+          <div class="remember-row"><label style="display:flex;align-items:center;gap:0.5rem;"><input type="checkbox" name="rememberMe" /> Remember me</label><a href="#" data-forgot-password>Forgot password?</a></div>
+          <button class="button button--primary" type="submit">Access dashboard</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

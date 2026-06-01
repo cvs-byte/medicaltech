@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Collaboration | Medicares</title>
+  <meta name="description" content="Hospital onboarding and partnership page for Medicares." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="navbar">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>Medicares</a>
+      <nav class="nav-links" data-nav-menu>
+        <a href="index.html#services">Platform</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-button mobile-toggle" data-mobile-menu aria-label="Open navigation" aria-expanded="false">☰</button>
+        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="button button--primary hide-mobile" href="#partnerForm">Partner with us</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Hospital Collaboration</span>
+          <h1 class="section-title">Onboard your hospital network</h1>
+        </div>
+        <p class="section-subtitle">A polished partnership experience for healthcare systems that want unified scheduling and appointment visibility.</p>
+      </div>
+
+      <section class="grid grid-2">
+        <article class="glass-panel" style="padding:1.25rem;">
+          <h2 class="section-title" style="font-size:1.6rem;">Partner benefits</h2>
+          <div class="grid" style="margin-top:1rem;">
+            <div class="feature-card"><h3>Dedicated schedule control</h3><p>Manage hospital-wide availability and booking windows.</p></div>
+            <div class="feature-card"><h3>Notification routing</h3><p>Deliver appointment and reminder alerts through AWS-backed services.</p></div>
+            <div class="feature-card"><h3>Operational analytics</h3><p>Track utilization, revenue, and appointment conversions in real time.</p></div>
+          </div>
+        </article>
+        <article class="glass-panel" style="padding:1.25rem;">
+          <h2 class="section-title" style="font-size:1.6rem;">Analytics preview</h2>
+          <p class="muted">A platform snapshot for executives and operations teams.</p>
+          <div class="grid grid-2" style="margin-top:1rem;">
+            <div class="counter-card"><strong data-counter="84">0</strong><span>capacity utilization</span></div>
+            <div class="counter-card"><strong data-counter="18">0</strong><span>partner departments</span></div>
+          </div>
+          <div class="chart-placeholder" style="margin-top:1rem;">Hospital performance charts</div>
+        </article>
+      </section>
+
+      <section class="grid grid-2" style="margin-top:1rem;">
+        <form id="partnerForm" class="card stack" data-demo-form data-success-title="Partnership request received" data-success-message="Our hospital onboarding team will contact you shortly.">
+          <h2 style="margin:0;">Hospital registration</h2>
+          <div class="auth-row">
+            <div class="field-group"><label for="hospitalName">Hospital name</label><input class="input" id="hospitalName" name="hospitalName" required /></div>
+            <div class="field-group"><label for="contactEmail">Contact email</label><input class="input" id="contactEmail" name="contactEmail" type="email" required /></div>
+          </div>
+          <div class="auth-row">
+            <div class="field-group"><label for="contactPerson">Contact person</label><input class="input" id="contactPerson" name="contactPerson" required /></div>
+            <div class="field-group"><label for="departmentCount">Departments</label><input class="input" id="departmentCount" name="departmentCount" type="number" min="1" required /></div>
+          </div>
+          <div class="field-group"><label for="details">Partnership goals</label><textarea class="textarea" id="details" name="details" required></textarea></div>
+          <button class="button button--primary" type="submit">Send partnership request</button>
+        </form>
+        <article class="glass-panel" style="padding:1.25rem;">
+          <span class="eyebrow">Healthcare Network</span>
+          <h2 class="section-title" style="font-size:1.6rem;">Built for large-scale coordination</h2>
+          <p class="muted">Hospitals can collaborate with doctors, patient services, and reminder workflows from one secure platform.</p>
+          <div class="stack" style="margin-top:1rem;">
+            <div class="badge badge--info">Schedule orchestration</div>
+            <div class="badge badge--success">Patient engagement</div>
+            <div class="badge badge--warning">Executive reporting</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid grid-2" style="margin-top:1rem;">
+        <article class="glass-panel" style="padding:1.25rem;">
+          <h2 class="section-title" style="font-size:1.6rem;">Contact sales</h2>
+          <p class="muted">Request a demo and get a tailored onboarding plan for your hospital network.</p>
+          <div class="flex" style="margin-top:1rem;flex-wrap:wrap;">
+            <a class="button button--primary" href="#partnerForm">Book a demo</a>
+            <a class="button button--ghost" href="index.html#contact">Email us</a>
+          </div>
+        </article>
+        <article class="glass-panel" style="padding:1.25rem;">
+          <h2 class="section-title" style="font-size:1.6rem;">Deployment ready</h2>
+          <p class="muted">Optimized for CloudFront delivery, S3 hosting, and AWS API Gateway backend connections.</p>
+          <div class="stack" style="margin-top:1rem;">
+            <div class="timeline-item"><div class="timeline-dot"></div><div><h3>Secure onboarding</h3><p>JWT and role-based access for internal teams.</p></div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div><h3>Scalable APIs</h3><p>Lambda-driven workflows and DynamoDB persistence.</p></div></div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

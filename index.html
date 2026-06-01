@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicares | Smart Healthcare Appointment & Reminder Platform</title>
+  <meta name="description" content="Medicares is a premium healthcare SaaS for patient appointments, medicine reminders, and hospital collaboration with secure JWT-based access." />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="navbar">
+      <a class="brand" href="index.html" aria-label="Medicares home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </span>
+        <span class="brand-copy">
+          <span>Medicares</span>
+          <small>Healthcare SaaS</small>
+        </span>
+      </a>
+
+      <nav class="nav-links" data-nav-menu aria-label="Primary navigation">
+        <a href="#services">Services</a>
+        <a href="#reminders">Reminders</a>
+        <a href="#hospitals">Hospitals</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-button mobile-toggle" data-mobile-menu aria-label="Open navigation" aria-expanded="false">☰</button>
+        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <div class="auth-actions">
+          <a class="button button--ghost" href="login.html" data-auth-guest>Patient Login</a>
+          <a class="button button--primary" href="register.html" data-auth-guest>Get Started</a>
+          <a class="button button--ghost" href="dashboard.html" data-auth-user hidden>Dashboard</a>
+          <a class="button button--primary" href="#" data-auth-user data-logout hidden>Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero home-hero">
+      <div class="container hero-grid-landing">
+        <div class="hero-copy hero-copy-landing" data-animate>
+          <div class="hero-kicker">
+            <span class="eyebrow">Smart Healthcare Appointment & Reminder Platform</span>
+            <span>Professionally developed. Patient-first. Secure by design.</span>
+          </div>
+          <h1 data-user-greeting>Welcome to Medicares</h1>
+          <p>Medicares is a premium healthcare SaaS built for easy patient appointment booking, medicine reminders, and secure technical support with a JWT-based foundation and AWS-ready architecture.</p>
+
+          <div class="hero-proof" aria-label="Platform highlights">
+            <span class="proof-chip">Patient booking workflow</span>
+            <span class="proof-chip">Reminder automation</span>
+            <span class="proof-chip">Role-based access</span>
+            <span class="proof-chip">AWS API Gateway ready</span>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button button--primary" href="login.html" data-book-appointment>Book Appointment</a>
+            <a class="button button--ghost" href="reminders.html">Manage Reminders</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hero-stat"><strong data-counter="128000">0</strong><span>patients supported</span></div>
+            <div class="hero-stat"><strong data-counter="9600">0</strong><span>appointments handled</span></div>
+            <div class="hero-stat"><strong data-counter="99">0</strong><span>uptime reliability</span></div>
+          </div>
+        </div>
+
+        <div class="hero-visual home-visual" data-animate>
+          <div class="floating-pill one">Live notifications</div>
+          <div class="floating-pill two">JWT-secured access</div>
+          <div class="floating-pill three">AWS integration ready</div>
+
+          <div class="hero-card home-dashboard" aria-label="Medicares platform preview">
+            <div class="dashboard-topline">
+              <div>
+                <div class="status-pill">Operations online</div>
+                <h3 style="margin:0.85rem 0 0.25rem; font-size:1.35rem;">Care coordination dashboard</h3>
+                <p class="muted" style="margin:0;">Appointments, reminders, and hospital scheduling in one place.</p>
+              </div>
+              <div class="avatar" aria-hidden="true">MC</div>
+            </div>
+
+            <div class="dashboard-grid-mini">
+              <div class="mini-card">
+                <strong>128k</strong>
+                <span>patients served</span>
+              </div>
+              <div class="mini-card">
+                <strong>3.4k</strong>
+                <span>daily bookings</span>
+              </div>
+              <div class="mini-card">
+                <strong>99%</strong>
+                <span>uptime reliability</span>
+              </div>
+            </div>
+
+            <div class="dashboard-stack">
+              <div class="dashboard-block">
+                <div class="doctor-meta">
+                  <h3 style="margin:0;">Platform reliability</h3>
+                  <span class="badge badge--success">Stable</span>
+                </div>
+                <p>Cloud-ready design for secure login, patient workflows, and service expansion across AWS infrastructure.</p>
+                <div class="dashboard-chart" aria-hidden="true">
+                  <div class="chart-line"><span style="width:86%;"></span></div>
+                  <div class="chart-line"><span style="width:74%;"></span></div>
+                  <div class="chart-line"><span style="width:92%;"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section stats-section" aria-label="Medicares performance stats">
+      <div class="container">
+        <div class="grid grid-3">
+          <article class="metric-card card" data-animate>
+            <div class="metric-top">
+              <div class="metric-icon">P</div>
+              <span class="badge badge--info">Care scale</span>
+            </div>
+            <strong data-counter="128000">0</strong>
+            <p>128,000 patients supported through a calm, modern booking and care-management experience.</p>
+          </article>
+          <article class="metric-card card" data-animate>
+            <div class="metric-top">
+              <div class="metric-icon">A</div>
+              <span class="badge badge--success">Flow volume</span>
+            </div>
+            <strong data-counter="9600">0</strong>
+            <p>9,600 appointments handled with a predictable workflow designed for patient operations.</p>
+          </article>
+          <article class="metric-card card" data-animate>
+            <div class="metric-top">
+              <div class="metric-icon">%</div>
+              <span class="badge badge--warning">Reliability</span>
+            </div>
+            <strong data-counter="99">0</strong>
+            <p>99% uptime reliability for a trustworthy healthcare SaaS presence that feels production-grade.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Why Choose Medicares</span>
+            <h2 class="section-title">Built for modern healthcare workflows</h2>
+          </div>
+          <p class="section-subtitle">Everything is designed to feel like a premium healthcare SaaS while staying fast, secure, and easy to use across devices.</p>
+        </div>
+        <div class="grid grid-3">
+          <article class="feature-card card" data-animate>
+            <div class="feature-icon">⚕</div>
+            <h3>Appointment booking</h3>
+            <ul>
+              <li>Search doctors</li>
+              <li>Filter specialization</li>
+              <li>Smooth booking flow</li>
+            </ul>
+          </article>
+          <article class="feature-card card" data-animate>
+            <div class="feature-icon">⏰</div>
+            <h3>Medicine reminders</h3>
+            <ul>
+              <li>Daily and weekly schedules</li>
+              <li>Alert tracking</li>
+              <li>Smart notification system</li>
+            </ul>
+          </article>
+          <article class="feature-card card" data-animate>
+            <div class="feature-icon">🔒</div>
+            <h3>JWT authentication</h3>
+            <ul>
+              <li>Secure login system</li>
+              <li>AWS API Gateway ready</li>
+              <li>Role-based access</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reminders">
+      <div class="container grid grid-2 align-center">
+        <div data-animate>
+          <span class="eyebrow">Reminder Features</span>
+          <h2 class="section-title">Medicine planning that stays on schedule</h2>
+          <p class="section-subtitle">Patients can manage tablets, injections, and vitamins with reminder flows that feel like a real care companion.</p>
+          <div class="stack" style="margin-top:1.4rem;">
+            <div class="feature-card card">
+              <strong>Smart intervals</strong>
+              <p>Daily, weekly, and monthly cycles with repeatable schedules.</p>
+            </div>
+            <div class="feature-card card">
+              <strong>Alert history</strong>
+              <p>Track past reminders and mark medicines as taken.</p>
+            </div>
+          </div>
+        </div>
+        <div class="glass-panel" data-animate style="padding:1.25rem;">
+          <div class="hero-kicker" style="margin-bottom:1rem;">
+            <span class="eyebrow">Daily timeline</span>
+            <span>Calendar feel with soft gradients</span>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item"><div class="timeline-dot"></div><div><h3>08:00 AM</h3><p>Take Amlodipine after breakfast.</p></div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div><h3>01:00 PM</h3><p>Insulin injection and dose logging.</p></div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div><h3>08:00 PM</h3><p>Vitamin D reminder before bedtime.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="hospitals">
+      <div class="container grid grid-2 align-center">
+        <div data-animate>
+          <span class="eyebrow">Technical Support</span>
+          <h2 class="section-title">Built for startup-scale support and future growth</h2>
+          <p class="section-subtitle">This is a professional healthcare website with technical support workflows, clean integration paths, and a booking experience designed to stay simple for patients.</p>
+          <div class="stack" style="margin-top:1.2rem;">
+            <div class="feature-card card">
+              <strong>Technical onboarding</strong>
+              <p>Clear setup guidance for future AWS and API integration work.</p>
+            </div>
+            <div class="feature-card card">
+              <strong>Booking simplicity</strong>
+              <p>Patients can move from login to appointment booking with fewer steps.</p>
+            </div>
+          </div>
+        </div>
+        <article class="hospital-panel story-card card" data-animate>
+          <div class="doctor-meta">
+            <h3 style="margin:0;">Support overview</h3>
+            <span class="badge badge--info">Technical support ready</span>
+          </div>
+          <p>Unified booking guidance, technical support routing, and integration-ready architecture for a startup environment.</p>
+          <div class="dashboard-stack" style="margin-top:1rem;">
+            <div class="dashboard-block">
+              <div class="doctor-meta">
+                <h3 style="margin:0;">Support routing</h3>
+                <span class="badge badge--success">Live</span>
+              </div>
+              <p>Contact requests are handled through the support inbox and future API workflows.</p>
+            </div>
+            <div class="dashboard-block">
+              <div class="doctor-meta">
+                <h3 style="margin:0;">Simple appointment flow</h3>
+                <span class="badge badge--warning">Patient-first</span>
+              </div>
+              <p>Patients sign in first, then book appointments inside their account dashboard.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container contact-grid">
+        <aside class="contact-aside" data-animate>
+          <span class="eyebrow">Contact</span>
+          <h2 class="section-title">Talk to Medicares support</h2>
+          <p class="section-subtitle">Share a question, a rollout requirement, or a booking issue and the technical support team will handle it directly.</p>
+          <div class="contact-stack">
+            <article class="card" style="padding:1.2rem;">
+              <h3 style="margin-top:0;">What this platform supports</h3>
+              <ul>
+                <li>Patient appointment booking after login</li>
+                <li>Medicine reminder management</li>
+                <li>Hospital collaboration and coordination</li>
+              </ul>
+            </article>
+            <article class="card" style="padding:1.2rem;">
+              <h3 style="margin-top:0;">Support inbox</h3>
+              <ul>
+                <li><a href="mailto:support@medicares.me">support@medicares.me</a></li>
+                <li>JWT authentication</li>
+                <li>AWS API Gateway ready</li>
+                <li>Future backend friendly</li>
+              </ul>
+            </article>
+          </div>
+        </aside>
+
+        <form class="contact-panel card stack" data-demo-form data-support-email="support@medicares.me" data-success-title="Message sent" data-success-message="Your support request has been routed to support@medicares.me.">
+          <h3 style="margin:0;">Send a message</h3>
+          <div class="form-grid">
+            <div class="floating-field">
+              <input class="input" id="name" name="name" placeholder=" " required />
+              <label for="name">Full name</label>
+            </div>
+            <div class="floating-field">
+              <input class="input" id="email" name="email" type="email" placeholder=" " required />
+              <label for="email">Email</label>
+            </div>
+            <div class="floating-field">
+              <textarea class="textarea" id="message" name="message" placeholder=" " required></textarea>
+              <label for="message">Message</label>
+            </div>
+          </div>
+          <button class="button button--primary" type="submit">Send to support</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand" href="index.html" aria-label="Medicares home footer">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+          <span class="brand-copy">
+            <span>Medicares</span>
+            <small>Healthcare SaaS</small>
+          </span>
+        </a>
+        <p class="muted">A premium healthcare appointment booking and medicine reminder platform for patients, doctors, and hospitals.</p>
+        <span class="footer-note">AWS-ready architecture with secure JWT-based access</span>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="login.html">Patient Login</a></li>
+          <li><a href="doctor-login.html">Doctor Login</a></li>
+          <li><a href="admin-login.html">Admin Login</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="hospitals.html">Hospital Collaboration</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Deployment</h4>
+        <ul>
+          <li>AWS CloudFront</li>
+          <li>S3 static hosting</li>
+          <li>API Gateway + Lambda</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> Medicares. All rights reserved.</span>
+      <span>Frontend optimized for medicares.me and api.medicares.me</span>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

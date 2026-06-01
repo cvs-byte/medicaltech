@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Login | Medicares</title>
+  <meta name="description" content="Sign in to your Medicares patient account." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="navbar">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>Medicares</a>
+      <div class="nav-actions">
+        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="button button--ghost hide-mobile" href="doctor-login.html">Doctor Login</a>
+        <a class="button button--primary hide-mobile" href="register.html">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-page">
+    <div class="auth-shell">
+      <section class="auth-visual" data-animate>
+        <span class="eyebrow" style="background:rgba(255,255,255,0.14);color:#fff;border-color:rgba(255,255,255,0.16);">Patient Access</span>
+        <h1>Sign in to your health workspace</h1>
+        <p>Access appointments, reminders, notifications, and secure JWT-powered patient tools in one elegant dashboard.</p>
+        <ul class="feature-list">
+          <li>Forgot-password support</li>
+          <li>Remember-me session handling</li>
+          <li>AWS API Gateway ready</li>
+        </ul>
+        <div class="auth-visual-art">
+          <svg viewBox="0 0 560 360" role="img" aria-label="Patient login illustration">
+            <rect width="560" height="360" rx="28" fill="rgba(255,255,255,0.12)" />
+            <rect x="40" y="42" width="220" height="276" rx="26" fill="rgba(255,255,255,0.18)" />
+            <rect x="286" y="42" width="234" height="88" rx="22" fill="rgba(255,255,255,0.14)" />
+            <rect x="286" y="144" width="234" height="174" rx="22" fill="rgba(255,255,255,0.10)" />
+            <circle cx="150" cy="132" r="42" fill="rgba(255,255,255,0.26)" />
+            <path d="M126 132h48M150 108v48" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+            <path d="M314 84h154M314 114h128" stroke="rgba(255,255,255,0.72)" stroke-width="12" stroke-linecap="round" />
+            <path d="M314 188c20-40 46-58 74-58 30 0 43 26 63 26s31-18 57-18" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+          </svg>
+        </div>
+      </section>
+      <section class="auth-card card" data-animate>
+        <h2>Patient login</h2>
+        <p class="subtext">Enter your email and password to continue. Demo mode falls back to local session storage if the API is offline.</p>
+        <form id="patientLoginForm" class="auth-form">
+          <div class="field-group"><label for="loginEmail">Email</label><input class="input" id="loginEmail" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field-group">
+            <label for="loginPassword">Password</label>
+            <div class="input-wrap"><input class="input" id="loginPassword" name="password" type="password" autocomplete="current-password" required /><button class="password-toggle" type="button" data-toggle-password="#loginPassword">Show</button></div>
+          </div>
+          <div class="remember-row">
+            <label style="display:flex;align-items:center;gap:0.5rem;"><input type="checkbox" name="rememberMe" /> Remember me</label>
+            <a href="#" data-forgot-password>Forgot password?</a>
+          </div>
+          <button class="button button--primary" type="submit">Sign in</button>
+        </form>
+        <p class="form-note" style="margin-top:1rem;">Protected login endpoint: <strong>POST https://api.medicares.me/login</strong></p>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

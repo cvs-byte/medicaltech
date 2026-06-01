@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel | Medicares</title>
+  <meta name="description" content="Admin dashboard for Medicares operations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body data-role="admin">
+  <header class="topbar">
+    <div class="navbar">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>Medicares</a>
+      <div class="nav-actions">
+        <button class="icon-button mobile-sidebar-toggle" data-sidebar-toggle aria-label="Toggle sidebar">☰</button>
+        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="button button--ghost hide-mobile" href="hospitals.html">Hospitals</a>
+        <a class="button button--primary hide-mobile" data-logout href="#">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="flex align-center">
+          <div class="avatar-xl">AD</div>
+          <div>
+            <strong>System Admin</strong>
+            <div class="muted">Operations control center</div>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" href="admin.html"><span>Dashboard</span><strong>01</strong></a>
+        <a class="sidebar-link" href="#users"><span>Manage users</span><strong>02</strong></a>
+        <a class="sidebar-link" href="#doctors"><span>Manage doctors</span><strong>03</strong></a>
+        <a class="sidebar-link" href="#appointments"><span>Appointments</span><strong>04</strong></a>
+        <a class="sidebar-link" href="#hospitals"><span>Manage hospitals</span><strong>05</strong></a>
+        <a class="sidebar-link" data-logout href="#"><span>Logout</span><strong>06</strong></a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="dashboard-top">
+        <div class="dashboard-title">
+          <h1>Admin panel</h1>
+          <p class="muted">Track platform health, appointment flow, reminders, and partner operations.</p>
+        </div>
+        <div class="dashboard-actions">
+          <button class="button button--ghost" data-toast data-toast-title="Report ready" data-toast="A monthly operations report can be exported from the backend." data-toast-type="info">Export report</button>
+          <a class="button button--primary" href="hospitals.html">Add partner</a>
+        </div>
+      </div>
+
+      <section class="dashboard-grid cols-4" data-admin-stats></section>
+
+      <section class="dashboard-grid cols-2" style="margin-top:1rem;">
+        <article class="glass-panel analysis-card" data-admin-analytics></article>
+        <article class="glass-panel summary-card">
+          <h3>Operations overview</h3>
+          <p class="muted">Monitor users, doctors, hospitals, appointment tracking, reminder tracking, and revenue trends.</p>
+          <div class="stack" style="margin-top:1rem;">
+            <div class="badge badge--success">Users and doctors are loaded from live APIs</div>
+            <div class="badge badge--info">Appointments are fetched in real time</div>
+            <div class="badge badge--warning">Hospital API is not exposed in current backend routes</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid grid-2" style="margin-top:1rem;" id="users">
+        <article class="table-shell">
+          <div class="table-toolbar" style="flex-direction:column;align-items:stretch;gap:0.8rem;">
+            <div><h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.2rem;">Manage users</h2><p class="muted" style="margin:0;">All platform users loaded from <strong>/users</strong> with full create, edit, and delete controls.</p></div>
+            <form class="form-grid" data-admin-user-form novalidate>
+              <input type="hidden" data-admin-user-id />
+              <div class="auth-row">
+                <div class="field-group">
+                  <label for="userName">User name</label>
+                  <input id="userName" class="input" type="text" data-admin-user-name required minlength="3" />
+                  <span class="inline-error" id="userName-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+                <div class="field-group">
+                  <label for="userEmail">Email</label>
+                  <input id="userEmail" class="input" type="email" data-admin-user-email required />
+                  <span class="inline-error" id="userEmail-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+              </div>
+              <div class="auth-row">
+                <div class="field-group">
+                  <label for="userRole">Role</label>
+                  <select id="userRole" class="select" data-admin-user-role required>
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label for="userStatus">Status</label>
+                  <select id="userStatus" class="select" data-admin-user-status required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Suspended">Suspended</option>
+                  </select>
+                </div>
+              </div>
+              <div class="flex" style="gap:0.6rem;">
+                <button class="button button--primary" type="submit" data-admin-user-submit>Save User</button>
+                <button class="button button--ghost" type="button" data-admin-user-cancel>Clear</button>
+              </div>
+            </form>
+          </div>
+          <div class="table-controls" style="padding: 0.8rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid var(--border); flex-wrap: wrap;">
+            <input class="input" type="search" data-admin-user-search placeholder="Search users by name, email, role..." style="max-width: 320px; min-height: 40px; padding: 0.5rem 1rem;" />
+            <div class="pagination-controls" style="display: flex; align-items: center; gap: 0.8rem;">
+              <button class="button button--ghost" data-admin-user-prev style="min-height: 40px; padding: 0.5rem 1rem;">&larr; Prev</button>
+              <span data-admin-user-page-info class="muted" style="font-size: 0.9rem;">Page 1 of 1</span>
+              <button class="button button--ghost" data-admin-user-next style="min-height: 40px; padding: 0.5rem 1rem;">Next &rarr;</button>
+            </div>
+          </div>
+          <div class="table-wrap"><table class="table"><thead><tr><th data-sort-user="name" style="cursor: pointer; user-select: none;">Name <span class="sort-icon"></span></th><th data-sort-user="role" style="cursor: pointer; user-select: none;">Role <span class="sort-icon"></span></th><th data-sort-user="status" style="cursor: pointer; user-select: none;">Status <span class="sort-icon"></span></th><th>Actions</th></tr></thead><tbody data-admin-users></tbody></table></div>
+        </article>
+
+        <article class="table-shell" id="doctors">
+          <div class="table-toolbar" style="flex-direction:column;align-items:stretch;gap:0.8rem;">
+            <div><h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.2rem;">Manage doctors</h2><p class="muted" style="margin:0;">GET, POST, PUT, and DELETE doctors through <strong>/doctors</strong> on api.medicares.me.</p></div>
+            <form class="form-grid" data-admin-doctor-form novalidate>
+              <input type="hidden" data-admin-doctor-id />
+              <div class="auth-row">
+                <div class="field-group">
+                  <label for="doctorName">Doctor name</label>
+                  <input id="doctorName" class="input" type="text" data-admin-doctor-name required minlength="3" />
+                  <span class="inline-error" id="doctorName-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+                <div class="field-group">
+                  <label for="doctorSpecialization">Specialization</label>
+                  <input id="doctorSpecialization" class="input" type="text" data-admin-doctor-specialization required minlength="3" />
+                  <span class="inline-error" id="doctorSpecialization-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+              </div>
+              <div class="auth-row">
+                <div class="field-group">
+                  <label for="doctorEmail">Email</label>
+                  <input id="doctorEmail" class="input" type="email" data-admin-doctor-email required />
+                  <span class="inline-error" id="doctorEmail-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+                <div class="field-group">
+                  <label for="doctorAddress">Address</label>
+                  <input id="doctorAddress" class="input" type="text" data-admin-doctor-address required minlength="3" />
+                  <span class="inline-error" id="doctorAddress-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+              </div>
+              <div class="flex" style="gap:0.6rem;">
+                <button class="button button--primary" type="submit" data-admin-doctor-submit>Save Doctor</button>
+                <button class="button button--ghost" type="button" data-admin-doctor-cancel>Clear</button>
+              </div>
+            </form>
+          </div>
+          <div class="table-controls" style="padding: 0.8rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid var(--border); flex-wrap: wrap;">
+            <input class="input" type="search" data-admin-doctor-search placeholder="Search doctors by name, specialty, address..." style="max-width: 320px; min-height: 40px; padding: 0.5rem 1rem;" />
+            <div class="pagination-controls" style="display: flex; align-items: center; gap: 0.8rem;">
+              <button class="button button--ghost" data-admin-doctor-prev style="min-height: 40px; padding: 0.5rem 1rem;">&larr; Prev</button>
+              <span data-admin-doctor-page-info class="muted" style="font-size: 0.9rem;">Page 1 of 1</span>
+              <button class="button button--ghost" data-admin-doctor-next style="min-height: 40px; padding: 0.5rem 1rem;">Next &rarr;</button>
+            </div>
+          </div>
+          <div class="table-wrap"><table class="table"><thead><tr><th data-sort-doctor="name" style="cursor: pointer; user-select: none;">Doctor <span class="sort-icon"></span></th><th data-sort-doctor="specialization" style="cursor: pointer; user-select: none;">Specialty <span class="sort-icon"></span></th><th data-sort-doctor="id" style="cursor: pointer; user-select: none;">ID <span class="sort-icon"></span></th><th>Actions</th></tr></thead><tbody data-admin-doctors></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="table-shell" id="appointments" style="margin-top:1rem;">
+        <div class="table-toolbar"><div><h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.2rem;">Appointments</h2><p class="muted" style="margin:0;">Live appointment list from backend.</p></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>ID</th><th>Doctor</th><th>Patient</th><th>Date & Time</th><th>Status</th></tr></thead><tbody data-admin-appointments></tbody></table></div>
+      </section>
+
+      <section class="table-shell" id="hospitals" style="margin-top:1rem;">
+        <div class="table-toolbar"><div><h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.2rem;">Manage hospitals</h2><p class="muted" style="margin:0;">Partner tiers and activation state.</p></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Hospital</th><th>Plan</th><th>Status</th></tr></thead><tbody data-admin-hospitals></tbody></table></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

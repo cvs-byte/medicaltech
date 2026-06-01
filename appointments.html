@@ -1,0 +1,441 @@
+# appointments.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    Appointments | Medicares
+  </title>
+
+  <meta
+    name="description"
+    content="Book doctor appointments with Medicares."
+  />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  />
+
+</head>
+
+<body data-page="appointments">
+
+  <!-- HEADER -->
+  <header class="topbar">
+
+    <div class="navbar">
+
+      <a
+        class="brand"
+        href="index.html"
+      >
+        Medicares
+      </a>
+
+      <nav class="nav-links">
+
+        <a href="patient-dashboard.html">
+          Dashboard
+        </a>
+
+        <a href="hospitals.html">
+          Hospitals
+        </a>
+
+        <a href="reminders.html">
+          Reminders
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="section">
+
+    <div class="container">
+
+      <!-- TITLE -->
+      <div class="section-head">
+
+        <div>
+
+          <span class="eyebrow">
+            Appointment Booking
+          </span>
+
+          <h1 class="section-title">
+            Book Your Doctor
+          </h1>
+
+        </div>
+
+      </div>
+
+      <!-- SEARCH -->
+      <section
+        class="glass-panel"
+        style="padding:1.5rem;"
+      >
+
+        <div class="grid grid-3">
+
+          <div class="field-group">
+
+            <label>
+              Search doctor
+            </label>
+
+            <input
+              class="input"
+              id="doctorSearch"
+              type="search"
+              placeholder="Search doctor"
+            />
+
+          </div>
+
+          <div class="field-group">
+
+            <label>
+              Specialization
+            </label>
+
+            <select
+              class="select"
+              id="specializationFilter"
+            >
+
+              <option value="all">
+                All
+              </option>
+
+              <option>
+                Cardiologist
+              </option>
+
+              <option>
+                Neurologist
+              </option>
+
+              <option>
+                Dermatologist
+              </option>
+
+              <option>
+                Pediatrician
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="field-group">
+
+            <label>
+              Hospital
+            </label>
+
+            <select
+              class="select"
+              id="hospitalFilter"
+            >
+
+              <option value="all">
+                All Hospitals
+              </option>
+
+              <option>
+                Northside Medical
+              </option>
+
+              <option>
+                City Care Hospital
+              </option>
+
+              <option>
+                Green Valley Clinic
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- DOCTOR RESULTS -->
+      <section
+        id="doctorResults"
+        class="grid grid-2"
+        style="margin-top:2rem;"
+      ></section>
+
+      <!-- BOOKING FORM -->
+      <section
+        class="glass-panel"
+        style="
+          margin-top:2rem;
+          padding:1.5rem;
+        "
+      >
+
+        <span class="eyebrow">
+          Booking Form
+        </span>
+
+        <h2
+          class="section-title"
+          style="font-size:1.7rem;"
+        >
+          Confirm Appointment
+        </h2>
+
+        <form
+          id="bookingForm"
+          class="form-grid"
+          style="margin-top:1rem;"
+        >
+
+          <!-- PATIENT NAME -->
+          <div class="field-group">
+
+            <label>
+              Patient Name
+            </label>
+
+            <input
+              class="input"
+              id="patientName"
+              name="patientName"
+              required
+            />
+
+          </div>
+
+          <!-- PATIENT EMAIL -->
+          <div class="field-group">
+
+            <label>
+              Patient Email
+            </label>
+
+            <input
+              class="input"
+              id="patientEmail"
+              name="patientEmail"
+              type="email"
+              required
+            />
+
+          </div>
+
+
+                      <!-- DOCTOR EMAIL -->
+                      <div class="field-group">
+
+                        <label>
+                          Doctor Email
+                        </label>
+
+                        <input
+                          class="input"
+                          id="doctorEmail"
+                          name="doctorEmail"
+                          readonly
+                          placeholder="Selected from doctor record"
+                        />
+
+                      </div>
+          <!-- DOCTOR -->
+          <div class="field-group">
+
+            <label>
+              Selected Doctor
+            </label>
+
+            <input
+              class="input"
+              id="doctor"
+              name="doctor"
+              readonly
+              placeholder="Select doctor first"
+            />
+
+          </div>
+
+          <!-- DOCTOR ID -->
+          <div class="field-group">
+
+            <label>
+              Doctor ID
+            </label>
+
+            <input
+              class="input"
+              id="doctorId"
+              name="doctorId"
+              readonly
+              placeholder="Auto-filled from selected doctor"
+            />
+
+          </div>
+
+          <!-- DATE -->
+          <div class="auth-row">
+
+            <div class="field-group">
+
+              <label>
+                Date
+              </label>
+
+              <input
+                class="input"
+                id="date"
+                name="date"
+                type="date"
+                required
+              />
+
+            </div>
+
+            <div class="field-group">
+
+              <label>
+                Time
+              </label>
+
+              <input
+                class="input"
+                id="time"
+                name="time"
+                type="time"
+                required
+              />
+
+            </div>
+
+          </div>
+
+          <!-- NOTES -->
+          <div class="field-group">
+
+            <label>
+              Notes
+            </label>
+
+            <textarea
+              class="textarea"
+              id="notes"
+              name="notes"
+              placeholder="Symptoms or additional notes"
+            ></textarea>
+
+          </div>
+
+          <!-- SUBMIT -->
+          <button
+            class="button button--primary"
+            type="submit"
+          >
+
+            Review Booking
+
+          </button>
+
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL -->
+  <div
+    class="modal"
+    id="appointmentModal"
+  >
+
+    <div class="modal-card">
+
+      <div class="modal-header">
+
+        <h3>
+          Confirm Appointment
+        </h3>
+
+      </div>
+
+      <div
+        class="modal-body"
+        id="appointmentSummary"
+      ></div>
+
+      <div class="modal-footer">
+
+        <button
+          class="button button--ghost"
+          type="button"
+          data-close-modal
+        >
+
+          Cancel
+
+        </button>
+
+        <button
+          class="button button--primary"
+          id="confirmBooking"
+          type="button"
+        >
+
+          Confirm Booking
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script src="js/api.js"></script>
+
+  <script src="js/appointments.js"></script>
+
+</body>
+</html>
+```

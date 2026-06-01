@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicine Reminders | Medicares</title>
+  <meta name="description" content="Create medicine reminders with Medicares." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body data-page="reminders">
+  <header class="topbar">
+    <div class="navbar">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>Medicares</a>
+      <nav class="nav-links" data-nav-menu>
+        <a href="patient-dashboard.html">Dashboard</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="hospitals.html">Hospitals</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-button mobile-toggle" data-mobile-menu aria-label="Open navigation" aria-expanded="false">☰</button>
+        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="button button--ghost hide-mobile" href="patient-dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Medicine Planner</span>
+          <h1 class="section-title">Set and manage reminders</h1>
+        </div>
+        <p class="section-subtitle">Track tablets, syrups, injections, vitamins, and prescription reminders in a clean timeline.</p>
+      </div>
+
+      <section class="grid grid-2">
+        <article class="glass-panel" style="padding:1.25rem;">
+          <h2 class="section-title" style="font-size:1.6rem;">Add medicine</h2>
+          <p class="muted">Upcoming reminder: <strong id="nextReminder">No upcoming reminders</strong></p>
+          <form id="reminderForm" class="form-grid" style="margin-top:1rem;">
+            <div class="field-group"><label for="medicine">Medicine name</label><input class="input" id="medicine" name="medicine" required /></div>
+            <div class="auth-row">
+              <div class="field-group"><label for="dosage">Dosage</label><input class="input" id="dosage" name="dosage" placeholder="1 tablet" required /></div>
+              <div class="field-group"><label for="type">Type</label><select class="select" id="type" name="type"><option>Tablet</option><option>Syrup</option><option>Injection</option><option>Vitamin</option><option>Prescription</option></select></div>
+            </div>
+            <div class="auth-row">
+              <div class="field-group"><label for="reminderTime">Reminder time</label><input class="input" id="reminderTime" name="time" type="time" required /></div>
+              <div class="field-group"><label for="frequency">Frequency</label><select class="select" id="frequency" name="frequency"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div>
+            </div>
+            <p class="muted" id="frequencyLabel" style="margin:0;">Every day at the selected time</p>
+            <button class="button button--primary" type="submit">Save reminder</button>
+          </form>
+        </article>
+
+        <article class="glass-panel" style="padding:1.25rem;">
+          <div class="section-head" style="margin-bottom:1rem;"><div><h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.3rem;">Upcoming reminders</h2><p class="muted" style="margin:0;">Mark each dose as completed when taken.</p></div></div>
+          <div class="stack" id="reminderList"></div>
+        </article>
+      </section>
+
+      <section class="glass-panel" style="padding:1.25rem;margin-top:1rem;">
+        <div class="section-head" style="margin-bottom:1rem;"><div><h2 class="section-title" style="font-size:1.6rem;margin-bottom:0.3rem;">Reminder history</h2><p class="muted" style="margin:0;">Completed medications and timestamps.</p></div></div>
+        <div class="history-list" id="reminderHistory"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/reminders.js"></script>
+</body>
+</html>
