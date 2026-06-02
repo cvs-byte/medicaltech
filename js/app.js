@@ -80,11 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       link.addEventListener('click', (event) => {
         event.preventDefault();
         const currentRole = String(document.body?.dataset?.role || '').toLowerCase();
-        const redirectTo = currentRole === 'doctor'
-          ? 'doctor-login.html'
-          : currentRole === 'admin'
-            ? 'admin-login.html'
-            : 'login.html';
+        const redirectTo = 'index.html';
 
         MedicaresAPI.clearAuthSession();
         notify('Signed out', 'Your Medicares session has been cleared.', 'success');
@@ -217,35 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'User';
   }
 
-  function renderAuthState() {
-    const user = MedicaresAPI.getAuthUser();
-    const token = MedicaresAPI.getAuthToken();
-    const isAuthenticated = Boolean(token || user);
-    const bookAppointmentLink = document.querySelector('[data-book-appointment]');
 
-    document.querySelectorAll('[data-auth-guest]').forEach((element) => {
-      element.hidden = isAuthenticated;
-    });
-
-    document.querySelectorAll('[data-auth-user]').forEach((element) => {
-      element.hidden = !isAuthenticated;
-    });
-
-    document.querySelectorAll('[data-auth-name]').forEach((element) => {
-      if (!isAuthenticated) {
-        element.hidden = true;
-        element.textContent = '';
-        return;
-      }
-
-      element.hidden = false;
-      element.textContent = getDisplayName(user);
-    });
-
-    if (bookAppointmentLink) {
-      bookAppointmentLink.href = isAuthenticated ? 'dashboard.html' : 'login.html';
-    }
-  }
 
   window.MedicaresUI = {
     notify,
@@ -268,11 +236,50 @@ document.addEventListener('DOMContentLoaded', () => {
   bindDemoForms();
   bindQuickActions();
   bindSectionScroll();
-  renderAuthState();
-
-  const heroGreeting = document.querySelector('[data-user-greeting]');
-  if (heroGreeting) {
-    const user = MedicaresAPI.getAuthUser();
-    heroGreeting.textContent = user ? `Welcome back, ${getDisplayName(user)}` : 'Welcome to Medicares';
+  async function handlePublicPageSession() {
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    const publicPages = ['login.html', 'register.html', 'doctor-login.html', 'admin-login.html'];
+    
+    // Only auto-redirect from login/register pages if user clicked them, 
+    // or from index if that was the intent, but user said "at clicking patient login".
+    // Let's add an event listener to the login links to do it seamlessly, or just redirect from login.html.
+    
+    if (publicPages.includes(currentPath) || currentPath === 'index.html') {
+      const token = MedicaresAPI.getAuthToken();
+      if (token) {
+        try {
+          // Use requireAuth to gracefully handle profile fetch errors
+          const profile = await MedicaresAPI.requireAuth({ validateProfile: true, redirectTo: '' });
+          if (profile) {
+            const role = String(profile.role || 'patient').toLowerCase();
+            const redirectTo = role === 'admin' ? 'admin-dashboard.html' : role === 'doctor' ? 'doctor-dashboard.html' : 'patient-dashboard.html';
+            // Only redirect if we are on a login page OR we are on index.html and have a valid session
+            window.location.href = redirectTo;
+          }
+        } catch (error) {
+          // Do nothing, let the user stay on the page. requireAuth already cleared if 401
+        }
+      }
+    }
   }
+
+  // Intercept login clicks on index.html to verify and redirect directly without loading login.html
+  document.querySelectorAll('a[href="login.html"], a[href="doctor-login.html"], a[href="admin-login.html"]').forEach(link => {
+    link.addEventListener('click', async (e) => {
+      const token = MedicaresAPI.getAuthToken();
+      if (token) {
+        e.preventDefault();
+        const profile = await MedicaresAPI.requireAuth({ validateProfile: true, redirectTo: '' });
+        if (profile) {
+          const role = String(profile.role || 'patient').toLowerCase();
+          const redirectTo = role === 'admin' ? 'admin-dashboard.html' : role === 'doctor' ? 'doctor-dashboard.html' : 'patient-dashboard.html';
+          window.location.href = redirectTo;
+        } else {
+          window.location.href = link.getAttribute('href');
+        }
+      }
+    });
+  });
+
+  handlePublicPageSession();
 });

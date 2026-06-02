@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const rememberEmail = localStorage.getItem(MedicaresAPI.STORAGE_KEYS.remembers) || '';
   const registrationNoticeKey = 'medicares_registration_notice_seen';
   const dashboardByRole = {
-    admin: 'admin.html',
+    admin: 'admin-dashboard.html',
     doctor: 'doctor-dashboard.html',
     patient: 'patient-dashboard.html'
   };
