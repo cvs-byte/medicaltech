@@ -1,6 +1,3 @@
-# appointments.html
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -312,39 +309,48 @@
           </div>
 
           <!-- DATE -->
-          <div class="auth-row">
+          <div class="field-group">
 
-            <div class="field-group">
+            <label>
+              Appointment Date
+            </label>
 
-              <label>
-                Date
-              </label>
+            <input
+              class="input"
+              id="date"
+              name="date"
+              type="date"
+              required
+            />
 
-              <input
-                class="input"
-                id="date"
-                name="date"
-                type="date"
-                required
-              />
+          </div>
 
+          <!-- TIME SLOT PICKER -->
+          <div class="field-group">
+
+            <label>
+              Select Time Slot <span class="muted" style="font-weight:400;">(9:00 AM – 5:00 PM, 15 min intervals)</span>
+            </label>
+
+            <div
+              id="slotStatusMsg"
+              class="slot-status-msg"
+              style="display:none;"
+            ></div>
+
+            <div
+              id="slotGrid"
+              class="slot-grid"
+            >
+              <p class="muted">Please select a doctor and date first to view available slots.</p>
             </div>
 
-            <div class="field-group">
-
-              <label>
-                Time
-              </label>
-
-              <input
-                class="input"
-                id="time"
-                name="time"
-                type="time"
-                required
-              />
-
-            </div>
+            <!-- Hidden input to carry the selected time value -->
+            <input
+              type="hidden"
+              id="time"
+              name="time"
+            />
 
           </div>
 
@@ -438,4 +444,3 @@
 
 </body>
 </html>
-```
