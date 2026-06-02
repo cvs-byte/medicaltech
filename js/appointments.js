@@ -553,8 +553,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       hideSlotStatus();
 
-      notify('Appointment booked', 'Your appointment has been booked successfully.', 'success');
-      await loadAppointments();
+      notify('Appointment booked', 'Your appointment has been booked successfully. Redirecting...', 'success');
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
     } catch (error) {
       notify('Booking failed', error.message || 'Unable to book appointment.', 'error');
     } finally {
