@@ -1,32 +1,12 @@
-/* Responsive system */
-@media (max-width: 1100px) {
-  .hero-grid,
-  .auth-shell,
-  .dashboard-shell,
-  .dashboard-grid.cols-2,
-  .dashboard-grid.cols-3,
-  .dashboard-grid.cols-4,
-  .footer-grid,
-  .grid-4,
-  .grid-3,
-  .grid-2,
-  .stat-strip {
-    grid-template-columns: 1fr 1fr;
-  }
+/* Responsive system (Mobile-First) */
 
-  .dashboard-shell {
-    grid-template-columns: 1fr;
-  }
+/* 
+  Base styles in style.css, dashboard.css, and auth.css are now Mobile-First (320px - 767px).
+  Grids, sidebars, and multi-column layouts scale up from here. 
+*/
 
-  .sidebar {
-    position: static;
-    height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-@media (max-width: 900px) {
+/* Mobile Specific Tweaks (<= 767px) */
+@media (max-width: 767px) {
   .nav-links,
   .nav-actions .hide-mobile,
   .sidebar {
@@ -67,27 +47,8 @@
     display: inline-grid;
   }
 
-  .hero-grid,
-  .auth-shell,
-  .dashboard-grid.cols-2,
-  .dashboard-grid.cols-3,
-  .dashboard-grid.cols-4,
-  .footer-grid,
-  .grid-4,
-  .grid-3,
-  .grid-2,
-  .stat-strip,
-  .hero-stats {
-    grid-template-columns: 1fr;
-  }
-
   .hero-visual {
-    min-height: 420px;
-  }
-
-  .dashboard-main,
-  .sidebar {
-    padding-inline: 1rem;
+    min-height: 360px;
   }
 
   .dashboard-top,
@@ -99,58 +60,219 @@
     flex-direction: column;
   }
 
-  .auth-row,
-  .social-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
   .container {
     width: min(100% - 1rem, var(--container));
   }
+}
 
-  .hero {
-    padding-top: 3rem;
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid-2, .grid-4, .stat-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .dashboard-grid.cols-2,
+  .dashboard-grid.cols-3,
+  .dashboard-grid.cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .section {
-    padding: 3.5rem 0;
+  .auth-row, .social-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .section-title {
-    font-size: clamp(1.6rem, 7vw, 2.4rem);
+  .hero-grid, .hero-grid-landing {
+    grid-template-columns: 1fr;
   }
 
-  .hero-copy h1 {
-    font-size: clamp(2rem, 11vw, 3.2rem);
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .hero-card {
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-toggle,
+  .mobile-sidebar-toggle {
+    display: inline-grid;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-links.open {
+    position: absolute;
+    top: 78px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
     padding: 1rem;
-    border-radius: 26px;
+    background: color-mix(in srgb, var(--background) 88%, white);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    z-index: 99;
   }
 
-  .hero-visual {
-    min-height: 360px;
+  .sidebar.open {
+    display: block;
+    position: fixed;
+    top: 78px;
+    left: 0;
+    right: 0;
+    z-index: 95;
+    height: auto;
+    max-height: calc(100vh - 78px);
+    overflow: auto;
+    background: color-mix(in srgb, var(--surface) 94%, white);
+    box-shadow: var(--shadow);
+  }
+}
+
+/* Laptop (1024px - 1439px) */
+@media (min-width: 1024px) {
+  .grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .calendar-grid {
-    gap: 0.35rem;
+  .grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .calendar-day,
-  .calendar-head {
-    min-height: 44px;
-    font-size: 0.84rem;
+  .grid-4, .stat-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .table th,
-  .table td {
-    padding: 0.75rem 0.8rem;
+  .auth-row, .social-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .modal-card {
-    border-radius: 22px;
+  .auth-shell {
+    grid-template-columns: 1fr 0.95fr;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .hero-grid-landing {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .dashboard-shell {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .dashboard-grid.cols-2 {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .dashboard-grid.cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dashboard-grid.cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
+  }
+  
+  .contact-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  }
+
+  .hospital-figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-grid-mini, .hero-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .mobile-toggle,
+  .mobile-sidebar-toggle {
+    display: none;
+  }
+}
+
+/* Desktop and Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-4, .stat-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .auth-row, .social-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .auth-shell {
+    grid-template-columns: 1fr 0.95fr;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .hero-grid-landing {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .dashboard-grid.cols-2 {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .dashboard-grid.cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dashboard-grid.cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
+  }
+  
+  .contact-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  }
+
+  .hospital-figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-grid-mini, .hero-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .container {
+    max-width: 1360px;
+  }
+
+  .dashboard-shell {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .mobile-toggle,
+  .mobile-sidebar-toggle {
+    display: none;
   }
 }
