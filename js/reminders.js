@@ -8,22 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextReminder = document.getElementById('nextReminder');
   const frequencyLabel = document.getElementById('frequencyLabel');
 
-  const saved = MedicaresAPI.loadLocalList(MedicaresAPI.STORAGE_KEYS.reminders, []);
-  let reminders = saved.length ? saved : seedReminders();
-  MedicaresAPI.storeLocalList(MedicaresAPI.STORAGE_KEYS.reminders, reminders);
+  const user = MedicaresAPI.getAuthUser();
+  const userId = user ? (user.userId || user.id) : 'guest';
+  const reminderStorageKey = `${MedicaresAPI.STORAGE_KEYS.reminders}_${userId}`;
+
+  if ('Notification' in window && Notification.permission !== 'denied') {
+    Notification.requestPermission();
+  }
+
+  let reminders = MedicaresAPI.loadLocalList(reminderStorageKey, []);
   renderReminders();
   startReminderMonitor();
 
   reminderForm?.addEventListener('submit', addReminder);
   reminderForm?.querySelector('[name="frequency"]')?.addEventListener('change', updateFrequencyCopy);
   updateFrequencyCopy();
-
-  function seedReminders() {
-    return [
-      { id: 1, medicine: 'Amlodipine', dosage: '1 tablet', time: '08:00', frequency: 'daily', type: 'Tablet', status: 'upcoming', notifiedAt: null },
-      { id: 2, medicine: 'Vitamin D', dosage: '1 capsule', time: '20:00', frequency: 'daily', type: 'Vitamin', status: 'upcoming', notifiedAt: null }
-    ];
-  }
 
   function updateFrequencyCopy() {
     const value = reminderForm?.querySelector('[name="frequency"]')?.value || 'daily';
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     persistAndRender();
     reminderForm.reset();
     updateFrequencyCopy();
-    MedicaresUI.notify('Reminder saved', 'Medicine reminders are synced locally and ready for API persistence.', 'success');
+    MedicaresUI.notify('Reminder saved', 'Medicine reminders are synced and ready for you.', 'success');
   }
 
   function nextDoseTimestamp(timeValue) {
@@ -75,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function persistAndRender() {
-    MedicaresAPI.storeLocalList(MedicaresAPI.STORAGE_KEYS.reminders, reminders);
+    MedicaresAPI.storeLocalList(reminderStorageKey, reminders);
     renderReminders();
   }
 
@@ -99,7 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="muted" style="font-size:0.9rem;">Reminder time</div>
                 <strong>${reminder.time}</strong>
               </div>
-              <button class="button button--ghost" type="button" data-mark-taken="${reminder.id}">Mark taken</button>
+              <div style="display:flex; gap:0.5rem;">
+                <button class="button button--ghost" style="color:var(--danger, #ef4444); padding:0.4rem 0.8rem;" type="button" data-delete-reminder="${reminder.id}">Delete</button>
+                <button class="button button--primary" type="button" data-mark-taken="${reminder.id}">Mark taken</button>
+              </div>
             </div>
           </div>
         `).join('')
@@ -132,18 +134,48 @@ document.addEventListener('DOMContentLoaded', () => {
         MedicaresUI.notify('Reminder completed', `${reminder.medicine} marked as taken.`, 'success');
       });
     });
+
+    reminderList?.querySelectorAll('[data-delete-reminder]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.deleteReminder;
+        reminders = reminders.filter((item) => String(item.id) !== id);
+        persistAndRender();
+        MedicaresUI.notify('Reminder deleted', 'The medicine reminder has been removed.', 'success');
+      });
+    });
+  }
+
+  function sendSystemNotification(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/favicon.ico' });
+    }
   }
 
   function startReminderMonitor() {
     window.setInterval(() => {
       const now = new Date();
       reminders.forEach((reminder) => {
-        if (reminder.status === 'completed' || reminder.notifiedAt) return;
+        if (reminder.status === 'completed') return;
+        // If not completed, checking time
         const reminderDate = new Date(`${now.toISOString().split('T')[0]}T${reminder.time}:00`);
-        const diff = Math.abs(reminderDate.getTime() - now.getTime());
-        if (diff < 60000) {
+        const diff = now.getTime() - reminderDate.getTime();
+        
+        // Notify if within a 1-minute window around the reminder time, and only if not notified yet
+        if (Math.abs(diff) < 60000 && !reminder.notifiedAt) {
           reminder.notifiedAt = new Date().toISOString();
-          MedicaresUI.notify('Medicine due', `${reminder.medicine} is scheduled now.`, 'warning');
+          const title = 'Medicine due';
+          const body = `It is time to take ${reminder.medicine}.`;
+          MedicaresUI.notify(title, body, 'warning');
+          sendSystemNotification(title, body);
+          persistAndRender();
+        } else if (diff > 60000 && reminder.status === 'upcoming' && !reminder.notifiedAt) {
+          // If the time has passed and they didn't mark taken, send a missed notification
+          // We can notify them if they missed it (just once)
+          reminder.notifiedAt = new Date().toISOString();
+          const title = 'Missed Medicine';
+          const body = `You missed taking ${reminder.medicine} at ${reminder.time}.`;
+          MedicaresUI.notify(title, body, 'error');
+          sendSystemNotification(title, body);
           persistAndRender();
         }
       });
