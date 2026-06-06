@@ -14,8 +14,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (!doctorResults || !bookingForm || !modal || !modalSummary || !confirmButton) return;
 
-  const profile = await MedicaresAPI.requireAuth({ role: 'patient', redirectTo: 'login.html', validateProfile: true });
-  if (!profile) return;
+  let profile = null;
+  const token = MedicaresAPI.getAuthToken();
+  if (token) {
+    try {
+      profile = await MedicaresAPI.getProfile().catch(() => null) || MedicaresAPI.getAuthUser();
+      if (profile && String(profile.role || '').toLowerCase() !== 'patient') {
+        profile = null;
+      }
+    } catch (e) {
+      console.warn('Failed to load profile for booking page:', e);
+    }
+  }
 
   const state = {
     selectedDoctor: null,
@@ -31,11 +41,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const SLOT_INTERVAL = 15;    // 15-minute intervals
 
   prefillPatientForm(profile);
-  ensureAppointmentsSection();
+  if (profile) {
+    ensureAppointmentsSection();
+  }
   bindEvents();
 
   await loadDoctors();
-  await loadAppointments();
+  if (profile) {
+    await loadAppointments();
+  }
 
   /* ── Helpers ─────────────────────────────────── */
 
@@ -54,8 +68,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
     const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
 
-    if (nameInput && !nameInput.value) nameInput.value = user.fullName || user.name || '';
-    if (emailInput && !emailInput.value) emailInput.value = user.email || '';
+    if (nameInput && !nameInput.value) nameInput.value = user?.fullName || user?.name || '';
+    if (emailInput && !emailInput.value) emailInput.value = user?.email || '';
     if (dateInput) dateInput.min = new Date().toISOString().split('T')[0];
     if (doctorInput) doctorInput.value = '';
     if (doctorIdInput) doctorIdInput.value = '';
