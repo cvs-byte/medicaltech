@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const SLOT_INTERVAL = 15;    // 15-minute intervals
 
   prefillPatientForm(profile);
+  renderHospitalBanner();
   if (profile) {
     ensureAppointmentsSection();
   }
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const doctorInput = bookingForm.querySelector('[name="doctor"]');
     const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
     const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
+    const doctorHospitalInput = bookingForm.querySelector('[name="doctorHospital"]');
 
     if (nameInput && !nameInput.value) nameInput.value = user?.fullName || user?.name || '';
     if (emailInput && !emailInput.value) emailInput.value = user?.email || '';
@@ -76,8 +78,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (doctorInput) doctorInput.value = '';
     if (doctorIdInput) doctorIdInput.value = '';
     if (doctorEmailInput) doctorEmailInput.value = '';
+    if (doctorHospitalInput) doctorHospitalInput.value = '';
     if (timeInput) timeInput.value = '';
     state.selectedSlot = null;
+  }
+
+  function updateHospitalBanner(hospitalName, label = 'Selected Hospital') {
+    const bannerContainer = document.getElementById('hospitalBannerContainer');
+    if (!bannerContainer) return;
+
+    if (hospitalName && hospitalName !== 'N/A') {
+      bannerContainer.innerHTML = `
+        <div class="hospital-banner" style="margin-bottom: 2.5rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(37, 99, 235, 0.2); border-left: 5px solid var(--primary); background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); display: flex; align-items: center; gap: 1.25rem; transition: all 0.3s ease-in-out;">
+          <span style="font-size: 1.8rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">🏥</span>
+          <div>
+            <span class="muted" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; display: block; margin-bottom: 0.25rem;">${label}</span>
+            <strong style="font-size: 1.25rem; color: var(--text); font-family: 'Poppins', sans-serif;">${MedicaresAPI.sanitizeText(hospitalName)}</strong>
+          </div>
+        </div>
+      `;
+    } else {
+      bannerContainer.innerHTML = '';
+    }
+  }
+
+  function renderHospitalBanner() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hospitalName = urlParams.get('hospitalName') || urlParams.get('hospital') || '';
+
+    if (hospitalName) {
+      updateHospitalBanner(hospitalName, 'Partner Hospital');
+    }
   }
 
   /* ── Slot generation ─────────────────────────── */
@@ -308,8 +339,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         id: Number(doctor.id),
         name: String(doctor.name || doctor.fullName || 'Doctor'),
         specialization: String(doctor.specialization || doctor.specialty || 'General'),
-        hospital: String(doctor.hospital || doctor.location || doctor.address || 'N/A'),
-        location: String(doctor.location || doctor.address || doctor.hospital || 'N/A'),
+        hospital: String(doctor.hospital_name || doctor.hospital || doctor.location || doctor.address || 'N/A'),
+        location: String(doctor.location || doctor.address || doctor.hospital_name || doctor.hospital || 'N/A'),
         email: String(doctor.email || doctor.doctorEmail || doctor.contactEmail || '')
       }));
 
@@ -388,6 +419,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     specializationFilter.innerHTML = ['<option value="all">All</option>', ...specializations.map((item) => `<option value="${MedicaresAPI.sanitizeText(item)}">${MedicaresAPI.sanitizeText(item)}</option>`)].join('');
     hospitalFilter.innerHTML = ['<option value="all">All Hospitals</option>', ...hospitals.map((item) => `<option value="${MedicaresAPI.sanitizeText(item)}">${MedicaresAPI.sanitizeText(item)}</option>`)].join('');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const hospitalParam = urlParams.get('hospitalName') || urlParams.get('hospital') || '';
+    if (hospitalParam) {
+      const matched = hospitals.find((h) => h.toLowerCase() === hospitalParam.toLowerCase());
+      if (matched) {
+        hospitalFilter.value = matched;
+      }
+    }
   }
 
   function getFilteredDoctors() {
@@ -420,7 +460,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="badge badge--info">ID ${MedicaresAPI.sanitizeText(doctor.id)}</span>
         </div>
         <h3>${MedicaresAPI.sanitizeText(doctor.name)}</h3>
-        <p>${MedicaresAPI.sanitizeText(doctor.specialization)} • ${MedicaresAPI.sanitizeText(doctor.location)}</p>
+        <p style="font-weight: 600; color: var(--primary); margin: 0.3rem 0; display: flex; align-items: center; gap: 0.35rem;">
+          <span>🏥</span> ${MedicaresAPI.sanitizeText(doctor.hospital)}
+        </p>
+        <p class="muted" style="font-size: 0.9rem; margin-bottom: 0.3rem;">${MedicaresAPI.sanitizeText(doctor.specialization)}</p>
+        <p class="muted" style="font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
+          <span>📍</span> ${MedicaresAPI.sanitizeText(doctor.location)}
+        </p>
         <div class="flex justify-between align-center" style="margin-top:1rem;">
           <div>
             <div class="muted" style="font-size:0.9rem;">Availability</div>
@@ -441,10 +487,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const doctorInput = bookingForm.querySelector('[name="doctor"]');
         const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
         const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
+        const doctorHospitalInput = bookingForm.querySelector('[name="doctorHospital"]');
         if (doctorInput) doctorInput.value = `${selectedDoctor.name} - ${selectedDoctor.specialization}`;
         if (doctorIdInput) doctorIdInput.value = String(selectedDoctor.id);
         if (doctorEmailInput) doctorEmailInput.value = selectedDoctor.email || '';
+        if (doctorHospitalInput) doctorHospitalInput.value = selectedDoctor.hospital || '';
         notify('Doctor selected', `${selectedDoctor.name} selected for booking.`, 'success');
+
+        // Dynamically update or display the hospital banner at the top
+        if (selectedDoctor.hospital && selectedDoctor.hospital !== 'N/A') {
+          updateHospitalBanner(selectedDoctor.hospital, 'Selected Hospital');
+        }
 
         // Re-render the slot grid since doctor changed
         renderSlotGrid();
@@ -517,6 +570,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div><strong>Doctor:</strong> ${MedicaresAPI.sanitizeText(state.selectedDoctor.name)}</div>
         <div><strong>Doctor ID:</strong> ${MedicaresAPI.sanitizeText(state.selectedDoctor.id)}</div>
         <div><strong>Specialization:</strong> ${MedicaresAPI.sanitizeText(state.selectedDoctor.specialization)}</div>
+        <div><strong>Hospital:</strong> ${MedicaresAPI.sanitizeText(state.selectedDoctor.hospital)}</div>
         <div><strong>Location:</strong> ${MedicaresAPI.sanitizeText(state.selectedDoctor.location)}</div>
         <div><strong>Patient:</strong> ${MedicaresAPI.sanitizeText(formData.patientName)}</div>
         <div><strong>Email:</strong> ${MedicaresAPI.sanitizeText(formData.patientEmail)}</div>
@@ -553,6 +607,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       doctorId: String(state.selectedDoctor.id || ''),
       doctorName: String(state.selectedDoctor.name || ''),
       doctorEmail: String(formData.doctorEmail || state.selectedDoctor.email || '').trim(),
+      hospital: String(state.selectedDoctor.hospital || '').trim(),
+      hospital_name: String(state.selectedDoctor.hospital || '').trim(),
       date: String(formData.date || '').trim(),
       time: String(formData.time || '').trim(),
       notes: String(formData.notes || '').trim()
@@ -567,9 +623,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const doctorInput = bookingForm.querySelector('[name="doctor"]');
       const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
       const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
+      const doctorHospitalInput = bookingForm.querySelector('[name="doctorHospital"]');
       if (doctorInput) doctorInput.value = '';
       if (doctorIdInput) doctorIdInput.value = '';
       if (doctorEmailInput) doctorEmailInput.value = '';
+      if (doctorHospitalInput) doctorHospitalInput.value = '';
 
       // Reset slot grid
       if (slotGrid) {

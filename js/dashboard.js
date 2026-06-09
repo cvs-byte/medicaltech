@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       specialization: doctor.specialization || doctor.specialty || 'General',
       email: doctor.email || doctor.doctorEmail || doctor.contactEmail || '',
       address: doctor.address || doctor.location || doctor.hospital || '',
-      hospital: doctor.hospital || doctor.location || doctor.address || 'N/A',
-      location: doctor.location || doctor.address || doctor.hospital || 'N/A',
+      hospital: doctor.hospital_name || doctor.hospital || doctor.location || doctor.address || 'N/A',
+      location: doctor.location || doctor.address || doctor.hospital_name || doctor.hospital || 'N/A',
     }));
   }
 
@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      const payload = { name, specialization, email, address, hospital };
+      const payload = { hospital, hospital_name: hospital, name, specialization, email, address };
       if (id) payload.id = id;
 
       try {
