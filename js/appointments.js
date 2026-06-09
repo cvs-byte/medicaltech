@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (nameInput && !nameInput.value) nameInput.value = user?.fullName || user?.name || '';
     if (emailInput && !emailInput.value) emailInput.value = user?.email || '';
-    if (phoneInput && !phoneInput.value) phoneInput.value = user?.phoneNumber || user?.phone || '';
+    if (phoneInput && !phoneInput.value) phoneInput.value = user?.phoneNumber || user?.phone || user?.phone_number || user?.patientPhone || '';
     if (dateInput) dateInput.min = new Date().toISOString().split('T')[0];
     if (doctorInput) doctorInput.value = '';
     if (doctorIdInput) doctorIdInput.value = '';

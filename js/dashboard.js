@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
       <div class="stack" style="margin-top:1rem;">
         <div class="dashboard-badge">Patient ID #${MedicaresAPI.sanitizeText(user.userId || '-')}</div>
-        <p class="muted" style="margin:0;">Phone: ${MedicaresAPI.sanitizeText(user.phoneNumber || '-')}</p>
+        <p class="muted" style="margin:0;">Phone: ${MedicaresAPI.sanitizeText(user.phoneNumber || user.phone || user.phone_number || '-')}</p>
         <p class="muted" style="margin:0;">Gender: ${MedicaresAPI.sanitizeText(user.gender || '-')}</p>
       </div>
     `;

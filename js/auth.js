@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? 'patient'
         : resolveRole(data?.user?.role, data?.role, requestedRole, 'patient');
       const token = data?.token || data?.accessToken || data?.access_token || data?.user?.token || '';
+      const phoneVal = data?.user?.phoneNumber || data?.user?.phone || data?.user?.phone_number || data?.phoneNumber || data?.phone || data?.phone_number || '';
       const session = {
         token,
         user: {
@@ -126,7 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
           name: data?.user?.name || data?.user?.fullName || data?.name || data?.fullName || payload.email,
           email: data?.user?.email || data?.email || payload.email,
           role: resolvedRole,
-          userId: data?.user?.userId || data?.user?.id || data?.userId || data?.id || ''
+          userId: data?.user?.userId || data?.user?.id || data?.userId || data?.id || '',
+          phoneNumber: phoneVal,
+          phone: phoneVal
         }
       };
 
@@ -224,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const resolvedRole = resolveRole(result?.user?.role, result?.role, 'patient');
       const token = result?.token || result?.accessToken || result?.access_token || result?.user?.token || '';
 
+      const phoneVal = result?.user?.phoneNumber || result?.user?.phone || result?.user?.phone_number || result?.phoneNumber || result?.phone || result?.phone_number || payload.phone || payload.phoneNumber || '';
       const session = {
         token,
         user: {
@@ -231,7 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
           name: result?.user?.name || result?.user?.fullName || result?.name || result?.fullName || payload.fullName,
           email: result?.user?.email || result?.email || payload.email,
           role: resolvedRole,
-          userId: result?.user?.userId || result?.user?.id || result?.userId || result?.id || ''
+          userId: result?.user?.userId || result?.user?.id || result?.userId || result?.id || '',
+          phoneNumber: phoneVal,
+          phone: phoneVal
         }
       };
 

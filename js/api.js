@@ -244,12 +244,21 @@ async function getProfile(options = {}) {
 
   const profile = await apiRequest('/profile', { method: 'GET' });
   if (profile) {
+    const existingUser = getAuthUser() || {};
+    const phoneVal = profile.phoneNumber || profile.phone || profile.phone_number || existingUser.phoneNumber || existingUser.phone || existingUser.phone_number || '';
+
+    if (!profile.phoneNumber && phoneVal) profile.phoneNumber = phoneVal;
+    if (!profile.phone && phoneVal) profile.phone = phoneVal;
+
     setCachedProfile(profile);
     setAuthUser({
-      name: profile.fullName || profile.name || profile.email || 'User',
-      email: profile.email || '',
-      role: String(profile.role || '').toLowerCase(),
-      userId: profile.userId || profile.id || ''
+      ...existingUser,
+      name: profile.fullName || profile.name || profile.email || existingUser.name || 'User',
+      email: profile.email || existingUser.email || '',
+      role: String(profile.role || existingUser.role || '').toLowerCase(),
+      userId: profile.userId || profile.id || existingUser.userId || '',
+      phoneNumber: phoneVal,
+      phone: phoneVal
     });
   }
   return profile;
