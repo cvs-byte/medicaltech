@@ -64,12 +64,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   function prefillPatientForm(user) {
     const nameInput = bookingForm.querySelector('[name="patientName"]');
     const emailInput = bookingForm.querySelector('[name="patientEmail"]');
+    const phoneInput = bookingForm.querySelector('[name="patientPhone"]');
     const doctorInput = bookingForm.querySelector('[name="doctor"]');
     const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
     const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
 
     if (nameInput && !nameInput.value) nameInput.value = user?.fullName || user?.name || '';
     if (emailInput && !emailInput.value) emailInput.value = user?.email || '';
+    if (phoneInput && !phoneInput.value) phoneInput.value = user?.phoneNumber || user?.phone || '';
     if (dateInput) dateInput.min = new Date().toISOString().split('T')[0];
     if (doctorInput) doctorInput.value = '';
     if (doctorIdInput) doctorIdInput.value = '';
@@ -455,6 +457,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function validateFormData(formData) {
     const patientName = String(formData.patientName || '').trim();
     const patientEmail = String(formData.patientEmail || '').trim();
+    const patientPhone = String(formData.patientPhone || '').trim();
     const date = String(formData.date || '').trim();
     const time = String(formData.time || '').trim();
 
@@ -468,6 +471,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patientEmail)) {
       return 'Enter a valid patient email.';
+    }
+
+    if (!patientPhone) {
+      return 'Patient phone number is required.';
     }
 
     if (!date) return 'Select an appointment date.';
@@ -513,6 +520,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div><strong>Location:</strong> ${MedicaresAPI.sanitizeText(state.selectedDoctor.location)}</div>
         <div><strong>Patient:</strong> ${MedicaresAPI.sanitizeText(formData.patientName)}</div>
         <div><strong>Email:</strong> ${MedicaresAPI.sanitizeText(formData.patientEmail)}</div>
+        <div><strong>Phone:</strong> ${MedicaresAPI.sanitizeText(formData.patientPhone)}</div>
         <div><strong>Doctor Email:</strong> ${MedicaresAPI.sanitizeText(formData.doctorEmail || state.selectedDoctor.email || 'Email not available')}</div>
         <div><strong>Date:</strong> ${MedicaresAPI.sanitizeText(formData.date)}</div>
         <div><strong>Time:</strong> ${MedicaresAPI.sanitizeText(formatSlotLabel(formData.time))}</div>
@@ -539,6 +547,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const payload = {
       patientName: String(formData.patientName || '').trim(),
       patientEmail: String(formData.patientEmail || '').trim(),
+      patientPhone: String(formData.patientPhone || '').trim(),
+      phoneNumber: String(formData.patientPhone || '').trim(),
+      phone: String(formData.patientPhone || '').trim(),
       doctorId: String(state.selectedDoctor.id || ''),
       doctorName: String(state.selectedDoctor.name || ''),
       doctorEmail: String(formData.doctorEmail || state.selectedDoctor.email || '').trim(),
