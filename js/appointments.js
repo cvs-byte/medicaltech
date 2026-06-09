@@ -346,6 +346,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       hydrateFilterOptions();
       renderDoctors();
+      handleUrlDoctorSelection();
     } catch (error) {
       doctorResults.innerHTML = `<div class="dashboard-empty"><h3>Unable to load doctors</h3><p class="muted">${MedicaresAPI.sanitizeText(error.message || 'Please try again later.')}</p></div>`;
     }
@@ -445,6 +446,67 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── Render doctors ──────────────────────────── */
 
+  function selectDoctor(selectedDoctor, isAutoSelect = false) {
+    if (!selectedDoctor) return;
+
+    state.selectedDoctor = selectedDoctor;
+    const doctorInput = bookingForm.querySelector('[name="doctor"]');
+    const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
+    const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
+    const doctorHospitalInput = bookingForm.querySelector('[name="doctorHospital"]');
+    if (doctorInput) doctorInput.value = `${selectedDoctor.name} - ${selectedDoctor.specialization}`;
+    if (doctorIdInput) doctorIdInput.value = String(selectedDoctor.id);
+    if (doctorEmailInput) doctorEmailInput.value = selectedDoctor.email || '';
+    if (doctorHospitalInput) doctorHospitalInput.value = selectedDoctor.hospital || '';
+
+    if (isAutoSelect) {
+      notify('Doctor selected', `${selectedDoctor.name} has been pre-selected.`, 'success');
+    } else {
+      notify('Doctor selected', `${selectedDoctor.name} selected for booking.`, 'success');
+    }
+
+    // Dynamically update or display the hospital banner at the top
+    if (selectedDoctor.hospital && selectedDoctor.hospital !== 'N/A') {
+      updateHospitalBanner(selectedDoctor.hospital, 'Selected Hospital');
+    }
+
+    // Refresh the doctors list to show visual selection
+    renderDoctors();
+
+    // Re-render the slot grid since doctor changed
+    renderSlotGrid();
+  }
+
+  function handleUrlDoctorSelection() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const doctorIdParam = urlParams.get('doctorId');
+    if (!doctorIdParam) return;
+
+    // Try to find exact match by ID string or number
+    let matchedDoctor = state.doctors.find(
+      (d) => String(d.id) === doctorIdParam || Number(d.id) === Number(doctorIdParam)
+    );
+
+    // If not found, try extracting digits from the parameter (e.g. "doctor-001" -> 1)
+    if (!matchedDoctor) {
+      const digits = doctorIdParam.match(/\d+/);
+      if (digits) {
+        const numericId = Number(digits[0]);
+        matchedDoctor = state.doctors.find((d) => Number(d.id) === numericId);
+      }
+    }
+
+    if (matchedDoctor) {
+      selectDoctor(matchedDoctor, true);
+
+      // Scroll the booking form into view
+      const formSection = bookingForm.closest('section');
+      if (formSection) {
+        formSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+
   function renderDoctors() {
     const doctors = getFilteredDoctors();
 
@@ -453,8 +515,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    doctorResults.innerHTML = doctors.map((doctor) => `
-      <article class="doctor-card card">
+    doctorResults.innerHTML = doctors.map((doctor) => {
+      const isSelected = state.selectedDoctor && Number(state.selectedDoctor.id) === Number(doctor.id);
+      const cardClass = isSelected ? 'doctor-card card doctor-card--selected' : 'doctor-card card';
+      const buttonText = isSelected ? 'Selected' : 'Book Now';
+      const buttonClass = isSelected ? 'button button--success' : 'button button--primary';
+
+      return `
+      <article class="${cardClass}" data-doctor-card-id="${doctor.id}">
         <div class="flex justify-between align-center">
           <div class="doctor-avatar">${MedicaresAPI.initials(doctor.name)}</div>
           <span class="badge badge--info">ID ${MedicaresAPI.sanitizeText(doctor.id)}</span>
@@ -472,35 +540,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="muted" style="font-size:0.9rem;">Availability</div>
             <strong>Check slots below</strong>
           </div>
-          <button class="button button--primary" type="button" data-select-doctor="${doctor.id}">Book Now</button>
+          <button class="${buttonClass}" type="button" data-select-doctor="${doctor.id}">${buttonText}</button>
         </div>
       </article>
-    `).join('');
+      `;
+    }).join('');
 
     document.querySelectorAll('[data-select-doctor]').forEach((button) => {
       button.addEventListener('click', () => {
         const doctorId = Number(button.dataset.selectDoctor || 0);
         const selectedDoctor = state.doctors.find((item) => item.id === doctorId);
         if (!selectedDoctor) return;
-
-        state.selectedDoctor = selectedDoctor;
-        const doctorInput = bookingForm.querySelector('[name="doctor"]');
-        const doctorIdInput = bookingForm.querySelector('[name="doctorId"]');
-        const doctorEmailInput = bookingForm.querySelector('[name="doctorEmail"]');
-        const doctorHospitalInput = bookingForm.querySelector('[name="doctorHospital"]');
-        if (doctorInput) doctorInput.value = `${selectedDoctor.name} - ${selectedDoctor.specialization}`;
-        if (doctorIdInput) doctorIdInput.value = String(selectedDoctor.id);
-        if (doctorEmailInput) doctorEmailInput.value = selectedDoctor.email || '';
-        if (doctorHospitalInput) doctorHospitalInput.value = selectedDoctor.hospital || '';
-        notify('Doctor selected', `${selectedDoctor.name} selected for booking.`, 'success');
-
-        // Dynamically update or display the hospital banner at the top
-        if (selectedDoctor.hospital && selectedDoctor.hospital !== 'N/A') {
-          updateHospitalBanner(selectedDoctor.hospital, 'Selected Hospital');
-        }
-
-        // Re-render the slot grid since doctor changed
-        renderSlotGrid();
+        selectDoctor(selectedDoctor);
       });
     });
   }
