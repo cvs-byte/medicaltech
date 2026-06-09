@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!table) return;
 
     if (!doctors.length) {
-      table.innerHTML = '<tr><td colspan="4" class="muted">No doctors found.</td></tr>';
+      table.innerHTML = '<tr><td colspan="5" class="muted">No doctors found.</td></tr>';
       return;
     }
 
@@ -594,9 +594,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       <tr>
         <td>${MedicaresAPI.sanitizeText(doctor.name)}</td>
         <td>${MedicaresAPI.sanitizeText(doctor.specialization)}</td>
+        <td>${MedicaresAPI.sanitizeText(doctor.hospital || 'N/A')}</td>
         <td>${MedicaresAPI.sanitizeText(doctor.id)}</td>
         <td>
-          <button class="button button--ghost" type="button" data-admin-edit-doctor="${doctor.id}" data-admin-doctor-email="${MedicaresAPI.sanitizeText(doctor.email || '')}" data-admin-doctor-address="${MedicaresAPI.sanitizeText(doctor.address || '')}">Edit</button>
+          <button class="button button--ghost" type="button" data-admin-edit-doctor="${doctor.id}" data-admin-doctor-email="${MedicaresAPI.sanitizeText(doctor.email || '')}" data-admin-doctor-address="${MedicaresAPI.sanitizeText(doctor.address || '')}" data-admin-doctor-hospital="${MedicaresAPI.sanitizeText(doctor.hospital || '')}">Edit</button>
           <button class="button button--primary" type="button" data-admin-delete-doctor="${doctor.id}">Delete</button>
         </td>
       </tr>
@@ -639,17 +640,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const specializationField = document.querySelector('[data-admin-doctor-specialization]');
     const emailField = document.querySelector('[data-admin-doctor-email]');
     const addressField = document.querySelector('[data-admin-doctor-address]');
+    const hospitalField = document.querySelector('[data-admin-doctor-hospital]');
     const cancelButton = document.querySelector('[data-admin-doctor-cancel]');
 
     document.querySelectorAll('[data-admin-edit-doctor]').forEach((button) => {
       button.addEventListener('click', () => {
         const row = button.closest('tr');
-        if (!row || !idField || !nameField || !specializationField || !emailField || !addressField) return;
+        if (!row || !idField || !nameField || !specializationField || !emailField || !addressField || !hospitalField) return;
         idField.value = button.dataset.adminEditDoctor || '';
         nameField.value = row.children[0]?.textContent?.trim() || '';
         specializationField.value = row.children[1]?.textContent?.trim() || '';
         emailField.value = button.dataset.adminDoctorEmail || '';
         addressField.value = button.dataset.adminDoctorAddress || '';
+        hospitalField.value = button.dataset.adminDoctorHospital || '';
       });
     });
 
@@ -678,9 +681,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       const specialization = String(specializationField?.value || '').trim();
       const email = String(emailField?.value || '').trim();
       const address = String(addressField?.value || '').trim();
+      const hospital = String(hospitalField?.value || '').trim();
 
-      if (name.length < 3 || specialization.length < 3 || address.length < 3) {
-        notify('Validation failed', 'Name, specialization, and address must be at least 3 characters.', 'error');
+      if (name.length < 3 || specialization.length < 3 || address.length < 3 || hospital.length < 3) {
+        notify('Validation failed', 'Name, specialization, address, and hospital must be at least 3 characters.', 'error');
         return;
       }
 
@@ -689,7 +693,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      const payload = { name, specialization, email, address };
+      const payload = { name, specialization, email, address, hospital };
       if (id) payload.id = id;
 
       try {
@@ -712,6 +716,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (specializationField) specializationField.value = '';
       if (emailField) emailField.value = '';
       if (addressField) addressField.value = '';
+      if (hospitalField) hospitalField.value = '';
     });
   }
 
@@ -817,7 +822,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const stats = document.querySelector('[data-admin-stats]');
     const doctors = document.querySelector('[data-admin-doctors]');
     if (stats) stats.innerHTML = '<p class="muted">Loading platform metrics...</p>';
-    if (doctors) doctors.innerHTML = '<tr><td colspan="4" class="muted">Loading doctors...</td></tr>';
+    if (doctors) doctors.innerHTML = '<tr><td colspan="5" class="muted">Loading doctors...</td></tr>';
   }
 
   function showErrorState(currentRole, message) {
@@ -835,7 +840,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (currentRole === 'admin') {
       const doctors = document.querySelector('[data-admin-doctors]');
-      if (doctors) doctors.innerHTML = `<tr><td colspan="4" class="muted">${MedicaresAPI.sanitizeText(message)}</td></tr>`;
+      if (doctors) doctors.innerHTML = `<tr><td colspan="5" class="muted">${MedicaresAPI.sanitizeText(message)}</td></tr>`;
     }
   }
 });

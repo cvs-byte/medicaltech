@@ -133,26 +133,37 @@
               <input type="hidden" data-admin-doctor-id />
               <div class="auth-row">
                 <div class="field-group">
+                  <label for="doctorHospital">Hospital name</label>
+                  <input id="doctorHospital" class="input" type="text" data-admin-doctor-hospital required minlength="3" />
+                  <span class="inline-error" id="doctorHospital-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+                <div class="field-group">
                   <label for="doctorName">Doctor name</label>
                   <input id="doctorName" class="input" type="text" data-admin-doctor-name required minlength="3" />
                   <span class="inline-error" id="doctorName-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
                 </div>
+              </div>
+              <div class="auth-row">
                 <div class="field-group">
                   <label for="doctorSpecialization">Specialization</label>
                   <input id="doctorSpecialization" class="input" type="text" data-admin-doctor-specialization required minlength="3" />
                   <span class="inline-error" id="doctorSpecialization-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
                 </div>
-              </div>
-              <div class="auth-row">
                 <div class="field-group">
                   <label for="doctorEmail">Email</label>
                   <input id="doctorEmail" class="input" type="email" data-admin-doctor-email required />
                   <span class="inline-error" id="doctorEmail-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
                 </div>
+              </div>
+              <div class="auth-row">
                 <div class="field-group">
                   <label for="doctorAddress">Address</label>
                   <input id="doctorAddress" class="input" type="text" data-admin-doctor-address required minlength="3" />
                   <span class="inline-error" id="doctorAddress-error" style="color: #ef4444; font-size: 0.82rem; margin-top: 0.2rem; display: none;"></span>
+                </div>
+                <div class="field-group" style="visibility: hidden;">
+                  <label>&nbsp;</label>
+                  <input class="input" type="text" disabled />
                 </div>
               </div>
               <div class="flex" style="gap:0.6rem;">
@@ -169,7 +180,7 @@
               <button class="button button--ghost" data-admin-doctor-next style="min-height: 40px; padding: 0.5rem 1rem;">Next &rarr;</button>
             </div>
           </div>
-          <div class="table-wrap"><table class="table"><thead><tr><th data-sort-doctor="name" style="cursor: pointer; user-select: none;">Doctor <span class="sort-icon"></span></th><th data-sort-doctor="specialization" style="cursor: pointer; user-select: none;">Specialty <span class="sort-icon"></span></th><th data-sort-doctor="id" style="cursor: pointer; user-select: none;">ID <span class="sort-icon"></span></th><th>Actions</th></tr></thead><tbody data-admin-doctors></tbody></table></div>
+          <div class="table-wrap"><table class="table"><thead><tr><th data-sort-doctor="name" style="cursor: pointer; user-select: none;">Doctor <span class="sort-icon"></span></th><th data-sort-doctor="specialization" style="cursor: pointer; user-select: none;">Specialty <span class="sort-icon"></span></th><th data-sort-doctor="hospital" style="cursor: pointer; user-select: none;">Hospital <span class="sort-icon"></span></th><th data-sort-doctor="id" style="cursor: pointer; user-select: none;">ID <span class="sort-icon"></span></th><th>Actions</th></tr></thead><tbody data-admin-doctors></tbody></table></div>
         </article>
       </section>
 
