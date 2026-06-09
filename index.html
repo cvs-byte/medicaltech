@@ -3,14 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Medicares | Smart Healthcare Appointment & Reminder Platform</title>
-  <meta name="description" content="Medicares is a premium healthcare SaaS for patient appointments, medicine reminders, and hospital collaboration with secure JWT-based access." />
+  <title>Medicares | Doctor Appointment & GST Pharmacy Software India</title>
+  <meta name="description" content="Medicares is India's leading clinic management software and doctor appointment system. Manage billing, prescriptions & pharmacy inventory with GST compliance." />
+  <meta name="keywords" content="doctor appointment system, online appointment booking for doctors, clinic management software India, pharmacy management system with GST, medical billing software India, appointment scheduling software for clinics, digital prescription system, pharmacy inventory software, doctor patient management system" />
   <meta name="theme-color" content="#2563eb" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    /* FAQ Accordions */
+    .faq-grid {
+      display: grid;
+      gap: 1rem;
+      max-width: 800px;
+      margin: 2rem auto 0;
+    }
+    .faq-item {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow: hidden;
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+    .faq-item:hover {
+      border-color: rgba(37, 99, 235, 0.3);
+      box-shadow: var(--shadow-soft);
+    }
+    .faq-item summary {
+      padding: 1.25rem 1.5rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      font-size: 1.05rem;
+    }
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-item summary::after {
+      content: '+';
+      font-size: 1.4rem;
+      font-weight: 400;
+      transition: transform 180ms ease;
+    }
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+    .faq-item p {
+      padding: 0 1.5rem 1.5rem;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -46,17 +97,17 @@
       <div class="container hero-grid-landing">
         <div class="hero-copy hero-copy-landing" data-animate>
           <div class="hero-kicker">
-            <span class="eyebrow">Smart Healthcare Appointment & Reminder Platform</span>
-            <span>Professionally developed. Patient-first. Secure by design.</span>
+            <span class="eyebrow">Smart Doctor Appointment System &amp; Clinic Management Platform</span>
+            <span>Online appointment booking for doctors. Patient-first. Secure.</span>
           </div>
           <h1>Welcome to Medicares</h1>
-          <p>Medicares is a premium healthcare SaaS built for easy patient appointment booking, medicine reminders, and secure technical support with a JWT-based foundation and AWS-ready architecture.</p>
+          <p>Medicares is a clinic management software India platform built for easy online appointment booking for doctors, medicine reminders, and medical billing software India integration with a JWT-based secure foundation.</p>
 
           <div class="hero-proof" aria-label="Platform highlights">
-            <span class="proof-chip">Patient booking workflow</span>
-            <span class="proof-chip">Reminder automation</span>
-            <span class="proof-chip">Role-based access</span>
-            <span class="proof-chip">AWS API Gateway ready</span>
+            <span class="proof-chip">doctor appointment system</span>
+            <span class="proof-chip">clinic management software India</span>
+            <span class="proof-chip">pharmacy management system with GST</span>
+            <span class="proof-chip">medical billing software India</span>
           </div>
 
           <div class="hero-actions">
@@ -72,16 +123,16 @@
         </div>
 
         <div class="hero-visual home-visual" data-animate>
-          <div class="floating-pill one">Live notifications</div>
-          <div class="floating-pill two">JWT-secured access</div>
-          <div class="floating-pill three">AWS integration ready</div>
+          <div class="floating-pill one">GST Invoices Live</div>
+          <div class="floating-pill two">EHR Patient Records</div>
+          <div class="floating-pill three">AWS Ready Platform</div>
 
           <div class="hero-card home-dashboard" aria-label="Medicares platform preview">
             <div class="dashboard-topline">
               <div>
                 <div class="status-pill">Operations online</div>
                 <h3 style="margin:0.85rem 0 0.25rem; font-size:1.35rem;">Care coordination dashboard</h3>
-                <p class="muted" style="margin:0;">Appointments, reminders, and hospital scheduling in one place.</p>
+                <p class="muted" style="margin:0;">Manage doctor patient management system details, billing, and scheduling from one place.</p>
               </div>
               <div class="avatar" aria-hidden="true">MC</div>
             </div>
@@ -107,7 +158,7 @@
                   <h3 style="margin:0;">Platform reliability</h3>
                   <span class="badge badge--success">Stable</span>
                 </div>
-                <p>Cloud-ready design for secure login, patient workflows, and service expansion across AWS infrastructure.</p>
+                <p>Cloud-ready clinic management software India features for secure login, patient workflows, and digital prescription system expansion across AWS infrastructure.</p>
                 <div class="dashboard-chart" aria-hidden="true">
                   <div class="chart-line"><span style="width:86%;"></span></div>
                   <div class="chart-line"><span style="width:74%;"></span></div>
@@ -156,36 +207,36 @@
         <div class="section-head">
           <div>
             <span class="eyebrow">Why Choose Medicares</span>
-            <h2 class="section-title">Built for modern healthcare workflows</h2>
+            <h2 class="section-title">Clinic Management Software India: Smart clinical workflows</h2>
           </div>
           <p class="section-subtitle">Everything is designed to feel like a premium healthcare SaaS while staying fast, secure, and easy to use across devices.</p>
         </div>
         <div class="grid grid-3">
           <article class="feature-card card" data-animate>
             <div class="feature-icon">⚕</div>
-            <h3>Appointment booking</h3>
+            <h3>Doctor Appointment System</h3>
             <ul>
-              <li>Search doctors</li>
-              <li>Filter specialization</li>
-              <li>Smooth booking flow</li>
+              <li>Search clinic doctors</li>
+              <li>online appointment booking for doctors</li>
+              <li>Smooth patient booking flow</li>
             </ul>
           </article>
           <article class="feature-card card" data-animate>
             <div class="feature-icon">⏰</div>
             <h3>Medicine reminders</h3>
             <ul>
-              <li>Daily and weekly schedules</li>
-              <li>Alert tracking</li>
-              <li>Smart notification system</li>
+              <li>Daily medicine schedules</li>
+              <li>pharmacy management system with GST check</li>
+              <li>Smart alert notifications</li>
             </ul>
           </article>
           <article class="feature-card card" data-animate>
             <div class="feature-icon">🔒</div>
-            <h3>JWT authentication</h3>
+            <h3>Medical Billing Software India</h3>
             <ul>
-              <li>Secure login system</li>
+              <li>Secure JWT authentication</li>
               <li>AWS API Gateway ready</li>
-              <li>Role-based access</li>
+              <li>GST invoice billing access</li>
             </ul>
           </article>
         </div>
@@ -196,16 +247,16 @@
       <div class="container grid grid-2 align-center">
         <div data-animate>
           <span class="eyebrow">Reminder Features</span>
-          <h2 class="section-title">Medicine planning that stays on schedule</h2>
-          <p class="section-subtitle">Patients can manage tablets, injections, and vitamins with reminder flows that feel like a real care companion.</p>
+          <h2 class="section-title">Appointment scheduling software for clinics &amp; medicine planning</h2>
+          <p class="section-subtitle">Patients and clinics can manage daily and weekly medicine schedules, linked directly to a digital prescription system care companion.</p>
           <div class="stack" style="margin-top:1.4rem;">
             <div class="feature-card card">
-              <strong>Smart intervals</strong>
-              <p>Daily, weekly, and monthly cycles with repeatable schedules.</p>
+              <strong>Smart intervals &amp; pharmacy inventory software</strong>
+              <p>Track medicine inventory schedules across daily, weekly, and monthly treatment cycles.</p>
             </div>
             <div class="feature-card card">
-              <strong>Alert history</strong>
-              <p>Track past reminders and mark medicines as taken.</p>
+              <strong>Doctor patient management system logs</strong>
+              <p>Track patient compliance history, active prescriptions, and medicine consumption updates.</p>
             </div>
           </div>
         </div>
@@ -227,16 +278,16 @@
       <div class="container grid grid-2 align-center">
         <div data-animate>
           <span class="eyebrow">Technical Support</span>
-          <h2 class="section-title">Built for startup-scale support and future growth</h2>
-          <p class="section-subtitle">This is a professional healthcare website with technical support workflows, clean integration paths, and a booking experience designed to stay simple for patients.</p>
+          <h2 class="section-title">Clinic Management Software India: Scale support and future growth</h2>
+          <p class="section-subtitle">This is a professional healthcare website offering tools like a pharmacy management system with GST, medical billing software India onboarding support, and a patient booking experience.</p>
           <div class="stack" style="margin-top:1.2rem;">
             <div class="feature-card card">
-              <strong>Technical onboarding</strong>
-              <p>Clear setup guidance for future AWS and API integration work.</p>
+              <strong>Clinic &amp; Pharmacy Setup Support</strong>
+              <p>Guidance to integrate pharmacy inventory software, billing APIs, and AWS endpoints.</p>
             </div>
             <div class="feature-card card">
-              <strong>Booking simplicity</strong>
-              <p>Patients can move from login to appointment booking with fewer steps.</p>
+              <strong>Online appointment booking for doctors</strong>
+              <p>Frictionless doctor appointment system flow for patients to register and book slots.</p>
             </div>
           </div>
         </div>
@@ -249,14 +300,14 @@
           <div class="dashboard-stack" style="margin-top:1rem;">
             <div class="dashboard-block">
               <div class="doctor-meta">
-                <h3 style="margin:0;">Support routing</h3>
+                <h3 style="margin:0;">GST Billing Support Routing</h3>
                 <span class="badge badge--success">Live</span>
               </div>
               <p>Contact requests are handled through the support inbox and future API workflows.</p>
             </div>
             <div class="dashboard-block">
               <div class="doctor-meta">
-                <h3 style="margin:0;">Simple appointment flow</h3>
+                <h3 style="margin:0;">Doctor Patient Management System sync</h3>
                 <span class="badge badge--warning">Patient-first</span>
               </div>
               <p>Patients can book appointments directly, or sign in to manage them from their account dashboard.</p>
@@ -264,6 +315,93 @@
           </div>
         </article>
       </div>
+    </section>
+
+    <section class="section" id="faqs">
+      <div class="container">
+        <div class="section-head text-center" style="flex-direction: column; align-items: center; margin-bottom: 3rem;">
+          <span class="eyebrow">FAQ</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Find answers to common questions about our clinic management software India and pharmacy systems.</p>
+        </div>
+        
+        <div class="faq-grid">
+          <details class="faq-item" open>
+            <summary>How does the Medicares doctor appointment system work?</summary>
+            <p>Our doctor appointment system provides a complete solution for online appointment booking for doctors. Clinics can configure consultation slots, accept online patient reservations, coordinate with walk-ins at the front-desk, and send automated email and SMS notification schedules to reduce no-shows.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does the clinic management software India support GST billing?</summary>
+            <p>Yes. Medicares is fully optimized for Indian businesses. The integrated medical billing software India handles custom OPD charges, prescription items, and generates GST-compliant bills automatically calculating CGST and SGST rates based on the relevant drug HSN codes.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can retail chemists use Medicares as a pharmacy inventory software?</summary>
+            <p>Absolutely. Medicares contains a robust pharmacy management system with GST that operates as real-time pharmacy inventory software. It allows pharmacy owners to record drug batches, monitor stock quantities, set reorder levels, and receive automated warnings for expiring medicines.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How does the digital prescription system benefit clinics and pharmacies?</summary>
+            <p>The digital prescription system allows doctors to write prescriptions electronically on tablets or laptops. The prescriptions are immediately saved in the doctor patient management system database. The in-house or partner pharmacy can pull up the patient details instantly, minimizing manual entry errors and dispensing wait times.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is Medicares suitable as appointment scheduling software for clinics in India?</summary>
+            <p>Yes, it is specifically customized for clinics, individual practitioners, and pharmacies. The tool acts as an appointment scheduling software for clinics, connecting patient appointments, digital history tracking, pharmacy transactions, and tax reporting under one dashboard.</p>
+          </details>
+        </div>
+      </div>
+
+      <!-- JSON-LD FAQ Schema for Google Search Engine Optimization -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does the Medicares doctor appointment system work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Medicares offers a complete online appointment booking for doctors platform. Healthcare providers can manage daily slots, receptionist bookings, configure custom consulting schedules, and minimize patient waiting times."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the clinic management software India support GST billing?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Medicares features advanced medical billing software India with full support for GST regulations. It automates SGST, CGST, and IGST tax calculations based on correct HSN codes for medicine and services."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can pharmacies use Medicares as a pharmacy inventory software?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely. Medicares provides a comprehensive pharmacy management system with GST compliance that functions as a pharmacy inventory software. You can track stocks by batch, monitor drug expiries, and automate supply requests."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the digital prescription system benefit clinics?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The digital prescription system enables doctors to record and issue electronic prescriptions. These feed directly into the doctor patient management system and the in-house pharmacy desk to eliminate slip losses."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Medicares suitable as appointment scheduling software for clinics?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Medicares is designed specifically as an appointment scheduling software for clinics, pharmacies, and small hospitals in India, bringing billing, doctor schedules, and EHR into one online app."
+            }
+          }
+        ]
+      }
+      </script>
     </section>
 
     <section class="section" id="contact">
@@ -276,18 +414,18 @@
             <article class="card" style="padding:1.2rem;">
               <h3 style="margin-top:0;">What this platform supports</h3>
               <ul>
-                <li>Direct patient appointment booking</li>
-                <li>Medicine reminder management</li>
-                <li>Hospital collaboration and coordination</li>
+                <li>Doctor appointment system &amp; patient booking</li>
+                <li>Pharmacy management system with GST &amp; medicine tracking</li>
+                <li>Clinic management software India &amp; hospital support</li>
               </ul>
             </article>
             <article class="card" style="padding:1.2rem;">
               <h3 style="margin-top:0;">Support inbox</h3>
               <ul>
                 <li><a href="mailto:support@medicares.me">support@medicares.me</a></li>
-                <li>JWT authentication</li>
-                <li>AWS API Gateway ready</li>
-                <li>Future backend friendly</li>
+                <li>JWT authentication &amp; medical billing software India</li>
+                <li>AWS API Gateway ready &amp; digital prescription system</li>
+                <li>Future backend friendly pharmacy inventory software</li>
               </ul>
             </article>
           </div>
@@ -325,8 +463,8 @@
             <small>Healthcare SaaS</small>
           </span>
         </a>
-        <p class="muted">A premium healthcare appointment booking and medicine reminder platform for patients, doctors, and hospitals.</p>
-        <span class="footer-note">AWS-ready architecture with secure JWT-based access</span>
+        <p class="muted">Medicares is a doctor appointment system and clinic management software India platform. Manage billing, prescriptions &amp; pharmacy inventory with GST compliance.</p>
+        <span class="footer-note">Secure JWT access with GST-ready medical billing software India support.</span>
       </div>
       <div>
         <h4>Platform</h4>
