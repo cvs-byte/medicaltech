@@ -181,6 +181,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         patientId: String(appointment.patient_id || appointment.patientId || ''),
         patientEmail: String(appointment.patient_email || appointment.patientEmail || appointment.email || ''),
         patientName: String(appointment.patient_name || appointment.patientName || appointment.patient || ''),
+        patientPhone: String(appointment.patientPhone || appointment.phoneNumber || appointment.phone || appointment.patient_phone || ''),
+        appointmentType: String(appointment.appointmentType || appointment.type || appointment.bookingType || 'Consultation'),
         date,
         time,
         status: String(appointment.status || 'BOOKED').toUpperCase(),
@@ -285,11 +287,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     container.innerHTML = upcoming.slice(0, 6).map((appointment) => {
       const doctor = doctors.find((item) => Number(item.id) === Number(appointment.doctorId));
+      const docName = doctor?.name || appointment.doctorName || `Doctor #${appointment.doctorId}`;
       return `
-        <div class="schedule-item">
-          <strong>${MedicaresAPI.sanitizeText(doctor?.name || `Doctor #${appointment.doctorId}`)}</strong>
-          <div class="meta">${MedicaresAPI.sanitizeText(doctor?.specialization || 'General')} • ${appointmentLabel(appointment)}</div>
-          <div class="badge badge--info" style="margin-top:0.6rem;">${MedicaresAPI.sanitizeText(appointment.status)}</div>
+        <div class="schedule-item" style="padding: 1rem; border-bottom: 1px solid var(--border);">
+          <strong>Doctor: ${MedicaresAPI.sanitizeText(docName)}</strong>
+          <div class="meta" style="margin-top:0.25rem;">
+            ${MedicaresAPI.sanitizeText(doctor?.specialization || 'General')} • ${appointmentLabel(appointment)}
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text); margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            <strong>Patient Name:</strong> ${MedicaresAPI.sanitizeText(appointment.patientName || 'N/A')}
+            ${appointment.patientPhone ? `• <strong>Phone:</strong> ${MedicaresAPI.sanitizeText(appointment.patientPhone)}` : ''}
+            • <strong>Type:</strong> ${MedicaresAPI.sanitizeText(appointment.appointmentType || 'Consultation')}
+          </div>
+          <div class="badge badge--info">${MedicaresAPI.sanitizeText(appointment.status)}</div>
         </div>
       `;
     }).join('');
@@ -326,10 +336,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     notifications.innerHTML = history.slice(-8).reverse().map((appointment) => {
       const doctor = doctors.find((item) => Number(item.id) === Number(appointment.doctorId));
+      const docName = doctor?.name || appointment.doctorName || `Doctor #${appointment.doctorId}`;
       return `
-        <div class="notification-item">
-          <strong>${MedicaresAPI.sanitizeText(doctor?.name || `Doctor #${appointment.doctorId}`)}</strong>
-          <div class="meta">${appointmentLabel(appointment)} • ${MedicaresAPI.sanitizeText(appointment.status)}</div>
+        <div class="notification-item" style="padding: 1rem; border-bottom: 1px solid var(--border);">
+          <strong>Doctor: ${MedicaresAPI.sanitizeText(docName)}</strong>
+          <div class="meta" style="margin-top:0.25rem;">
+            ${appointmentLabel(appointment)}
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text); margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            <strong>Patient Name:</strong> ${MedicaresAPI.sanitizeText(appointment.patientName || 'N/A')}
+            ${appointment.patientPhone ? `• <strong>Phone:</strong> ${MedicaresAPI.sanitizeText(appointment.patientPhone)}` : ''}
+            • <strong>Type:</strong> ${MedicaresAPI.sanitizeText(appointment.appointmentType || 'Consultation')}
+          </div>
+          <div class="badge badge--warning" style="display:inline-block;">${MedicaresAPI.sanitizeText(appointment.status)}</div>
         </div>
       `;
     }).join('');
@@ -354,7 +373,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderDoctorStats(relevantAppointments.length, upcoming.length, pending.length);
     renderDoctorSchedule(upcoming, doctors);
-    renderDoctorTable(relevantAppointments, doctors);
+    renderDoctorTable(relevantAppointments, doctors, user);
   }
 
   function renderDoctorProfile(user, doctors) {
@@ -428,13 +447,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     container.innerHTML = upcoming.slice(0, 8).map((appointment) => {
       const doctor = doctors.find((item) => Number(item.id) === Number(appointment.doctorId));
+      const docName = doctor?.name || appointment.doctorName || `Doctor #${appointment.doctorId}`;
       return `
-        <div class="schedule-item">
-          <strong>${MedicaresAPI.sanitizeText(appointment.patientName || `Patient #${appointment.patientId || '-'}`)}</strong>
-          <div class="meta">
+        <div class="schedule-item" style="padding: 1rem; border-bottom: 1px solid var(--border);">
+          <strong>Patient: ${MedicaresAPI.sanitizeText(appointment.patientName || `Patient #${appointment.patientId || '-'}`)}</strong>
+          <div class="meta" style="margin-top:0.25rem;">
             Email: ${MedicaresAPI.sanitizeText(appointment.patientEmail || 'N/A')}
+            ${appointment.patientPhone ? `• Phone: ${MedicaresAPI.sanitizeText(appointment.patientPhone)}` : ''}
             <br>
-            Doctor: ${MedicaresAPI.sanitizeText(doctor?.name || appointment.doctorName || `Doctor #${appointment.doctorId}`)} (${MedicaresAPI.sanitizeText(doctor?.specialization || 'General')}) • ${appointmentLabel(appointment)}
+            Doctor: ${MedicaresAPI.sanitizeText(docName)} (${MedicaresAPI.sanitizeText(doctor?.specialization || 'General')}) • ${appointmentLabel(appointment)}
+            <br>
+            Type: ${MedicaresAPI.sanitizeText(appointment.appointmentType || 'Consultation')}
           </div>
           <div class="badge badge--${appointment.status === 'BOOKED' ? 'success' : 'warning'}" style="margin-top:0.6rem;">${MedicaresAPI.sanitizeText(appointment.status)}</div>
         </div>
@@ -442,9 +465,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).join('');
   }
 
-  function renderDoctorTable(appointments, doctors) {
+  function renderDoctorTable(appointments, doctors, user) {
     const table = document.querySelector('[data-doctor-patients]');
     const searchInput = document.querySelector('[data-patient-search]');
+    const downloadBtn = document.getElementById('download-pdf-btn');
+    const paginationContainer = document.getElementById('doctor-pagination');
     if (!table) return;
 
     const rows = appointments.map((appointment) => {
@@ -452,44 +477,348 @@ document.addEventListener('DOMContentLoaded', async () => {
       return {
         patientName: appointment.patientName || 'Patient',
         patientEmail: appointment.patientEmail || 'N/A',
+        patientPhone: appointment.patientPhone || 'N/A',
         patientId: appointment.patientId || '-',
-        detail: `Doctor: ${doctor?.name || appointment.doctorName || `Doctor #${appointment.doctorId}`} (${doctor?.specialization || 'General'}) • ${appointmentLabel(appointment)}`,
-        time: MedicaresAPI.formatTime(appointment.time),
-        status: appointment.status
+        appointmentType: appointment.appointmentType || 'Consultation',
+        dateTime: appointmentLabel(appointment),
+        status: appointment.status,
+        rawAppointment: appointment
       };
     });
+
+    let currentFilteredRows = [...rows];
+    const PAGE_SIZE = 10;
+    let currentPage = 1;
 
     const draw = (query = '') => {
       const lowered = query.toLowerCase().trim();
       const filtered = lowered
-        ? rows.filter((item) => `${item.patientName} ${item.patientEmail} ${item.patientId} ${item.detail}`.toLowerCase().includes(lowered))
+        ? rows.filter((item) => `${item.patientName} ${item.patientEmail} ${item.patientPhone} ${item.patientId} ${item.appointmentType} ${item.dateTime}`.toLowerCase().includes(lowered))
         : rows;
 
+      currentFilteredRows = filtered;
+
+      const totalItems = filtered.length;
+      const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
+
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIdx = (currentPage - 1) * PAGE_SIZE;
+      const endIdx = Math.min(startIdx + PAGE_SIZE, totalItems);
+      const pageRows = filtered.slice(startIdx, endIdx);
+
       if (!filtered.length) {
-        table.innerHTML = '<tr><td colspan="4" class="muted">No matching appointments found.</td></tr>';
+        table.innerHTML = '<tr><td colspan="6" class="muted" style="text-align: center; padding: 2.5rem 1rem;">No matching appointments found.</td></tr>';
+        if (paginationContainer) paginationContainer.style.display = 'none';
         return;
+      } else {
+        if (paginationContainer) paginationContainer.style.display = 'flex';
       }
 
-      table.innerHTML = filtered.map((item) => `
+      table.innerHTML = pageRows.map((item) => `
         <tr>
           <td>
-            <strong>${MedicaresAPI.sanitizeText(item.patientName)}</strong>
-            <div class="meta">Email: ${MedicaresAPI.sanitizeText(item.patientEmail)}</div>
-            <div class="meta">ID: ${MedicaresAPI.sanitizeText(item.patientId)}</div>
-            <div class="meta" style="margin-top:0.2rem;font-size:0.85rem;">${MedicaresAPI.sanitizeText(item.detail)}</div>
+            <div style="font-weight: 600; color: var(--text); font-size: 0.95rem;">${MedicaresAPI.sanitizeText(item.patientName)}</div>
+            <div class="meta" style="font-size: 0.8rem; margin-top: 0.15rem;">ID: ${MedicaresAPI.sanitizeText(item.patientId)}</div>
           </td>
-          <td>${MedicaresAPI.sanitizeText(item.time)}</td>
-          <td><span class="badge badge--${item.status === 'BOOKED' ? 'success' : 'warning'}">${MedicaresAPI.sanitizeText(item.status)}</span></td>
           <td>
-            <button class="button button--ghost" type="button" disabled>Review</button>
-            <button class="button button--primary" type="button" disabled>Accept</button>
+            <div style="font-size: 0.9rem; color: var(--text);">${MedicaresAPI.sanitizeText(item.patientEmail)}</div>
+            <div class="meta" style="font-size: 0.8rem; margin-top: 0.15rem;">${MedicaresAPI.sanitizeText(item.patientPhone)}</div>
+          </td>
+          <td>
+            <div style="font-weight: 500; color: var(--text); font-size: 0.9rem;">${MedicaresAPI.sanitizeText(item.dateTime)}</div>
+          </td>
+          <td>
+            <span class="badge badge--info" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.5rem;">
+              ${MedicaresAPI.sanitizeText(item.appointmentType)}
+            </span>
+          </td>
+          <td>
+            <span class="badge badge--${item.status === 'BOOKED' ? 'success' : 'warning'}" style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem;">
+              ${MedicaresAPI.sanitizeText(item.status)}
+            </span>
+          </td>
+          <td>
+            <button class="button button--ghost" type="button" onclick="showAppointmentDetailsModal('${item.rawAppointment.id || ''}')" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; min-height: auto; border-radius: 8px;">Review</button>
           </td>
         </tr>
       `).join('');
+
+      renderPaginationControls(totalItems, totalPages);
+    };
+
+    const renderPaginationControls = (totalItems, totalPages) => {
+      if (!paginationContainer) return;
+
+      const startItem = totalItems === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+      const endItem = Math.min(currentPage * PAGE_SIZE, totalItems);
+
+      let buttonsHtml = '';
+      
+      buttonsHtml += `
+        <button class="button button--ghost" type="button" ${currentPage === 1 ? 'disabled' : ''} data-page-action="prev" style="min-height: 36px; padding: 0.25rem 0.75rem; font-size: 0.85rem; border-radius: 8px; margin: 0 0.15rem;">
+          Previous
+        </button>
+      `;
+
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+          buttonsHtml += `
+            <button class="button ${currentPage === i ? 'button--primary' : 'button--ghost'}" type="button" data-page-num="${i}" style="min-height: 36px; width: 36px; padding: 0; font-size: 0.85rem; border-radius: 8px; margin: 0 0.15rem; ${currentPage === i ? 'color: white; pointer-events: none;' : ''}">
+              ${i}
+            </button>
+          `;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+          buttonsHtml += `<span style="padding: 0 0.25rem; color: var(--muted); font-size: 0.9rem;">...</span>`;
+        }
+      }
+
+      buttonsHtml += `
+        <button class="button button--ghost" type="button" ${currentPage === totalPages ? 'disabled' : ''} data-page-action="next" style="min-height: 36px; padding: 0.25rem 0.75rem; font-size: 0.85rem; border-radius: 8px; margin: 0 0.15rem;">
+          Next
+        </button>
+      `;
+
+      paginationContainer.innerHTML = `
+        <div class="pagination-info" style="font-size: 0.9rem; color: var(--muted);">
+          Showing <strong style="color: var(--text);">${startItem}</strong> to <strong style="color: var(--text);">${endItem}</strong> of <strong style="color: var(--text);">${totalItems}</strong> appointments
+        </div>
+        <div class="pagination-buttons" style="display: flex; align-items: center;">
+          ${buttonsHtml}
+        </div>
+      `;
+
+      paginationContainer.querySelectorAll('[data-page-action="prev"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            draw(searchInput?.value || '');
+          }
+        });
+      });
+
+      paginationContainer.querySelectorAll('[data-page-action="next"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            draw(searchInput?.value || '');
+          }
+        });
+      });
+
+      paginationContainer.querySelectorAll('[data-page-num]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = parseInt(btn.dataset.pageNum, 10);
+          if (page && page !== currentPage) {
+            currentPage = page;
+            draw(searchInput?.value || '');
+          }
+        });
+      });
     };
 
     draw();
-    searchInput?.addEventListener('input', () => draw(searchInput.value));
+    
+    searchInput?.addEventListener('input', () => {
+      currentPage = 1;
+      draw(searchInput.value);
+    });
+
+    // Handle PDF Download
+    if (downloadBtn) {
+      const newBtn = downloadBtn.cloneNode(true);
+      downloadBtn.parentNode.replaceChild(newBtn, downloadBtn);
+
+      newBtn.addEventListener('click', () => {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          const docName = user?.fullName || user?.name || 'Doctor';
+          const email = user?.email || 'N/A';
+          const totalCount = currentFilteredRows.length;
+          
+          // Header banner
+          doc.setFillColor(37, 99, 235);
+          doc.rect(0, 0, 210, 40, 'F');
+          
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(22);
+          doc.setFont('helvetica', 'bold');
+          doc.text("MEDICARES CLINICAL PORTAL", 14, 18);
+          
+          doc.setFontSize(11);
+          doc.setFont('helvetica', 'normal');
+          doc.text("Official Patient Booking History Report", 14, 25);
+          doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 32);
+          
+          // Provider Details
+          doc.setTextColor(15, 23, 42);
+          doc.setFontSize(12);
+          doc.setFont('helvetica', 'bold');
+          doc.text("Provider Information", 14, 50);
+          
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Doctor Name:  ${docName}`, 14, 56);
+          doc.text(`Email Address: ${email}`, 14, 62);
+          doc.text(`Status:        Authorized Medical Staff`, 14, 68);
+          
+          // Summary block
+          doc.setFillColor(248, 250, 252);
+          doc.rect(130, 45, 66, 25, 'F');
+          doc.rect(130, 45, 66, 25, 'S');
+          doc.setFont('helvetica', 'bold');
+          doc.text("Report Summary", 134, 51);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Filtered Bookings: ${totalCount}`, 134, 58);
+          doc.text(`Source: Live Database`, 134, 64);
+          
+          // Data Table
+          doc.autoTable({
+            head: [['Patient Name', 'Patient ID', 'Email', 'Phone', 'Date & Time', 'Type', 'Status']],
+            body: currentFilteredRows.map(item => [
+              item.patientName,
+              item.patientId,
+              item.patientEmail,
+              item.patientPhone,
+              item.dateTime,
+              item.appointmentType,
+              item.status
+            ]),
+            startY: 78,
+            theme: 'striped',
+            headStyles: {
+              fillColor: [15, 23, 42],
+              textColor: [255, 255, 255],
+              fontSize: 9,
+              fontStyle: 'bold'
+            },
+            bodyStyles: {
+              fontSize: 9,
+              textColor: [30, 41, 59]
+            },
+            columnStyles: {
+              0: { cellWidth: 32 },
+              1: { cellWidth: 15 },
+              2: { cellWidth: 40 },
+              3: { cellWidth: 28 },
+              4: { cellWidth: 40 },
+              5: { cellWidth: 25 },
+              6: { cellWidth: 20 }
+            },
+            alternateRowStyles: {
+              fillColor: [248, 250, 252]
+            },
+            margin: { top: 78 }
+          });
+          
+          // Footer
+          const pageCount = doc.internal.getNumberOfPages();
+          for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(148, 163, 184);
+            doc.text(`Page ${i} of ${pageCount}`, 196, 285, null, null, "right");
+            doc.text("CONFIDENTIAL - FOR INTERNAL MEDICAL USE ONLY. Generated via Medicares Clinic API.", 14, 285);
+          }
+          
+          doc.save(`Booking_History_Report_${docName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+          
+          if (typeof MedicaresAPI.showToast === 'function') {
+            MedicaresAPI.showToast("Report Downloaded", "PDF has been generated and saved successfully.", "success");
+          } else {
+            alert("PDF Downloaded successfully!");
+          }
+        } catch (err) {
+          console.error("PDF generation failed:", err);
+          alert("Error generating PDF. Please check console for details.");
+        }
+      });
+    }
+
+    // Modal popup helper methods
+    window.showAppointmentDetailsModal = function(id) {
+      let modal = document.getElementById('doctorReviewModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'doctorReviewModal';
+        modal.className = 'modal';
+        modal.innerHTML = `
+          <div class="modal-card" style="padding: 0; max-width: 650px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--surface) 30%, var(--background) 100%); border-bottom: 1px solid var(--border); padding: 1.5rem 1.8rem;">
+              <h3 style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 1.35rem; color: var(--text); font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Appointment Review
+              </h3>
+              <button class="button button--ghost" type="button" onclick="closeDoctorReviewModal()" style="min-height: auto; width: 32px; height: 32px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; line-height: 1;">✕</button>
+            </div>
+            <div class="modal-body" id="doctorReviewModalBody" style="padding: 1.8rem; background: var(--surface-strong);">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="modal-footer" style="padding: 1.2rem 1.8rem; background: linear-gradient(180deg, var(--surface-strong) 0%, var(--background) 100%); border-top: 1px solid var(--border);">
+              <button class="button button--ghost" type="button" onclick="closeDoctorReviewModal()" style="min-height: 40px; padding: 0.5rem 1.5rem; font-size: 0.9rem;">Close</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeDoctorReviewModal();
+        });
+      }
+
+      const row = rows.find(r => String(r.rawAppointment.id) === String(id));
+      if (!row) return;
+
+      const appt = row.rawAppointment;
+      const body = document.getElementById('doctorReviewModalBody');
+      body.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div style="display: flex; gap: 1rem; align-items: center; padding-bottom: 1rem; border-bottom: 1px dashed var(--border);">
+            <div class="avatar-xl" style="width: 54px; height: 54px; font-size: 1.25rem;">${MedicaresAPI.initials(appt.patientName)}</div>
+            <div>
+              <h4 style="margin: 0; font-size: 1.15rem; color: var(--text); font-weight: 700;">${MedicaresAPI.sanitizeText(appt.patientName)}</h4>
+              <p class="muted" style="margin: 0.15rem 0 0 0; font-size: 0.85rem;">Patient ID: ${MedicaresAPI.sanitizeText(appt.patientId || 'N/A')}</p>
+            </div>
+          </div>
+
+          <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+            <div>
+              <h5 style="margin: 0 0 0.75rem 0; color: var(--primary); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Contact Information</h5>
+              <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem;">
+                <div style="display: flex; justify-content: space-between;"><span style="color: var(--muted);">Email:</span> <strong style="color: var(--text); text-align: right;">${MedicaresAPI.sanitizeText(appt.patientEmail || 'N/A')}</strong></div>
+                <div style="display: flex; justify-content: space-between;"><span style="color: var(--muted);">Phone:</span> <strong style="color: var(--text); text-align: right;">${MedicaresAPI.sanitizeText(appt.patientPhone || 'N/A')}</strong></div>
+              </div>
+            </div>
+            
+            <div>
+              <h5 style="margin: 0 0 0.75rem 0; color: var(--primary); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Consultation Details</h5>
+              <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem;">
+                <div style="display: flex; justify-content: space-between;"><span style="color: var(--muted);">Date & Time:</span> <strong style="color: var(--text); text-align: right;">${MedicaresAPI.sanitizeText(row.dateTime)}</strong></div>
+                <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--muted);">Type:</span> <span class="badge badge--info" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.5rem;">${MedicaresAPI.sanitizeText(appt.appointmentType || 'Consultation')}</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--muted);">Status:</span> <span class="badge badge--${appt.status === 'BOOKED' ? 'success' : 'warning'}" style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem;">${MedicaresAPI.sanitizeText(appt.status)}</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: var(--background); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--border); margin-top: 0.5rem;">
+            <h5 style="margin: 0 0 0.5rem 0; color: var(--text); font-size: 0.9rem; font-weight: 700;">Consultation Reason & Symptoms</h5>
+            <p style="margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.5; font-style: italic;">
+              "${MedicaresAPI.sanitizeText(appt.reason || 'No description provided by patient.')}"
+            </p>
+          </div>
+        </div>
+      `;
+
+      modal.classList.add('open');
+    };
+
+    window.closeDoctorReviewModal = function() {
+      const modal = document.getElementById('doctorReviewModal');
+      if (modal) modal.classList.remove('open');
+    };
   }
 
   function normalizeIdentity(value) {
@@ -618,8 +947,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `
         <tr>
           <td>${MedicaresAPI.sanitizeText(String(appointment.id))}</td>
-          <td>${MedicaresAPI.sanitizeText(doctor?.name || `Doctor #${appointment.doctorId}`)}</td>
-          <td>${MedicaresAPI.sanitizeText(appointment.patientId || '-')}</td>
+          <td>${MedicaresAPI.sanitizeText(doctor?.name || appointment.doctorName || `Doctor #${appointment.doctorId}`)}</td>
+          <td>
+            ${MedicaresAPI.sanitizeText(appointment.patientName || 'N/A')}
+            <div class="meta">ID: ${MedicaresAPI.sanitizeText(appointment.patientId || '-')}</div>
+            <div class="meta">Phone: ${MedicaresAPI.sanitizeText(appointment.patientPhone || '-')}</div>
+            <div class="meta">Type: ${MedicaresAPI.sanitizeText(appointment.appointmentType || 'Consultation')}</div>
+          </td>
           <td>${MedicaresAPI.sanitizeText(appointmentLabel(appointment))}</td>
           <td><span class="badge badge--${appointment.status === 'BOOKED' ? 'success' : 'warning'}">${MedicaresAPI.sanitizeText(appointment.status)}</span></td>
         </tr>

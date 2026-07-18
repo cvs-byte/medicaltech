@@ -1,660 +1,807 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Medicares | Smart Healthcare Appointment & Reminder Platform</title>
+
+  <!-- Primary SEO Tags -->
+  <title>Medicares.me | Find & Book Doctors, Appointments & Clinics Online</title>
+  <meta name="title" content="Medicares.me | Find & Book Doctors, Appointments & Clinics Online" />
   <meta name="description"
-    content="Medicares is a premium healthcare SaaS for patient appointments, medicine reminders, and hospital collaboration with secure JWT-based access." />
+    content="Book appointments with trusted doctors and clinics worldwide. Secure, fast, and hassle-free healthcare scheduling, digital prescriptions, and cloud-based clinic management." />
   <meta name="theme-color" content="#2563eb" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://medicares.me/" />
+  <meta property="og:title" content="Medicares.me | Smart Doctor & Hospital Appointment Scheduling" />
+  <meta property="og:description"
+    content="Book appointments with verified healthcare professionals. Features patient records, medication tracking, and hospital collaboration platforms." />
+  <meta property="og:image" content="https://medicares.me/assets/og-image.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://medicares.me/" />
+  <meta property="twitter:title" content="Medicares.me | Smart Doctor & Hospital Appointment Scheduling" />
+  <meta property="twitter:description"
+    content="Book appointments with verified healthcare professionals. Features patient records, medication tracking, and hospital collaboration platforms." />
+  <meta property="twitter:image" content="https://medicares.me/assets/og-image.png" />
+
+  <!-- Schema.org Healthcare Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "Medicares.me",
+    "alternateName": "Medicares Healthcare",
+    "url": "https://medicares.me",
+    "logo": "https://medicares.me/assets/logo.png",
+    "description": "AI-powered hospital and doctor appointment booking platform.",
+    "telephone": "+91-98765-43210",
+    "email": "admin@medicares.me",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Mumbai",
+      "addressRegion": "Maharashtra",
+      "addressCountry": "IN"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-98765-43210",
+      "contactType": "customer service",
+      "email": "admin@medicares.me"
+    }
+  }
+  </script>
+
+  <!-- Google Fonts Link (Inter, Poppins, Manrope) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
     rel="stylesheet" />
+
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
-  <style>
-    /* FAQ Accordions */
-    .faq-grid {
-      display: grid;
-      gap: 1rem;
-      max-width: 800px;
-      margin: 2rem auto 0;
-    }
-
-    .faq-item {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: var(--surface);
-      overflow: hidden;
-      transition: border-color 180ms ease, box-shadow 180ms ease;
-    }
-
-    .faq-item:hover {
-      border-color: rgba(37, 99, 235, 0.3);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .faq-item summary {
-      padding: 1.25rem 1.5rem;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-      font-size: 1.05rem;
-    }
-
-    .faq-item summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .faq-item summary::after {
-      content: '+';
-      font-size: 1.4rem;
-      font-weight: 400;
-      transition: transform 180ms ease;
-    }
-
-    .faq-item[open] summary::after {
-      content: '−';
-    }
-
-    .faq-item p {
-      padding: 0 1.5rem 1.5rem;
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-  </style>
+  <link rel="stylesheet" href="css/landing.css" />
 </head>
 
-<body>
-  <header class="topbar">
-    <div class="navbar">
-      <a class="brand" href="index.html" aria-label="Medicares home">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M12 5v14" />
-            <path d="M5 12h14" />
-          </svg>
-        </span>
-        <span class="brand-copy">
-          <span>Medicares</span>
-          <small>Healthcare SaaS</small>
-        </span>
+<body class="lp-body">
+
+  <!-- Background Decorative Grid -->
+  <div class="lp-bg-grid" aria-hidden="true"></div>
+
+  <!-- Header Sticky Navigation -->
+  <header class="navbar-lp">
+    <div class="navbar-container">
+      <a class="logo-container" href="index.html" aria-label="Medicares Homepage">
+        <span class="logo-mark" aria-hidden="true">+</span>
+        <span class="logo-text">Medicares<span>.me</span></span>
       </a>
 
-      <nav class="nav-links" data-nav-menu aria-label="Primary navigation">
-        <a href="#services">Services</a>
-        <a href="#reminders">Reminders</a>
-        <a href="#hospitals">Hospitals</a>
-        <a href="#contact">Contact</a>
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-menu" aria-label="Primary Navigation">
+        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="#lp-search">Find Doctors</a>
+        <a class="nav-link" href="hospitals.html">Hospitals</a>
+        <a class="nav-link" href="#lp-features">Pricing</a>
+        <a class="nav-link" href="#lp-about">About</a>
       </nav>
 
-      <div class="nav-actions">
-        <button class="icon-button mobile-toggle" data-mobile-menu aria-label="Open navigation"
-          aria-expanded="false">☰</button>
-        <button class="icon-button" data-theme-toggle aria-label="Toggle dark mode">◐</button>
-        <a class="button button--ghost" href="login.html">Patient Login</a>
-        <a class="button button--primary" href="register.html">Get Started</a>
+      <!-- Action Buttons -->
+      <div class="nav-buttons">
+        <button class="theme-toggle-btn" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="lp-btn lp-btn-ghost lp-trigger-login" href="#">Login</a>
+        <a class="lp-btn lp-btn-outline" href="register.html">Register</a>
+        <a class="lp-btn lp-btn-primary" href="appointments.html">Book Appointment</a>
+      </div>
+
+      <!-- Mobile Nav Controls -->
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <button class="theme-toggle-btn mobile-only" data-theme-toggle aria-label="Toggle dark mode"
+          style="display: none;">◐</button>
+        <button class="mobile-nav-toggle" aria-label="Open Mobile Menu" aria-expanded="false">☰</button>
       </div>
     </div>
   </header>
 
+  <!-- Mobile Drawer Navigation Overlay -->
+  <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+    <div class="mobile-nav-header">
+      <a class="logo-container" href="index.html">
+        <span class="logo-mark">+</span>
+        <span class="logo-text">Medicares</span>
+      </a>
+      <button class="mobile-drawer-close lp-btn lp-btn-ghost" aria-label="Close Mobile Menu"
+        style="font-size: 1.5rem;">×</button>
+    </div>
+    <ul class="mobile-nav-menu">
+      <li><a class="mobile-nav-link" href="#">Home</a></li>
+      <li><a class="mobile-nav-link" href="#lp-search">Find Doctors</a></li>
+      <li><a class="mobile-nav-link" href="hospitals.html">Hospitals</a></li>
+      <li><a class="mobile-nav-link" href="#lp-features">Pricing</a></li>
+      <li><a class="mobile-nav-link" href="#lp-about">About</a></li>
+    </ul>
+    <div class="mobile-nav-buttons">
+      <a class="lp-btn lp-btn-outline lp-trigger-login" href="#">Login</a>
+      <a class="lp-btn lp-btn-primary" href="register.html">Register</a>
+      <a class="lp-btn lp-btn-accent" href="appointments.html" style="text-align: center;">Book Appointment</a>
+    </div>
+  </div>
+
   <main>
-    <section class="hero home-hero">
-      <div class="container hero-grid-landing">
-        <div class="hero-copy hero-copy-landing" data-animate>
-          <div class="hero-kicker">
-            <span class="eyebrow">Smart Doctor Appointment System &amp; Clinic Management Platform</span>
-            <span>Online appointment booking for doctors. Patient-first. Secure.</span>
-          </div>
-          <h1>Welcome to Medicares</h1>
-          <p>Medicares is a clinic management software India platform built for easy online appointment booking for
-            doctors, medicine reminders, and medical billing software India integration with a JWT-based secure
-            foundation.</p>
-
-          <div class="hero-proof" aria-label="Platform highlights">
-            <span class="proof-chip">doctor appointment system</span>
-            <span class="proof-chip">clinic management software India</span>
-            <span class="proof-chip">pharmacy management system with GST</span>
-            <span class="proof-chip">medical billing software India</span>
-          </div>
-
-          <div class="hero-actions">
-            <a class="button button--primary" href="appointments.html">Book Appointment</a>
-            <a class="button button--ghost" href="reminders.html">Manage Reminders</a>
-          </div>
-
-          <div class="hero-stats">
-            <div class="hero-stat"><strong data-counter="128000">0</strong><span>patients supported</span></div>
-            <div class="hero-stat"><strong data-counter="9600">0</strong><span>appointments handled</span></div>
-            <div class="hero-stat"><strong data-counter="99">0</strong><span>uptime reliability</span></div>
+    <!-- Hero Section -->
+    <section class="lp-hero-section">
+      <div class="lp-hero-grid">
+        <div class="lp-hero-content lp-reveal">
+          <div class="lp-hero-badge">AI-Powered Booking Platform</div>
+          <h1 class="lp-hero-title">
+            Welcome to Medicares. <br />
+            <span class="lp-gradient-text">Book Appointments</span> <br />
+            in Minutes.
+          </h1>
+          <p class="lp-hero-desc">
+            Book appointments with trusted doctors and hospitals worldwide. Secure, fast, and hassle-free healthcare
+            scheduling for patients, clinics, and hospitals.
+          </p>
+          <div class="lp-hero-actions">
+            <a class="lp-btn lp-btn-primary lp-btn-lg" href="appointments.html"
+              style="padding: 0.85rem 1.8rem; font-size: 1rem;">Book Appointment</a>
+            <a class="lp-btn lp-btn-outline lp-btn-lg" href="#lp-search"
+              style="padding: 0.85rem 1.8rem; font-size: 1rem;">Find a Doctor</a>
           </div>
         </div>
 
-        <div class="hero-visual home-visual" data-animate>
-          <div class="floating-pill one">Live notifications</div>
-          <div class="floating-pill two">JWT-secured access</div>
-          <div class="floating-pill three">AWS integration ready</div>
-
-          <div class="hero-card home-dashboard" aria-label="hospital management dashboard">
-            <div class="dashboard-topline">
-              <div>
-                <div class="status-pill">Operations online</div>
-                <h3 style="margin:0.85rem 0 0.25rem; font-size:1.35rem;">Care coordination dashboard</h3>
-                <p class="muted" style="margin:0;">Manage doctor patient management system details, billing, and
-                  scheduling from one place.</p>
-              </div>
-              <div class="avatar" aria-hidden="true" title="healthcare platform Medicares">MC</div>
+        <div class="lp-hero-booking-container lp-reveal lp-delay-1">
+          <div class="lp-booking-widget-card">
+            <!-- Tabs Navigator -->
+            <div class="lp-booking-tabs" style="display: flex; gap: 0.35rem; margin-bottom: 1.25rem; background: var(--lp-bg); padding: 0.25rem; border-radius: var(--lp-radius-md); border: 1px solid var(--lp-border);">
+              <button type="button" class="lp-booking-tab active" data-booking-tab="new" style="flex: 1; padding: 0.5rem 0.25rem; border: none; background: transparent; font-family: var(--lp-font-manrope); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; color: var(--lp-muted); transition: var(--lp-transition);">New Booking</button>
+              <button type="button" class="lp-booking-tab" data-booking-tab="reconsult" style="flex: 1; padding: 0.5rem 0.25rem; border: none; background: transparent; font-family: var(--lp-font-manrope); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; color: var(--lp-muted); transition: var(--lp-transition);">Reconsultation</button>
             </div>
 
-            <div class="dashboard-grid-mini">
-              <div class="mini-card">
-                <strong>128k</strong>
-                <span>patients served</span>
+            <!-- New Booking View -->
+            <div id="lp-view-new-booking">
+              <div class="lp-booking-widget-header" style="margin-bottom: 0.75rem;">
+                <h3>Book Appointment</h3>
+                <p>Confirm your consultation slot instantly</p>
               </div>
-              <div class="mini-card">
-                <strong>3.4k</strong>
-                <span>daily bookings</span>
-              </div>
-              <div class="mini-card">
-                <strong>99%</strong>
-                <span>uptime reliability</span>
-              </div>
-            </div>
 
-            <div class="dashboard-stack">
-              <div class="dashboard-block">
-                <div class="doctor-meta">
-                  <h3 style="margin:0;">Platform reliability</h3>
-                  <span class="badge badge--success">Stable</span>
+              <!-- Guest personalized hint banner -->
+              <div id="lp-booking-auth-tip" class="lp-booking-tip-banner" style="display: none; background: rgba(37,99,235,0.06); padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(37,99,235,0.12); margin-bottom: 1rem; font-size: 0.78rem; line-height: 1.4; color: var(--lp-text);">
+                💡 Note: For the best experience, <strong><a href="#" class="lp-trigger-login" style="color: var(--lp-primary); text-decoration: underline;">log in</a></strong> or <strong><a href="register.html" style="color: var(--lp-primary); text-decoration: underline;">register</a></strong> to securely save your details, manage appointments, and receive updates.
+              </div>
+              <div id="lp-booking-welcome-user" class="lp-booking-tip-banner" style="display: none; background: rgba(34,197,94,0.06); padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(34,197,94,0.12); margin-bottom: 1rem; font-size: 0.78rem; color: var(--lp-success); font-weight: 600;">
+                ✓ Welcome back! Patient details are auto-filled.
+              </div>
+
+              <form id="lp-home-booking-form" class="lp-booking-widget-form">
+                <!-- Select Doctor -->
+                <div class="lp-form-group">
+                  <label for="lp-booking-doctor" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Select Doctor</label>
+                  <select id="lp-booking-doctor" name="doctorId" class="lp-form-input" style="width: 100%;" required>
+                    <option value="" disabled selected>-- Select Doctor --</option>
+                  </select>
                 </div>
-                <p>Cloud-ready clinic management software India features for secure login, patient workflows, and
-                  digital prescription system expansion across AWS infrastructure.</p>
-                <div class="dashboard-chart" aria-hidden="true">
-                  <div class="chart-line"><span style="width:86%;"></span></div>
-                  <div class="chart-line"><span style="width:74%;"></span></div>
-                  <div class="chart-line"><span style="width:92%;"></span></div>
+
+                <!-- Select Date -->
+                <div class="lp-form-group">
+                  <label for="lp-booking-date" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Select Date</label>
+                  <input type="date" id="lp-booking-date" name="date" class="lp-form-input" style="width: 100%;" required />
+                </div>
+
+                <!-- Action Button -->
+                <button type="submit" id="lp-booking-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn" disabled>
+                  Select Doctor &amp; Date
+                </button>
+              </form>
+            </div>
+
+            <!-- Reconsultation View -->
+            <div id="lp-view-reconsult" style="display: none;">
+              <div class="lp-booking-widget-header" style="margin-bottom: 0.75rem;">
+                <h3>Reconsultation</h3>
+                <p>Find appointments to book follow-up consultations</p>
+              </div>
+
+              <!-- Reconsult Search Box -->
+              <div id="lp-reconsult-search-pane" class="lp-booking-widget-form">
+                <div class="lp-form-group">
+                  <label for="lp-reconsult-search-input" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Phone Number or Appointment ID</label>
+                  <input type="text" id="lp-reconsult-search-input" class="lp-form-input" placeholder="e.g. 9876543210 or apt-123" style="width: 100%;" />
+                </div>
+                <button type="button" id="lp-reconsult-find-btn" class="lp-btn lp-btn-primary" style="width: 100%; height: 44px;">
+                  Find Eligible Appointments
+                </button>
+                <div id="lp-reconsult-search-results" style="margin-top: 0.75rem; max-height: 240px; overflow-y: auto;">
+                  <!-- Results items render here -->
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section stats-section" aria-label="Medicares performance stats">
-      <div class="container">
-        <div class="grid grid-3">
-          <article class="metric-card card" data-animate>
-            <div class="metric-top">
-              <div class="metric-icon">P</div>
-              <span class="badge badge--info">Care scale</span>
-            </div>
-            <strong data-counter="128000">0</strong>
-            <p>128,000 patients supported through a calm, modern booking and care-management experience.</p>
-          </article>
-          <article class="metric-card card" data-animate>
-            <div class="metric-top">
-              <div class="metric-icon">A</div>
-              <span class="badge badge--success">Flow volume</span>
-            </div>
-            <strong data-counter="9600">0</strong>
-            <p>9,600 appointments handled with a predictable workflow designed for patient operations.</p>
-          </article>
-          <article class="metric-card card" data-animate>
-            <div class="metric-top">
-              <div class="metric-icon">%</div>
-              <span class="badge badge--warning">Reliability</span>
-            </div>
-            <strong data-counter="99">0</strong>
-            <p>99% uptime reliability for a trustworthy healthcare SaaS presence that feels production-grade.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+              <!-- Reconsult Selected Form -->
+              <form id="lp-home-reconsult-form" class="lp-booking-widget-form" style="display: none; border-top: 1px solid var(--lp-border); padding-top: 1rem; margin-top: 1rem; animation: slideUp 0.3s ease-out;">
+                <div class="lp-booking-step">
+                  <div class="lp-form-group">
+                    <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); display:block;">Selected Doctor</label>
+                    <input type="text" id="lp-reconsult-doctor-display" class="lp-form-input" style="width: 100%;" readonly />
+                  </div>
+                  <div class="lp-form-group">
+                    <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); display:block;">Hospital</label>
+                    <input type="text" id="lp-reconsult-hospital-display" class="lp-form-input" style="width: 100%;" readonly />
+                  </div>
+                </div>
 
-    <section class="section" id="services">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <span class="eyebrow">Why Choose Medicares</span>
-            <h2 class="section-title">Clinic Management Software India: Smart clinical workflows</h2>
-          </div>
-          <p class="section-subtitle">Everything is designed to feel like a premium healthcare SaaS while staying fast,
-            secure, and easy to use across devices.</p>
-        </div>
-        <div class="grid grid-3">
-          <article class="feature-card card" data-animate>
-            <div class="feature-icon">⚕</div>
-            <h3>Doctor Appointment System</h3>
-            <ul>
-              <li>Search clinic doctors</li>
-              <li>online appointment booking for doctors</li>
-              <li>Smooth patient booking flow</li>
-            </ul>
-          </article>
-          <article class="feature-card card" data-animate>
-            <div class="feature-icon">⏰</div>
-            <h3>Medicine reminders</h3>
-            <ul>
-              <li>Daily medicine schedules</li>
-              <li>pharmacy management system with GST check</li>
-              <li>Smart alert notifications</li>
-            </ul>
-          </article>
-          <article class="feature-card card" data-animate>
-            <div class="feature-icon">🔒</div>
-            <h3>Medical Billing Software India</h3>
-            <ul>
-              <li>Secure JWT authentication</li>
-              <li>AWS API Gateway ready</li>
-              <li>GST invoice billing access</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
+                <div class="lp-form-group">
+                  <label for="lp-reconsult-date" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Select Date</label>
+                  <input type="date" id="lp-reconsult-date" name="date" class="lp-form-input" style="width: 100%;" required />
+                </div>
 
-    <section class="section" id="reminders">
-      <div class="container grid grid-2 align-center">
-        <div data-animate>
-          <span class="eyebrow">Reminder Features</span>
-          <h2 class="section-title">Appointment scheduling software for clinics &amp; medicine planning</h2>
-          <p class="section-subtitle">Patients and clinics can manage daily and weekly medicine schedules, linked
-            directly to a digital prescription system care companion.</p>
-          <div class="stack" style="margin-top:1.4rem;">
-            <div class="feature-card card">
-              <strong>Smart intervals &amp; pharmacy inventory software</strong>
-              <p>Track medicine inventory schedules across daily, weekly, and monthly treatment cycles.</p>
+                <!-- Slots grid for reconsultation -->
+                <div id="lp-reconsult-slots-section" class="lp-booking-slots-section" style="display: none;">
+                  <label>Available Slots</label>
+                  <div id="lp-reconsult-slot-grid" class="lp-booking-slot-grid"></div>
+                  <input type="hidden" id="lp-reconsult-time" name="time" required />
+                </div>
+
+                <!-- Hidden Patient Data Prefilled from selected reconsult -->
+                <input type="hidden" id="lp-reconsult-patient-name" name="patientName" />
+                <input type="hidden" id="lp-reconsult-patient-email" name="patientEmail" />
+                <input type="hidden" id="lp-reconsult-patient-phone" name="patientPhone" />
+                <input type="hidden" id="lp-reconsult-notes" name="notes" />
+
+                <!-- Captcha for Reconsult Booking -->
+                <div class="lp-form-group" style="border-top: 1px solid var(--lp-border); padding-top: 0.85rem;">
+                  <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Security Verification</label>
+                  <div class="lp-captcha-container" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                    <span id="lp-reconsult-captcha-code" class="lp-captcha-code" style="font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 800; background: linear-gradient(45deg, #e2e8f0, #cbd5e1); color: #0f172a; padding: 0.4rem 0.8rem; border-radius: 6px; letter-spacing: 4px; border: 1px dashed #94a3b8; user-select: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); transform: rotate(2deg); display: inline-block;">H9X7P</span>
+                    <button type="button" id="lp-reconsult-captcha-refresh" class="lp-btn lp-btn-outline" style="min-height: auto; padding: 0.4rem 0.6rem; font-size: 0.8rem;" aria-label="Refresh Captcha">🔄</button>
+                  </div>
+                  <input type="text" id="lp-reconsult-captcha-input" class="lp-form-input" placeholder="Enter security code above" style="width: 100%;" required />
+                </div>
+
+                <button type="submit" id="lp-reconsult-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn" disabled>
+                  Book Follow-up
+                </button>
+              </form>
             </div>
-            <div class="feature-card card">
-              <strong>Doctor patient management system logs</strong>
-              <p>Track patient compliance history, active prescriptions, and medicine consumption updates.</p>
-            </div>
-          </div>
-        </div>
-        <div class="glass-panel" data-animate style="padding:1.25rem;">
-          <div class="hero-kicker" style="margin-bottom:1rem;">
-            <span class="eyebrow">Daily timeline</span>
-            <span>Calendar feel with soft gradients</span>
-          </div>
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div>
-                <h3>08:00 AM</h3>
-                <p>Take Amlodipine after breakfast.</p>
+
+            <!-- My Appointments View -->
+            <div id="lp-view-my-appointments" style="display: none;">
+              <div class="lp-booking-widget-header" style="margin-bottom: 1rem;">
+                <h3>My Appointments</h3>
+                <p>Upcoming and History</p>
+              </div>
+              
+              <div id="lp-my-appointments-list" style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+                <p class="muted" style="text-align:center; font-size:0.85rem; padding: 2rem 0; color:var(--lp-muted); line-height: 1.6;">
+                  No appointments found.<br/>Book an appointment to see it here.
+                </p>
               </div>
             </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div>
-                <h3>01:00 PM</h3>
-                <p>Insulin injection and dose logging.</p>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div>
-                <h3>08:00 PM</h3>
-                <p>Vitamin D reminder before bedtime.</p>
-              </div>
-            </div>
+
+          </div>
+        </div>
+
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="hospitals">
-      <div class="container grid grid-2 align-center">
-        <div data-animate>
-          <span class="eyebrow">Technical Support</span>
-          <h2 class="section-title">Clinic Management Software India: Scale support and future growth</h2>
-          <p class="section-subtitle">This is a professional healthcare website offering tools like a pharmacy
-            management system with GST, medical billing software India onboarding support, and a patient booking
-            experience.</p>
-          <div class="stack" style="margin-top:1.2rem;">
-            <div class="feature-card card">
-              <strong>Clinic &amp; Pharmacy Setup Support</strong>
-              <p>Guidance to integrate pharmacy inventory software, billing APIs, and AWS endpoints.</p>
-            </div>
-            <div class="feature-card card">
-              <strong>Online appointment booking for doctors</strong>
-              <p>Frictionless doctor appointment system flow for patients to register and book slots.</p>
+    <!-- Floating Search Section -->
+    <section class="lp-search-section lp-reveal lp-delay-2" id="lp-search">
+      <div class="lp-search-card">
+        <form id="lp-search-form" class="lp-search-grid">
+
+          <div class="lp-search-field">
+            <label for="lp-search-doctor">Search Doctor</label>
+            <div class="lp-search-input-wrapper">
+              <span class="lp-search-icon">🔍</span>
+              <input type="text" id="lp-search-doctor" class="lp-search-input" placeholder="Name or Keyword" />
             </div>
           </div>
-        </div>
-        <article class="hospital-panel story-card card" data-animate>
-          <div class="doctor-meta">
-            <h3 style="margin:0;">Support overview</h3>
-            <span class="badge badge--info">Technical support ready</span>
-          </div>
-          <p>Unified booking guidance, technical support routing, and integration-ready architecture for a startup
-            environment.</p>
-          <div class="dashboard-stack" style="margin-top:1rem;">
-            <div class="dashboard-block">
-              <div class="doctor-meta">
-                <h3 style="margin:0;">GST Billing Support Routing</h3>
-                <span class="badge badge--success">Live</span>
-              </div>
-              <p>Contact requests are handled through the support inbox and future API workflows.</p>
-            </div>
-            <div class="dashboard-block">
-              <div class="doctor-meta">
-                <h3 style="margin:0;">Doctor Patient Management System sync</h3>
-                <span class="badge badge--warning">Patient-first</span>
-              </div>
-              <p>Patients can book appointments directly, or sign in to manage them from their account dashboard.</p>
+
+          <div class="lp-search-field">
+            <label for="lp-search-hospital">Search Hospital</label>
+            <div class="lp-search-input-wrapper">
+              <span class="lp-search-icon">🏥</span>
+              <input type="text" id="lp-search-hospital" class="lp-search-input" placeholder="Location or Name" />
             </div>
           </div>
-        </article>
-      </div>
-    </section>
 
-    <section class="section" id="faqs">
-      <div class="container">
-        <div class="section-head text-center" style="flex-direction: column; align-items: center; margin-bottom: 3rem;">
-          <span class="eyebrow">FAQ</span>
-          <h2 class="section-title">Frequently Asked Questions</h2>
-          <p class="section-subtitle">Find answers to common questions about our clinic management software India and
-            pharmacy systems.</p>
-        </div>
-
-        <div class="faq-grid">
-          <details class="faq-item" open>
-            <summary>How does the Medicares doctor appointment system work?</summary>
-            <p>Our doctor appointment system provides a complete solution for online appointment booking for doctors.
-              Clinics can configure consultation slots, accept online patient reservations, coordinate with walk-ins at
-              the front-desk, and send automated email and SMS notification schedules to reduce no-shows.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Does the clinic management software India support GST billing?</summary>
-            <p>Yes. Medicares is fully optimized for Indian businesses. The integrated medical billing software India
-              handles custom OPD charges, prescription items, and generates GST-compliant bills automatically
-              calculating CGST and SGST rates based on the relevant drug HSN codes.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Can retail chemists use Medicares as a pharmacy inventory software?</summary>
-            <p>Absolutely. Medicares contains a robust pharmacy management system with GST that operates as real-time
-              pharmacy inventory software. It allows pharmacy owners to record drug batches, monitor stock quantities,
-              set reorder levels, and receive automated warnings for expiring medicines.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How does the digital prescription system benefit clinics and pharmacies?</summary>
-            <p>The digital prescription system allows doctors to write prescriptions electronically on tablets or
-              laptops. The prescriptions are immediately saved in the doctor patient management system database. The
-              in-house or partner pharmacy can pull up the patient details instantly, minimizing manual entry errors and
-              dispensing wait times.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Is Medicares suitable as appointment scheduling software for clinics in India?</summary>
-            <p>Yes, it is specifically customized for clinics, individual practitioners, and pharmacies. The tool acts
-              as an appointment scheduling software for clinics, connecting patient appointments, digital history
-              tracking, pharmacy transactions, and tax reporting under one dashboard.</p>
-          </details>
-        </div>
-      </div>
-
-      <!-- JSON-LD FAQ Schema for Google Search Engine Optimization -->
-      <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How does the Medicares doctor appointment system work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Medicares offers a complete online appointment booking for doctors platform. Healthcare providers can manage daily slots, receptionist bookings, configure custom consulting schedules, and minimize patient waiting times."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does the clinic management software India support GST billing?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, Medicares features advanced medical billing software India with full support for GST regulations. It automates SGST, CGST, and IGST tax calculations based on correct HSN codes for medicine and services."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can pharmacies use Medicares as a pharmacy inventory software?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Absolutely. Medicares provides a comprehensive pharmacy management system with GST compliance that functions as a pharmacy inventory software. You can track stocks by batch, monitor drug expiries, and automate supply requests."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does the digital prescription system benefit clinics?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The digital prescription system enables doctors to record and issue electronic prescriptions. These feed directly into the doctor patient management system and the in-house pharmacy desk to eliminate slip losses."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Medicares suitable as appointment scheduling software for clinics?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes, Medicares is designed specifically as an appointment scheduling software for clinics, pharmacies, and small hospitals in India, bringing billing, doctor schedules, and EHR into one online app."
-            }
-          }
-        ]
-      }
-      </script>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="container contact-grid">
-        <aside class="contact-aside" data-animate>
-          <span class="eyebrow">Contact</span>
-          <h2 class="section-title">Talk to Medicares support</h2>
-          <p class="section-subtitle">Share a question, a rollout requirement, or a booking issue and the technical
-            support team will handle it directly.</p>
-          <div class="contact-stack">
-            <article class="card" style="padding:1.2rem;">
-              <h3 style="margin-top:0;">What this platform supports</h3>
-              <ul>
-                <li>Doctor appointment system &amp; patient booking</li>
-                <li>Pharmacy management system with GST &amp; medicine tracking</li>
-                <li>Clinic management software India &amp; hospital support</li>
-              </ul>
-            </article>
-            <article class="card" style="padding:1.2rem;">
-              <h3 style="margin-top:0;">Support inbox</h3>
-              <ul>
-                <li><a href="mailto:support@medicares.me">support@medicares.me</a></li>
-                <li>JWT authentication &amp; medical billing software India</li>
-                <li>AWS API Gateway ready &amp; digital prescription system</li>
-                <li>Future backend friendly pharmacy inventory software</li>
-              </ul>
-            </article>
-          </div>
-        </aside>
-
-        <form class="contact-panel card stack" data-demo-form data-support-email="support@medicares.me"
-          data-success-title="Message sent"
-          data-success-message="Your support request has been routed to support@medicares.me.">
-          <h3 style="margin:0;">Send a message</h3>
-          <div class="form-grid">
-            <div class="floating-field">
-              <input class="input" id="name" name="name" placeholder=" " required />
-              <label for="name">Full name</label>
-            </div>
-            <div class="floating-field">
-              <input class="input" id="email" name="email" type="email" placeholder=" " required />
-              <label for="email">Email</label>
-            </div>
-            <div class="floating-field">
-              <textarea class="textarea" id="message" name="message" placeholder=" " required></textarea>
-              <label for="message">Message</label>
+          <div class="lp-search-field">
+            <label for="lp-search-date">Choose Date</label>
+            <div class="lp-search-input-wrapper">
+              <span class="lp-search-icon">📅</span>
+              <input type="date" id="lp-search-date" class="lp-search-input" />
             </div>
           </div>
-          <button class="button button--primary" type="submit">Send to support</button>
+
+          <button type="submit" class="lp-btn lp-btn-primary lp-search-btn">Book Now</button>
         </form>
       </div>
     </section>
-    <section class="section" id="faqs">
-      <div class="container">
-        <div class="section-head text-center" style="flex-direction: column; align-items: center; margin-bottom: 3rem;">
-          <span class="eyebrow">FAQ</span>
-          <h2 class="section-title">Frequently Asked Questions</h2>
-          <p class="section-subtitle">Find answers to common questions about our online doctor appointment booking and
-            healthcare management system.</p>
+
+    <!-- Trust Badges Section -->
+    <section class="lp-trust-section lp-reveal">
+      <div class="lp-trust-heading">Trusted by patients &amp; clinics globally</div>
+      <div class="lp-trust-grid">
+        <div class="lp-trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>HIPAA Ready</span>
         </div>
-
-        <div class="faq-grid">
-          <details class="faq-item" open>
-            <summary>How can I book doctor appointments online on Medicares?</summary>
-            <p>Our doctor appointment booking online system makes scheduling quick and easy. Patients can find verified
-              doctors, check live calendar availability, and book doctor online India slots instantly without waiting.
-            </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>What operations are included in the hospital management system?</summary>
-            <p>The digital hospital management system helps clinics and small hospitals manage patient records, slot
-              bookings, staff schedules, and billing streams securely under a unified dashboard.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Does the platform provide pharmacy management software?</summary>
-            <p>Yes. Medicares integrates a powerful pharmacy management software package to help retail chemists track
-              medicine inventory, manage supplier details, verify drug expiries, and issue GST tax receipts.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Is there an online consultation platform available?</summary>
-            <p>Medicares operates as an integrated online consultation platform where doctors can write and issue
-              e-prescriptions, track compliance logs, and sync details seamlessly with in-house pharmacy systems.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How does Medicares secure data in its healthcare management system?</summary>
-            <p>Our healthcare management system uses encrypted JWT (JSON Web Tokens) and role-based access protocols to
-              secure patient histories, prescription sheets, and hospital records against unauthorized leaks.</p>
-          </details>
+        <div class="lp-trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Encrypted Data</span>
+        </div>
+        <div class="lp-trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>99.9% Uptime</span>
+        </div>
+        <div class="lp-trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          <span>Secure Payments</span>
+        </div>
+        <div class="lp-trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span>Verified Doctors</span>
         </div>
       </div>
+    </section>
 
-      <!-- JSON-LD FAQ Schema for Google Search Engine Optimization -->
-      <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How can I book doctor appointments online on Medicares?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Our doctor appointment booking online system makes scheduling quick and easy. Patients can find verified doctors, check live calendar availability, and book doctor online India slots instantly without waiting."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What operations are included in the hospital management system?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The digital hospital management system helps clinics and small hospitals manage patient records, slot bookings, staff schedules, and billing streams securely under a unified dashboard."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does the platform provide pharmacy management software?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Medicares integrates a powerful pharmacy management software package to help retail chemists track medicine inventory, manage supplier details, verify drug expiries, and issue GST tax receipts."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is there an online consultation platform available?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Medicares operates as an integrated online consultation platform where doctors can write and issue e-prescriptions, track compliance logs, and sync details seamlessly with in-house pharmacy systems."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does Medicares secure data in its healthcare management system?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Our healthcare management system uses encrypted JWT (JSON Web Tokens) and role-based access protocols to secure patient histories, prescription sheets, and hospital records against unauthorized leaks."
-            }
-          }
-        ]
-      }
-      </script>
+
+
+    <!-- How It Works Section -->
+    <section class="lp-section lp-how-section" id="lp-about">
+      <div class="lp-section-head lp-reveal">
+        <span class="lp-section-kicker">Simple Steps</span>
+        <h2 class="lp-section-title">How Medicares Works</h2>
+        <p class="lp-section-desc">Get your appointment booked and completed in four clear steps.</p>
+      </div>
+
+      <div class="lp-timeline-container lp-reveal">
+        <div class="lp-timeline-line" aria-hidden="true"></div>
+
+        <div class="lp-timeline-grid">
+
+          <div class="lp-timeline-step">
+            <div class="lp-timeline-number">1</div>
+            <h3>Search Doctor</h3>
+            <p>Search by name, location, or specialty to find the right clinician.</p>
+          </div>
+
+          <div class="lp-timeline-step">
+            <div class="lp-timeline-number">2</div>
+            <h3>Choose Date &amp; Time</h3>
+            <p>Select a slot that perfectly aligns with your personal calendar.</p>
+          </div>
+
+          <div class="lp-timeline-step">
+            <div class="lp-timeline-number">3</div>
+            <h3>Confirm Appointment</h3>
+            <p>Complete booking with secure JWT authentication and zero hassle.</p>
+          </div>
+
+          <div class="lp-timeline-step">
+            <div class="lp-timeline-number">4</div>
+            <h3>Visit Hospital</h3>
+            <p>Meet your doctor on schedule for premium diagnostic consultation.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Medicares Section -->
+    <section class="lp-section" id="lp-features">
+      <div class="lp-section-head lp-reveal">
+        <span class="lp-section-kicker">Platform Excellence</span>
+        <h2 class="lp-section-title">Why Choose Medicares?</h2>
+        <p class="lp-section-desc">Experience a comprehensive clinical booking infrastructure designed for modern
+          healthcare.</p>
+      </div>
+
+      <div class="lp-why-grid">
+
+        <!-- Online Appointment Booking -->
+        <div class="lp-why-card lp-reveal">
+          <div class="lp-why-icon" aria-hidden="true">🗓</div>
+          <h3>Online Appointment Booking</h3>
+          <p>Book consults online instantly without waiting on call holds.</p>
+        </div>
+
+        <!-- Real-time Slot Availability -->
+        <div class="lp-why-card lp-reveal lp-delay-1">
+          <div class="lp-why-icon" aria-hidden="true">⏱</div>
+          <h3>Real-time Slot Availability</h3>
+          <p>Browse live session schedules directly verified by doctor offices.</p>
+        </div>
+
+        <!-- Instant Email Confirmation -->
+        <div class="lp-why-card lp-reveal lp-delay-2">
+          <div class="lp-why-icon" aria-hidden="true">✉</div>
+          <h3>Instant Email Confirmation</h3>
+          <p>Receive immediate tickets containing directions, tokens, and dates.</p>
+        </div>
+
+        <!-- Reconsultation Support -->
+        <div class="lp-why-card lp-reveal">
+          <div class="lp-why-icon" aria-hidden="true">🔄</div>
+          <h3>Reconsultation Support</h3>
+          <p>Book follow-up review clinics with doctor compliance histories.</p>
+        </div>
+
+        <!-- Medical Records -->
+        <div class="lp-why-card lp-reveal lp-delay-1">
+          <div class="lp-why-icon" aria-hidden="true">📂</div>
+          <h3>Medical Records</h3>
+          <p>Securely save patient charts and consult summaries on the cloud.</p>
+        </div>
+
+        <!-- Prescription Management -->
+        <div class="lp-why-card lp-reveal lp-delay-2">
+          <div class="lp-why-icon" aria-hidden="true">💊</div>
+          <h3>Prescription Management</h3>
+          <p>Read clean electronic prescriptions directly issued by doctors.</p>
+        </div>
+
+        <!-- AI Smart Search -->
+        <div class="lp-why-card lp-reveal">
+          <div class="lp-why-icon" aria-hidden="true">🧠</div>
+          <h3>AI Smart Search</h3>
+          <p>Type keywords to match doctors using smart indexing algorithms.</p>
+        </div>
+
+        <!-- Hospital Management -->
+        <div class="lp-why-card lp-reveal lp-delay-1">
+          <div class="lp-why-icon" aria-hidden="true">🏢</div>
+          <h3>Hospital Management</h3>
+          <p>Coordinate multi-room bookings, departments, and receptionist rosters.</p>
+        </div>
+
+        <!-- Video Consultation -->
+        <div class="lp-why-card lp-reveal lp-delay-2">
+          <div class="lp-why-icon" aria-hidden="true">📹</div>
+          <h3>Video Consultation</h3>
+          <p>Meet verified doctors remotely via HD browser tele-health consults.</p>
+        </div>
+
+        <!-- Patient Notifications -->
+        <div class="lp-why-card lp-reveal">
+          <div class="lp-why-icon" aria-hidden="true">🔔</div>
+          <h3>Patient Notifications</h3>
+          <p>Receive SMS and browser notifications ahead of consultation schedules.</p>
+        </div>
+
+        <!-- Responsive Dashboard -->
+        <div class="lp-why-card lp-reveal lp-delay-1">
+          <div class="lp-why-icon" aria-hidden="true">📱</div>
+          <h3>Responsive Dashboard</h3>
+          <p>Navigate clinics smoothly across mobile, tablet, and widescreen viewports.</p>
+        </div>
+
+        <!-- Cloud-Based Platform -->
+        <div class="lp-why-card lp-reveal lp-delay-2">
+          <div class="lp-why-icon" aria-hidden="true">☁</div>
+          <h3>Cloud-Based Platform</h3>
+          <p>Enjoy stable static hosting backends deployed across AWS serverless stacks.</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- FAQ Accordion -->
+    <section class="lp-section">
+      <div class="lp-section-head lp-reveal">
+        <span class="lp-section-kicker">Common Questions</span>
+        <h2 class="lp-section-title">Frequently Asked Questions</h2>
+        <p class="lp-section-desc">Clear answers to help you navigate our clinical doctor appointment platform.</p>
+      </div>
+
+      <div class="lp-faq-container lp-reveal">
+
+        <div class="lp-faq-item open">
+          <button class="lp-faq-trigger" aria-expanded="true">
+            <span>How do I book doctor appointments online on Medicares?</span>
+            <span class="lp-faq-icon">+</span>
+          </button>
+          <div class="lp-faq-content">
+            <p>
+              It is extremely simple. Use our Search Card to locate a doctor by name or specialty, select an available
+              date, and click "Book Now". You will be guided to appointments page to confirm your slot with instant
+              notification details.
+            </p>
+          </div>
+        </div>
+
+        <div class="lp-faq-item">
+          <button class="lp-faq-trigger" aria-expanded="false">
+            <span>What operations are included in the hospital management dashboard?</span>
+            <span class="lp-faq-icon">+</span>
+          </button>
+          <div class="lp-faq-content">
+            <p>
+              The hospital interface includes full doctor roster management, receptionist check-in tracking, patient
+              history analytics, daily consulting load graphs, and multi-department reports export options.
+            </p>
+          </div>
+        </div>
+
+        <div class="lp-faq-item">
+          <button class="lp-faq-trigger" aria-expanded="false">
+            <span>Does the platform secure patient medical details?</span>
+            <span class="lp-faq-icon">+</span>
+          </button>
+          <div class="lp-faq-content">
+            <p>
+              Yes. All patient files, prescription sheets, and appointment data logs are encrypted in transit and at
+              rest. Access is governed via JWT validation protocols keeping your data compliant with international
+              safety standards.
+            </p>
+          </div>
+        </div>
+
+        <div class="lp-faq-item">
+          <button class="lp-faq-trigger" aria-expanded="false">
+            <span>Can doctors write and manage prescriptions electronically?</span>
+            <span class="lp-faq-icon">+</span>
+          </button>
+          <div class="lp-faq-content">
+            <p>
+              Absolutely. Our doctor consultation workspace allows practitioners to write electronic prescriptions that
+              are immediately saved to the patient's record profile and can be downloaded as PDF files.
+            </p>
+          </div>
+        </div>
+
+        <div class="lp-faq-item">
+          <button class="lp-faq-trigger" aria-expanded="false">
+            <span>Is there support for remote video consultations?</span>
+            <span class="lp-faq-icon">+</span>
+          </button>
+          <div class="lp-faq-content">
+            <p>
+              Yes. Medicares has built-in tele-health infrastructure enabling doctors and patients to start secure
+              audio-video consult rooms directly in the web browser without downloading extra software.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="lp-cta-section lp-reveal">
+      <div class="lp-cta-card">
+        <div class="lp-cta-content">
+          <h2>Ready to Book Your Appointment?</h2>
+          <p>Book your consultation with trusted healthcare professionals today. Secure, fast, and instant confirmation.
+          </p>
+          <a class="lp-btn lp-btn-accent" href="appointments.html">Book Appointment Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Contact Section -->
+    <section class="lp-section lp-contact-section" id="lp-about">
+      <div class="lp-contact-grid">
+        <div class="lp-contact-info lp-reveal">
+          <span class="lp-section-kicker">Get in Touch</span>
+          <h2 class="lp-section-title" style="text-align: left; margin: 0;">Talk to Medicares support</h2>
+          <p class="lp-section-desc" style="text-align: left; margin: 0;">Have a technical question or need assistance
+            getting your clinic set up? Reach out to our team directly.</p>
+
+          <div class="lp-contact-card">
+            <h4>What this platform supports</h4>
+            <ul>
+              <li>Doctor appointment scheduling &amp; booking</li>
+              <li>Patient prescription lists &amp; medical records</li>
+              <li>Multi-specialty clinic roster management</li>
+            </ul>
+          </div>
+
+          <div class="lp-contact-card">
+            <h4>Support Email</h4>
+            <ul>
+              <li>Contact administrative inbox: <a href="mailto:admin@medicares.me"
+                  style="color: var(--lp-primary); font-weight:700;">admin@medicares.me</a></li>
+              <li>24-hour technical ticket routing channels</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Contact Form using app.js data-demo-form -->
+        <form class="lp-contact-form lp-reveal lp-delay-1" id="lp-contact-form" data-demo-form
+          data-support-email="admin@medicares.me" data-success-title="Support Request Sent"
+          data-success-message="Your message has been successfully routed to admin@medicares.me.">
+          <h3>Send us a Message</h3>
+
+          <div class="lp-form-group">
+            <label for="contact-name">Full Name</label>
+            <input type="text" id="contact-name" name="name" class="lp-form-input" placeholder="Siddharth Kapoor"
+              required />
+          </div>
+
+          <div class="lp-form-group">
+            <label for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" name="email" class="lp-form-input" placeholder="sid@medicares.me"
+              required />
+          </div>
+
+          <div class="lp-form-group">
+            <label for="contact-message">Your Message</label>
+            <textarea id="contact-message" name="message" class="lp-form-textarea" placeholder="How can we assist you?"
+              required></textarea>
+          </div>
+
+          <button type="submit" class="lp-btn lp-btn-primary"
+            style="align-self: flex-start; padding: 0.8rem 1.8rem;">Send to Support</button>
+        </form>
+      </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div>
-        <a class="brand" href="index.html" aria-label="Medicares home footer">
-          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2">
-              <path d="M12 5v14" />
-              <path d="M5 12h14" />
-            </svg></span>
-          <span class="brand-copy">
-            <span>Medicares</span>
-            <small>Healthcare SaaS</small>
-          </span>
+  <!-- Footer Section -->
+  <footer class="lp-footer">
+    <div class="lp-footer-grid">
+
+      <div class="lp-footer-brand">
+        <a class="lp-footer-logo" href="index.html">
+          <span class="lp-footer-logo-mark">+</span>
+          <span class="logo-text">Medicares<span>.me</span></span>
         </a>
-        <p class="muted">Medicares is a doctor appointment system and clinic management software India platform. Manage
-          billing, prescriptions &amp; pharmacy inventory with GST compliance.</p>
-        <span class="footer-note">Secure JWT access with GST-ready medical billing software India support.</span>
+        <p class="lp-footer-desc">
+          AI-powered clinical scheduling and patient management infrastructure built for doctors, hospitals, and
+          pharmacies globally.
+        </p>
+        <div class="lp-footer-socials">
+          <a class="lp-social-icon" href="#" aria-label="Twitter / X">𝕏</a>
+          <a class="lp-social-icon" href="#" aria-label="LinkedIn">in</a>
+          <a class="lp-social-icon" href="#" aria-label="Facebook">f</a>
+          <a class="lp-social-icon" href="#" aria-label="Instagram">📷</a>
+        </div>
       </div>
-      <div>
+
+      <div class="lp-footer-col">
         <h4>Platform</h4>
-        <ul>
+        <ul class="lp-footer-links">
+          <li><a href="appointments.html">Book Doctors</a></li>
           <li><a href="login.html">Patient Login</a></li>
-          <li><a href="doctor-login.html">Doctor Login</a></li>
-          <li><a href="admin-login.html">Admin Login</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="doctor-login.html">Doctor Workspace</a></li>
+          <li><a href="admin-login.html">Admin Console</a></li>
         </ul>
       </div>
-      <div>
+
+      <div class="lp-footer-col">
         <h4>Company</h4>
-        <ul>
-          <li><a href="hospitals.html">Hospital Collaboration</a></li>
-          <li><a href="#contact">Contact</a></li>
+        <ul class="lp-footer-links">
+          <li><a href="hospitals.html">Hospitals</a></li>
+          <li><a href="#lp-about">About Us</a></li>
+          <li><a href="#lp-features">Features</a></li>
+          <li><a href="#lp-contact-form">Contact Support</a></li>
         </ul>
       </div>
-      <div>
+
+      <div class="lp-footer-col">
+        <h4>Resources</h4>
+        <ul class="lp-footer-links">
+          <li><a href="reminders.html">Medicine Reminders</a></li>
+          <li><a href="#lp-specialties">Specialties</a></li>
+          <li><a href="#lp-search">AI Smart Search</a></li>
+          <li><a href="mailto:admin@medicares.me">admin@medicares.me</a></li>
+        </ul>
+      </div>
+
+      <div class="lp-footer-col">
         <h4>Deployment</h4>
-        <ul>
-          <li>AWS CloudFront</li>
-          <li>S3 static hosting</li>
-          <li>API Gateway + Lambda</li>
+        <ul class="lp-footer-links">
+          <li>AWS S3 Static Web</li>
+          <li>AWS API Gateway</li>
+          <li>Lambda Serverless</li>
+          <li>JWT Secured API</li>
         </ul>
       </div>
+
     </div>
-    <div class="container footer-bottom">
-      <span>© <span data-year></span> Medicares. All rights reserved.</span>
-      <span>Frontend optimized for medicares.me and api.medicares.me</span>
+
+    <div class="lp-footer-bottom">
+      <span>© <span data-year>2026</span> Medicares.me. All rights reserved.</span>
+      <div class="lp-footer-meta">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Support Channels</a>
+      </div>
     </div>
   </footer>
 
+  <!-- Patient Login Modal Dialog -->
+  <div id="lp-login-modal" class="lp-login-modal-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="lp-login-modal-title" style="display: none;">
+    <div class="lp-login-modal-card">
+      <div class="lp-login-modal-header">
+        <h3 id="lp-login-modal-title">Patient Login</h3>
+        <p>Access your health workspace &amp; book faster</p>
+        <button type="button" class="lp-login-modal-close" aria-label="Close Login Modal">×</button>
+      </div>
+      <form id="lp-home-login-form" class="lp-booking-widget-form">
+        <div class="lp-form-group">
+          <label for="lp-login-email"
+            style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Email
+            Address</label>
+          <input type="email" id="lp-login-email" name="email" class="lp-form-input" placeholder="yourname@email.com"
+            required />
+        </div>
+        <div class="lp-form-group">
+          <label for="lp-login-password"
+            style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Password</label>
+          <input type="password" id="lp-login-password" name="password" class="lp-form-input" placeholder="••••••••"
+            required />
+        </div>
+
+        <!-- Login CAPTCHA -->
+        <div class="lp-form-group" style="border-top: 1px solid var(--lp-border); padding-top: 0.85rem;">
+          <label
+            style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Security
+            Verification</label>
+          <div class="lp-captcha-container"
+            style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <span id="lp-login-captcha-code" class="lp-captcha-code"
+              style="font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 800; background: linear-gradient(45deg, #e2e8f0, #cbd5e1); color: #0f172a; padding: 0.4rem 0.8rem; border-radius: 6px; letter-spacing: 4px; border: 1px dashed #94a3b8; user-select: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); transform: rotate(2deg); display: inline-block;">M8W42</span>
+            <button type="button" id="lp-login-captcha-refresh" class="lp-btn lp-btn-outline"
+              style="min-height: auto; padding: 0.4rem 0.6rem; font-size: 0.8rem;"
+              aria-label="Refresh Captcha">🔄</button>
+          </div>
+          <input type="text" id="lp-login-captcha-input" class="lp-form-input" placeholder="Enter security code above"
+            style="width: 100%;" required />
+        </div>
+
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; margin: 0.5rem 0 1rem;">
+          <label
+            style="display: flex; align-items: center; gap: 0.4rem; color: var(--lp-muted); cursor: pointer; user-select: none;">
+            <input type="checkbox" name="rememberMe" /> Remember me
+          </label>
+          <a href="#" id="lp-forgot-password-link"
+            style="color: var(--lp-primary); font-weight: 600; text-decoration: none;">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="lp-login-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn"
+          style="width: 100%;">
+          Sign In
+        </button>
+        <p class="lp-login-modal-footer"
+          style="font-size: 0.88rem; text-align: center; margin-top: 1rem; color: var(--lp-muted);">
+          Don't have an account? <a href="register.html"
+            style="color: var(--lp-primary); font-weight: 600; text-decoration: none;">Register now</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/landing.js"></script>
 </body>
 
 </html>

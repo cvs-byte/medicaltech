@@ -1,484 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Appointments | Medicares.me</title>
+  <meta name="description" content="AI-powered hospital and doctor appointment booking platform." />
+  
+  <!-- Google Fonts Link (Inter, Poppins, Manrope) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
-  <title>
-    Appointments | Medicares
-  </title>
-
-  <meta
-    name="description"
-    content="Book doctor appointments with Medicares."
-  />
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  />
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  />
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <link
-    rel="stylesheet"
-    href="css/style.css"
-  />
-
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="css/landing.css" />
+  <style>
+    /* Center the booking card on the dedicated appointments page */
+    .lp-dedicated-booking-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 80px);
+      padding: 3rem 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+    .lp-dedicated-booking-container .lp-booking-widget-card {
+      width: 100%;
+      max-width: 580px;
+      margin: 0 auto;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+    }
+    [data-theme="dark"] .lp-dedicated-booking-container .lp-booking-widget-card {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+  </style>
 </head>
+<body class="lp-body">
 
-<body data-page="appointments">
+  <!-- Background Decorative Grid -->
+  <div class="lp-bg-grid" aria-hidden="true"></div>
 
-  <!-- HEADER -->
-  <header class="topbar">
-
-    <div class="navbar">
-
-      <a
-        class="brand"
-        href="index.html"
-      >
-        Medicares
+  <!-- Header Sticky Navigation -->
+  <header class="navbar-lp">
+    <div class="navbar-container">
+      <a class="logo-container" href="index.html" aria-label="Medicares Homepage">
+        <span class="logo-mark" aria-hidden="true">+</span>
+        <span class="logo-text">Medicares<span>.me</span></span>
       </a>
 
-      <nav class="nav-links">
-
-        <a href="patient-dashboard.html">
-          Dashboard
-        </a>
-
-        <a href="hospitals.html">
-          Hospitals
-        </a>
-
-        <a href="reminders.html">
-          Reminders
-        </a>
-
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-menu" aria-label="Primary Navigation">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="index.html#lp-search">Find Doctors</a>
+        <a class="nav-link" href="hospitals.html">Hospitals</a>
+        <a class="nav-link" href="index.html#lp-features">Pricing</a>
+        <a class="nav-link" href="index.html#lp-about">About</a>
       </nav>
 
-    </div>
+      <!-- Action Buttons -->
+      <div class="nav-buttons">
+        <button class="theme-toggle-btn" data-theme-toggle aria-label="Toggle dark mode">◐</button>
+        <a class="lp-btn lp-btn-ghost lp-trigger-login" href="#">Login</a>
+        <a class="lp-btn lp-btn-outline" href="register.html">Register</a>
+        <a class="lp-btn lp-btn-primary" href="appointments.html">Book Appointment</a>
+      </div>
 
+      <!-- Mobile Nav Controls -->
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <button class="theme-toggle-btn mobile-only" data-theme-toggle aria-label="Toggle dark mode" style="display: none;">◐</button>
+        <button class="mobile-nav-toggle" aria-label="Open Mobile Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="section">
-
-    <div class="container">
-
-      <!-- HOSPITAL BANNER -->
-      <div id="hospitalBannerContainer"></div>
-
-      <!-- TITLE -->
-      <div class="section-head">
-
-        <div>
-
-          <span class="eyebrow">
-            Appointment Booking
-          </span>
-
-          <h1 class="section-title">
-            Book Your Doctor
-          </h1>
-
-        </div>
-
-      </div>
-
-      <!-- SEARCH -->
-      <section
-        class="glass-panel"
-        style="padding:1.5rem;"
-      >
-
-        <div class="grid grid-3">
-
-          <div class="field-group">
-
-            <label>
-              Search doctor
-            </label>
-
-            <input
-              class="input"
-              id="doctorSearch"
-              type="search"
-              placeholder="Search doctor"
-            />
-
-          </div>
-
-          <div class="field-group">
-
-            <label>
-              Specialization
-            </label>
-
-            <select
-              class="select"
-              id="specializationFilter"
-            >
-
-              <option value="all">
-                All
-              </option>
-
-              <option>
-                Cardiologist
-              </option>
-
-              <option>
-                Neurologist
-              </option>
-
-              <option>
-                Dermatologist
-              </option>
-
-              <option>
-                Pediatrician
-              </option>
-
-            </select>
-
-          </div>
-
-          <div class="field-group">
-
-            <label>
-              Hospital
-            </label>
-
-            <select
-              class="select"
-              id="hospitalFilter"
-            >
-
-              <option value="all">
-                All Hospitals
-              </option>
-
-              <option>
-                Northside Medical
-              </option>
-
-              <option>
-                City Care Hospital
-              </option>
-
-              <option>
-                Green Valley Clinic
-              </option>
-
-            </select>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- DOCTOR RESULTS -->
-      <section
-        id="doctorResults"
-        class="grid grid-2"
-        style="margin-top:2rem;"
-      ></section>
-
-      <!-- BOOKING FORM -->
-      <section
-        class="glass-panel"
-        style="
-          margin-top:2rem;
-          padding:1.5rem;
-        "
-      >
-
-        <span class="eyebrow">
-          Booking Form
-        </span>
-
-        <h2
-          class="section-title"
-          style="font-size:1.7rem;"
-        >
-          Confirm Appointment
-        </h2>
-
-        <form
-          id="bookingForm"
-          class="form-grid"
-          style="margin-top:1rem;"
-        >
-
-          <!-- PATIENT NAME -->
-          <div class="field-group">
-
-            <label>
-              Patient Name
-            </label>
-
-            <input
-              class="input"
-              id="patientName"
-              name="patientName"
-              required
-            />
-
-          </div>
-
-          <!-- PATIENT EMAIL -->
-          <div class="field-group">
-
-            <label>
-              Patient Email
-            </label>
-
-            <input
-              class="input"
-              id="patientEmail"
-              name="patientEmail"
-              type="email"
-              required
-            />
-
-          </div>
-
-          <!-- PATIENT PHONE -->
-          <div class="field-group">
-
-            <label>
-              Patient Phone Number
-            </label>
-
-            <input
-              class="input"
-              id="patientPhone"
-              name="patientPhone"
-              type="tel"
-              autocomplete="tel"
-              required
-            />
-
-          </div>
-
-
-                      <!-- DOCTOR EMAIL -->
-                      <div class="field-group">
-
-                        <label>
-                          Doctor Email
-                        </label>
-
-                        <input
-                          class="input"
-                          id="doctorEmail"
-                          name="doctorEmail"
-                          readonly
-                          placeholder="Selected from doctor record"
-                        />
-
-                      </div>
-          <!-- DOCTOR -->
-          <div class="field-group">
-
-            <label>
-              Selected Doctor
-            </label>
-
-            <input
-              class="input"
-              id="doctor"
-              name="doctor"
-              readonly
-              placeholder="Select doctor first"
-            />
-
-          </div>
-
-          <!-- HOSPITAL -->
-          <div class="field-group">
-
-            <label>
-              Hospital
-            </label>
-
-            <input
-              class="input"
-              id="doctorHospital"
-              name="doctorHospital"
-              readonly
-              placeholder="Auto-filled from selected doctor"
-            />
-
-          </div>
-
-          <!-- DOCTOR ID -->
-          <div class="field-group">
-
-            <label>
-              Doctor ID
-            </label>
-
-            <input
-              class="input"
-              id="doctorId"
-              name="doctorId"
-              readonly
-              placeholder="Auto-filled from selected doctor"
-            />
-
-          </div>
-
-          <!-- DATE -->
-          <div class="field-group">
-
-            <label>
-              Appointment Date
-            </label>
-
-            <input
-              class="input"
-              id="date"
-              name="date"
-              type="date"
-              required
-            />
-
-          </div>
-
-          <!-- TIME SLOT PICKER -->
-          <div class="field-group">
-
-            <label>
-              Select Time Slot <span class="muted" style="font-weight:400;">(9:00 AM – 5:00 PM, 15 min intervals)</span>
-            </label>
-
-            <div
-              id="slotStatusMsg"
-              class="slot-status-msg"
-              style="display:none;"
-            ></div>
-
-            <div
-              id="slotGrid"
-              class="slot-grid"
-            >
-              <p class="muted">Please select a doctor and date first to view available slots.</p>
-            </div>
-
-            <!-- Hidden input to carry the selected time value -->
-            <input
-              type="hidden"
-              id="time"
-              name="time"
-            />
-
-          </div>
-
-          <!-- NOTES -->
-          <div class="field-group">
-
-            <label>
-              Notes
-            </label>
-
-            <textarea
-              class="textarea"
-              id="notes"
-              name="notes"
-              placeholder="Symptoms or additional notes"
-            ></textarea>
-
-          </div>
-
-          <!-- SUBMIT -->
-          <button
-            class="button button--primary"
-            type="submit"
-          >
-
-            Review Booking
-
-          </button>
-
-        </form>
-
-      </section>
-
+  <!-- Mobile Drawer Navigation Overlay -->
+  <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+    <div class="mobile-nav-header">
+      <a class="logo-container" href="index.html">
+        <span class="logo-mark">+</span>
+        <span class="logo-text">Medicares</span>
+      </a>
+      <button class="mobile-drawer-close lp-btn lp-btn-ghost" aria-label="Close Mobile Menu" style="font-size: 1.5rem;">×</button>
     </div>
-
-  </main>
-
-  <!-- MODAL -->
-  <div
-    class="modal"
-    id="appointmentModal"
-  >
-
-    <div class="modal-card">
-
-      <div class="modal-header">
-
-        <h3>
-          Confirm Appointment
-        </h3>
-
-      </div>
-
-      <div
-        class="modal-body"
-        id="appointmentSummary"
-      ></div>
-
-      <div class="modal-footer">
-
-        <button
-          class="button button--ghost"
-          type="button"
-          data-close-modal
-        >
-
-          Cancel
-
-        </button>
-
-        <button
-          class="button button--primary"
-          id="confirmBooking"
-          type="button"
-        >
-
-          Confirm Booking
-
-        </button>
-
-      </div>
-
+    <ul class="mobile-nav-menu">
+      <li><a class="mobile-nav-link" href="index.html">Home</a></li>
+      <li><a class="mobile-nav-link" href="index.html#lp-search">Find Doctors</a></li>
+      <li><a class="mobile-nav-link" href="hospitals.html">Hospitals</a></li>
+      <li><a class="mobile-nav-link" href="index.html#lp-features">Pricing</a></li>
+      <li><a class="mobile-nav-link" href="index.html#lp-about">About</a></li>
+    </ul>
+    <div class="mobile-nav-buttons">
+      <a class="lp-btn lp-btn-outline lp-trigger-login" href="#">Login</a>
+      <a class="lp-btn lp-btn-primary" href="register.html">Register</a>
+      <a class="lp-btn lp-btn-accent" href="appointments.html" style="text-align: center;">Book Appointment</a>
     </div>
-
   </div>
 
-  <!-- JS -->
+  <!-- Dedicated Page Main Section -->
+  <main class="lp-dedicated-booking-container">
+    <div class="lp-booking-widget-card" style="margin-top: 0;">
+      <!-- Tabs Navigator -->
+      <div class="lp-booking-tabs" style="display: flex; gap: 0.35rem; margin-bottom: 1.25rem; background: var(--lp-bg); padding: 0.25rem; border-radius: var(--lp-radius-md); border: 1px solid var(--lp-border);">
+        <button type="button" class="lp-booking-tab active" data-booking-tab="new" style="flex: 1; padding: 0.5rem 0.25rem; border: none; background: transparent; font-family: var(--lp-font-manrope); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; color: var(--lp-muted); transition: var(--lp-transition);">Confirm Appointment</button>
+        <button type="button" class="lp-booking-tab" data-booking-tab="reconsult" style="flex: 1; padding: 0.5rem 0.25rem; border: none; background: transparent; font-family: var(--lp-font-manrope); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; color: var(--lp-muted); transition: var(--lp-transition);">Reconsultation</button>
+      </div>
+
+      <!-- Confirm Appointment (New Booking View) -->
+      <div id="lp-view-new-booking">
+        <div class="lp-booking-widget-header" style="margin-bottom: 0.75rem;">
+          <h3>Confirm Appointment</h3>
+          <p>Provide details to schedule your consultation</p>
+        </div>
+        
+        <!-- Guest personalized hint banner -->
+        <div id="lp-booking-auth-tip" class="lp-booking-tip-banner" style="display: none; background: rgba(37,99,235,0.06); padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(37,99,235,0.12); margin-bottom: 1rem; font-size: 0.78rem; line-height: 1.4; color: var(--lp-text);">
+          💡 Note: For the best experience, <strong><a href="#" class="lp-trigger-login" style="color: var(--lp-primary); text-decoration: underline;">log in</a></strong> or <strong><a href="register.html" style="color: var(--lp-primary); text-decoration: underline;">register</a></strong> to securely save your details, manage appointments, and receive updates.
+        </div>
+        <div id="lp-booking-welcome-user" class="lp-booking-tip-banner" style="display: none; background: rgba(34,197,94,0.06); padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(34,197,94,0.12); margin-bottom: 1rem; font-size: 0.78rem; color: var(--lp-success); font-weight: 600;">
+          ✓ Welcome back! Patient details are auto-filled.
+        </div>
+
+        <form id="lp-home-booking-form" class="lp-booking-widget-form">
+          <!-- Patient Name -->
+          <div class="lp-form-group">
+            <label for="lp-booking-patient-name" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Patient Name</label>
+            <input type="text" id="lp-booking-patient-name" name="patientName" class="lp-form-input" placeholder="username" style="width: 100%;" required />
+          </div>
+
+          <!-- Patient Email & Phone Number -->
+          <div class="lp-booking-step">
+            <div class="lp-form-group">
+              <label for="lp-booking-patient-email" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Patient Email</label>
+              <input type="email" id="lp-booking-patient-email" name="patientEmail" class="lp-form-input" placeholder="example@gmail.com" style="width: 100%;" required />
+            </div>
+            <div class="lp-form-group">
+              <label for="lp-booking-patient-phone" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Patient Phone Number</label>
+              <input type="tel" id="lp-booking-patient-phone" name="patientPhone" class="lp-form-input" placeholder="Enter phone number" style="width: 100%;" required />
+            </div>
+          </div>
+
+          <!-- Selected Doctor & Hospital -->
+          <div class="lp-booking-step" style="margin-top: 0.5rem;">
+            <div class="lp-form-group">
+              <label for="lp-booking-doctor" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Selected Doctor</label>
+              <select id="lp-booking-doctor" name="doctorId" class="lp-form-input" style="width: 100%;" required>
+                <option value="" disabled selected>Select doctor first</option>
+              </select>
+            </div>
+            <div class="lp-form-group">
+              <label for="lp-booking-hospital" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Hospital</label>
+              <input type="text" id="lp-booking-hospital" class="lp-form-input" placeholder="Auto-filled from selected doctor" readonly style="width: 100%; cursor: not-allowed; background: rgba(148,163,184,0.08);" />
+            </div>
+          </div>
+
+          <!-- Appointment Date -->
+          <div class="lp-form-group">
+            <label for="lp-booking-date" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Appointment Date</label>
+            <input type="date" id="lp-booking-date" name="date" class="lp-form-input" style="width: 100%;" required />
+          </div>
+
+          <!-- Time Slots Grid -->
+          <div id="lp-booking-slots-section" class="lp-booking-slots-section" style="display: flex; flex-direction: column; margin-top: 0.5rem;">
+            <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Select Time Slot (9:00 AM – 5:00 PM, 15 min intervals)</label>
+            <div id="lp-booking-slot-grid" class="lp-booking-slot-grid">
+              <p class="muted" id="lp-booking-slots-placeholder" style="grid-column: span 4; text-align:center; font-size:0.82rem; color:var(--lp-muted); margin: 0.5rem 0;">Please select a doctor and date first to view available slots.</p>
+            </div>
+            <input type="hidden" id="lp-booking-time" name="time" required />
+          </div>
+
+          <!-- Notes -->
+          <div class="lp-form-group">
+            <label for="lp-booking-notes" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Notes</label>
+            <textarea id="lp-booking-notes" name="notes" class="lp-form-input lp-form-textarea" placeholder="Symptoms or additional notes" style="width: 100%; min-height: 56px;"></textarea>
+          </div>
+
+          <!-- CAPTCHA Verification -->
+          <div id="lp-booking-captcha-group" class="lp-form-group" style="display: none; border-top: 1px solid var(--lp-border); padding-top: 0.85rem;">
+            <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Security Verification</label>
+            <div class="lp-captcha-container" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+              <span id="lp-booking-captcha-code" class="lp-captcha-code" style="font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 800; background: linear-gradient(45deg, #e2e8f0, #cbd5e1); color: #0f172a; padding: 0.4rem 0.8rem; border-radius: 6px; letter-spacing: 4px; border: 1px dashed #94a3b8; user-select: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); transform: rotate(-2deg); display: inline-block;">R7K29</span>
+              <button type="button" id="lp-booking-captcha-refresh" class="lp-btn lp-btn-outline" style="min-height: auto; padding: 0.4rem 0.6rem; font-size: 0.8rem;" aria-label="Refresh Captcha">🔄</button>
+            </div>
+            <input type="text" id="lp-booking-captcha-input" class="lp-form-input" placeholder="Enter security code above" style="width: 100%;" required />
+          </div>
+
+          <!-- Action Button -->
+          <button type="submit" id="lp-booking-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn" disabled>
+            Review Booking
+          </button>
+        </form>
+      </div>
+
+      <!-- Reconsultation View -->
+      <div id="lp-view-reconsult" style="display: none;">
+        <div class="lp-booking-widget-header" style="margin-bottom: 0.75rem;">
+          <h3>Reconsultation</h3>
+          <p>Find appointments to book follow-up consultations</p>
+        </div>
+
+        <!-- Reconsult Search Box -->
+        <div id="lp-reconsult-search-pane" class="lp-booking-widget-form">
+          <div class="lp-form-group">
+            <label for="lp-reconsult-search-input" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Phone Number or Appointment ID</label>
+            <input type="text" id="lp-reconsult-search-input" class="lp-form-input" placeholder="e.g. 9876543210 or apt-123" style="width: 100%;" />
+          </div>
+          <button type="button" id="lp-reconsult-find-btn" class="lp-btn lp-btn-primary" style="width: 100%; height: 44px;">
+            Find Eligible Appointments
+          </button>
+          <div id="lp-reconsult-search-results" style="margin-top: 0.75rem; max-height: 240px; overflow-y: auto;">
+            <!-- Results items render here -->
+          </div>
+        </div>
+
+        <!-- Reconsult Selected Form -->
+        <form id="lp-home-reconsult-form" class="lp-booking-widget-form" style="display: none; border-top: 1px solid var(--lp-border); padding-top: 1rem; margin-top: 1rem; animation: slideUp 0.3s ease-out;">
+          <div class="lp-booking-step">
+            <div class="lp-form-group">
+              <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); display:block;">Selected Doctor</label>
+              <input type="text" id="lp-reconsult-doctor-display" class="lp-form-input" style="width: 100%;" readonly />
+            </div>
+            <div class="lp-form-group">
+              <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); display:block;">Hospital</label>
+              <input type="text" id="lp-reconsult-hospital-display" class="lp-form-input" style="width: 100%;" readonly />
+            </div>
+          </div>
+
+          <div class="lp-form-group">
+            <label for="lp-reconsult-date" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Select Date</label>
+            <input type="date" id="lp-reconsult-date" name="date" class="lp-form-input" style="width: 100%;" required />
+          </div>
+
+          <!-- Slots grid for reconsultation -->
+          <div id="lp-reconsult-slots-section" class="lp-booking-slots-section" style="display: none;">
+            <label>Available Slots</label>
+            <div id="lp-reconsult-slot-grid" class="lp-booking-slot-grid"></div>
+            <input type="hidden" id="lp-reconsult-time" name="time" required />
+          </div>
+
+          <!-- Hidden Patient Data Prefilled from selected reconsult -->
+          <input type="hidden" id="lp-reconsult-patient-name" name="patientName" />
+          <input type="hidden" id="lp-reconsult-patient-email" name="patientEmail" />
+          <input type="hidden" id="lp-reconsult-patient-phone" name="patientPhone" />
+          <input type="hidden" id="lp-reconsult-notes" name="notes" />
+
+          <!-- Captcha for Reconsult Booking -->
+          <div class="lp-form-group" style="border-top: 1px solid var(--lp-border); padding-top: 0.85rem;">
+            <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Security Verification</label>
+            <div class="lp-captcha-container" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+              <span id="lp-reconsult-captcha-code" class="lp-captcha-code" style="font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 800; background: linear-gradient(45deg, #e2e8f0, #cbd5e1); color: #0f172a; padding: 0.4rem 0.8rem; border-radius: 6px; letter-spacing: 4px; border: 1px dashed #94a3b8; user-select: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); transform: rotate(2deg); display: inline-block;">H9X7P</span>
+              <button type="button" id="lp-reconsult-captcha-refresh" class="lp-btn lp-btn-outline" style="min-height: auto; padding: 0.4rem 0.6rem; font-size: 0.8rem;" aria-label="Refresh Captcha">🔄</button>
+            </div>
+            <input type="text" id="lp-reconsult-captcha-input" class="lp-form-input" placeholder="Enter security code above" style="width: 100%;" required />
+          </div>
+
+          <button type="submit" id="lp-reconsult-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn" disabled>
+            Book Follow-up
+          </button>
+        </form>
+      </div>
+
+
+
+    </div>
+  </main>
+
+  <!-- Patient Login Modal Dialog -->
+  <div id="lp-login-modal" class="lp-login-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="lp-login-modal-title" style="display: none;">
+    <div class="lp-login-modal-card">
+      <div class="lp-login-modal-header">
+        <h3 id="lp-login-modal-title">Patient Login</h3>
+        <p>Access your health workspace &amp; book faster</p>
+        <button type="button" class="lp-login-modal-close" aria-label="Close Login Modal">×</button>
+      </div>
+      <form id="lp-home-login-form" class="lp-booking-widget-form">
+        <div class="lp-form-group">
+          <label for="lp-login-email" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Email Address</label>
+          <input type="email" id="lp-login-email" name="email" class="lp-form-input" placeholder="yourname@email.com" required />
+        </div>
+        <div class="lp-form-group">
+          <label for="lp-login-password" style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Password</label>
+          <input type="password" id="lp-login-password" name="password" class="lp-form-input" placeholder="••••••••" required />
+        </div>
+        
+        <!-- Login CAPTCHA -->
+        <div class="lp-form-group" style="border-top: 1px solid var(--lp-border); padding-top: 0.85rem;">
+          <label style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Security Verification</label>
+          <div class="lp-captcha-container" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <span id="lp-login-captcha-code" class="lp-captcha-code" style="font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 800; background: linear-gradient(45deg, #e2e8f0, #cbd5e1); color: #0f172a; padding: 0.4rem 0.8rem; border-radius: 6px; letter-spacing: 4px; border: 1px dashed #94a3b8; user-select: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); transform: rotate(2deg); display: inline-block;">M8W42</span>
+            <button type="button" id="lp-login-captcha-refresh" class="lp-btn lp-btn-outline" style="min-height: auto; padding: 0.4rem 0.6rem; font-size: 0.8rem;" aria-label="Refresh Captcha">🔄</button>
+          </div>
+          <input type="text" id="lp-login-captcha-input" class="lp-form-input" placeholder="Enter security code above" style="width: 100%;" required />
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; margin: 0.5rem 0 1rem;">
+          <label style="display: flex; align-items: center; gap: 0.4rem; color: var(--lp-muted); cursor: pointer; user-select: none;">
+            <input type="checkbox" name="rememberMe" /> Remember me
+          </label>
+          <a href="#" id="lp-forgot-password-link" style="color: var(--lp-primary); font-weight: 600; text-decoration: none;">Forgot password?</a>
+        </div>
+
+        <button type="submit" id="lp-login-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn" style="width: 100%;">
+          Sign In
+        </button>
+        <p class="lp-login-modal-footer" style="font-size: 0.88rem; text-align: center; margin-top: 1rem; color: var(--lp-muted);">
+          Don't have an account? <a href="register.html" style="color: var(--lp-primary); font-weight: 600; text-decoration: none;">Register now</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="js/api.js"></script>
-
-  <script src="js/appointments.js"></script>
-
+  <script src="js/app.js"></script>
+  <script src="js/landing.js"></script>
 </body>
 </html>

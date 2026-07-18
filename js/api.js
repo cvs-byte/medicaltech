@@ -173,6 +173,7 @@ async function request(path, options = {}) {
       }
 
       const requestUrl = /^https?:\/\//i.test(path) ? path : `${API_BASE_URL}${path}`;
+      console.log("Request URL", requestUrl);
       const response = await fetch(requestUrl, {
         ...fetchOptions,
         headers,
@@ -180,6 +181,7 @@ async function request(path, options = {}) {
       });
 
       const payload = await parseResponse(response);
+      console.log("API Response", payload);
       clearTimeout(timeout);
       return payload;
     } catch (error) {
@@ -357,12 +359,24 @@ const appointments = {
     const params = new URLSearchParams();
     const patientEmail = String(options.patientEmail || '').trim();
     const doctorEmail = String(options.doctorEmail || '').trim();
+    const patientPhone = String(options.patientPhone || '').trim();
+    const appointmentId = String(options.appointmentId || '').trim();
+    const date = String(options.date || options.appointmentDate || '').trim();
 
     if (patientEmail) {
       params.set('patientEmail', patientEmail);
     }
     if (doctorEmail) {
       params.set('doctorEmail', doctorEmail);
+    }
+    if (patientPhone) {
+      params.set('patientPhone', patientPhone);
+    }
+    if (appointmentId) {
+      params.set('appointmentId', appointmentId);
+    }
+    if (date) {
+      params.set('date', date);
     }
 
     const requestPath = params.toString()
