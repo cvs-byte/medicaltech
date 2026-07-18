@@ -241,18 +241,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profileCard = document.querySelector('[data-profile-card]');
     if (!profileCard) return;
 
+    // Merge locally-stored session user so phone/gender from login credentials
+    // are always available, even when the live API profile omits those fields.
+    const storedUser = MedicaresAPI.getAuthUser() || {};
+    const phone = user.phoneNumber || user.phone || user.phone_number
+                  || storedUser.phoneNumber || storedUser.phone || storedUser.phone_number || '-';
+    const gender = user.gender || storedUser.gender || '-';
+    const dob = user.dateOfBirth || user.dob || storedUser.dateOfBirth || storedUser.dob || '';
+    const userId = user.userId || user.id || storedUser.userId || storedUser.id || '-';
+    const displayName = MedicaresAPI.sanitizeText(user.fullName || user.name || storedUser.fullName || storedUser.name || 'User');
+    const displayEmail = MedicaresAPI.sanitizeText(user.email || storedUser.email || '-');
+
     profileCard.innerHTML = `
       <div class="profile-row">
-        <div class="avatar-xl">${MedicaresAPI.initials(user.fullName || user.name || 'U')}</div>
+        <div class="avatar-xl">${MedicaresAPI.initials(displayName)}</div>
         <div>
-          <h3 style="margin:0;">${MedicaresAPI.sanitizeText(user.fullName || user.name || 'User')}</h3>
-          <p class="muted" style="margin:0;">${MedicaresAPI.sanitizeText(user.email || '-')}</p>
+          <h3 style="margin:0;">${displayName}</h3>
+          <p class="muted" style="margin:0;">${displayEmail}</p>
         </div>
       </div>
       <div class="stack" style="margin-top:1rem;">
-        <div class="dashboard-badge">Patient ID #${MedicaresAPI.sanitizeText(user.userId || '-')}</div>
-        <p class="muted" style="margin:0;">Phone: ${MedicaresAPI.sanitizeText(user.phoneNumber || user.phone || user.phone_number || '-')}</p>
-        <p class="muted" style="margin:0;">Gender: ${MedicaresAPI.sanitizeText(user.gender || '-')}</p>
+        <div class="dashboard-badge">Patient ID #${MedicaresAPI.sanitizeText(String(userId))}</div>
+        <p class="muted" style="margin:0;">📞 Phone: <strong>${MedicaresAPI.sanitizeText(phone)}</strong></p>
+        <p class="muted" style="margin:0;">⚧ Gender: <strong>${MedicaresAPI.sanitizeText(gender)}</strong></p>
+        ${dob ? `<p class="muted" style="margin:0;">🎂 DOB: <strong>${MedicaresAPI.sanitizeText(dob)}</strong></p>` : ''}
       </div>
     `;
   }

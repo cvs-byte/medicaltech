@@ -387,23 +387,61 @@ document.addEventListener('DOMContentLoaded', () => {
     loginCaptchaRefresh.addEventListener('click', () => setCaptcha(loginCaptchaCode, loginCaptchaInput));
   }
 
+  // Helper: show an inline status banner inside the login modal
+  function showLoginStatus(type, message) {
+    const banner = document.getElementById('lp-login-status-banner');
+    const iconEl = document.getElementById('lp-login-status-icon');
+    const textEl = document.getElementById('lp-login-status-text');
+    if (!banner) return;
+
+    const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+    banner.className = `lp-login-status-banner lp-login-status-banner--${type} show`;
+    if (iconEl) iconEl.textContent = icons[type] || 'ℹ️';
+    if (textEl) textEl.textContent = message;
+
+    // Auto-hide after 6s for non-errors
+    if (type !== 'error') {
+      clearTimeout(banner._hideTimer);
+      banner._hideTimer = setTimeout(() => {
+        banner.classList.remove('show');
+      }, 6000);
+    }
+  }
+
+  function hideLoginStatus() {
+    const banner = document.getElementById('lp-login-status-banner');
+    if (banner) banner.classList.remove('show');
+  }
+
   if (homeLoginForm) {
     homeLoginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      hideLoginStatus();
 
       // Check CAPTCHA
       if (!verifyCaptcha(loginCaptchaCode, loginCaptchaInput)) {
+        showLoginStatus('error', 'Incorrect security code — please try again.');
         if (window.MedicaresUI) MedicaresUI.notify('Verification Failed', 'Incorrect CAPTCHA security code. Please try again.', 'error');
         setCaptcha(loginCaptchaCode, loginCaptchaInput);
         return;
       }
 
-      const email = document.getElementById('lp-login-email').value.trim();
+      const emailOrPhone = document.getElementById('lp-login-email').value.trim();
       const password = document.getElementById('lp-login-password').value;
       const rememberMe = homeLoginForm.querySelector('[name="rememberMe"]')?.checked;
       const submitBtn = document.getElementById('lp-login-submit-btn');
 
-      if (!email || !password) {
+      // Detect email vs phone number
+      const isPhone = emailOrPhone && /^[+\d][\d\s\-().]{6,}$/.test(emailOrPhone);
+      const loginPayload = {
+        password,
+        ...(isPhone
+          ? { phoneNumber: emailOrPhone, phone: emailOrPhone }
+          : { email: emailOrPhone })
+      };
+
+      if (!emailOrPhone || !password) {
+        showLoginStatus('error', 'Please fill in your email or phone number and password.');
         if (window.MedicaresUI) MedicaresUI.notify('Validation Error', 'Please fill in all fields.', 'error');
         return;
       }
@@ -418,12 +456,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`${baseUrl}/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify(loginPayload)
         });
 
         if (!response.ok) {
           const errData = await response.json().catch(() => null);
-          throw new Error(errData?.message || 'Invalid credentials.');
+          throw new Error(errData?.message || 'Invalid email or password. Please try again.');
         }
 
         const data = await response.json();
@@ -433,23 +471,34 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error('API did not return a valid auth token.');
         }
 
+        const phoneVal = data?.user?.phoneNumber || data?.user?.phone || data?.user?.phone_number || data?.phoneNumber || data?.phone || ''
+          || (isPhone ? emailOrPhone : '');
+        const genderVal = data?.user?.gender || data?.gender || '';
+        const dobVal = data?.user?.dateOfBirth || data?.user?.dob || data?.dateOfBirth || data?.dob || '';
+        const resolvedEmail = data?.user?.email || data?.email || (emailOrPhone.includes('@') ? emailOrPhone : '');
         const user = {
-          name: data?.user?.name || data?.user?.fullName || email,
-          email: data?.user?.email || email,
+          fullName: data?.user?.fullName || data?.user?.name || data?.fullName || emailOrPhone,
+          name: data?.user?.fullName || data?.user?.name || data?.fullName || emailOrPhone,
+          email: resolvedEmail,
           role: data?.user?.role || 'patient',
-          userId: data?.user?.id || ''
+          userId: data?.user?.id || data?.user?.userId || '',
+          phoneNumber: phoneVal || (isPhone ? emailOrPhone : ''),
+          phone: phoneVal || (isPhone ? emailOrPhone : ''),
+          gender: genderVal,
+          dateOfBirth: dobVal
         };
 
         if (window.MedicaresAPI) {
           MedicaresAPI.setAuthSession(token, user);
           if (rememberMe) {
-            localStorage.setItem(MedicaresAPI.STORAGE_KEYS.remembers, email);
+            localStorage.setItem(MedicaresAPI.STORAGE_KEYS.remembers, emailOrPhone);
           } else {
             localStorage.removeItem(MedicaresAPI.STORAGE_KEYS.remembers);
           }
         }
 
-        if (window.MedicaresUI) MedicaresUI.notify('Welcome Back', 'Logged in successfully.', 'success');
+        showLoginStatus('success', `Welcome back! Redirecting to your dashboard…`);
+        if (window.MedicaresUI) MedicaresUI.notify('Welcome Back! 🎉', 'Signed in successfully. Redirecting…', 'success');
         closeLoginModal();
 
         setTimeout(() => {
@@ -458,7 +507,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       } catch (err) {
         console.error(err);
-        if (window.MedicaresUI) MedicaresUI.notify('Authentication Failed', err.message, 'error');
+        showLoginStatus('error', err.message || 'Login failed. Please check your credentials.');
+        if (window.MedicaresUI) MedicaresUI.notify('Login Failed', err.message || 'Authentication failed.', 'error');
         setCaptcha(loginCaptchaCode, loginCaptchaInput);
       } finally {
         if (submitBtn) {
@@ -468,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
 
   // B. Booking widget container actions
   const homeBookingForm = document.getElementById('lp-home-booking-form');
@@ -881,6 +932,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const reconsultCaptchaCode = document.getElementById('lp-reconsult-captcha-code');
         const reconsultCaptchaInput = document.getElementById('lp-reconsult-captcha-input');
         if (reconsultCaptchaCode) setCaptcha(reconsultCaptchaCode, reconsultCaptchaInput);
+
+        // Pre-fill reconsult search field with logged-in user's phone number
+        const reconsultSearchEl = document.getElementById('lp-reconsult-search-input');
+        if (reconsultSearchEl && !reconsultSearchEl.value && window.MedicaresAPI) {
+          const storedUser = MedicaresAPI.getAuthUser();
+          const storedPhone = storedUser?.phoneNumber || storedUser?.phone || storedUser?.phone_number || '';
+          if (storedPhone) reconsultSearchEl.value = storedPhone;
+        }
       }
     });
   });
@@ -952,7 +1011,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Filter: only show BOOKED appointments eligible for reconsultation
         const matches = list.filter(apt => {
           const status = String(apt.status || '').toUpperCase();
-          return status === 'BOOKED' || status === 'CONFIRMED' || status === 'COMPLETED';
+          const type = String(apt.appointmentType || apt.type || apt.bookingType || '').toLowerCase();
+          const isEligibleStatus = status === 'BOOKED' || status === 'CONFIRMED' || status === 'COMPLETED';
+          const isAlreadyReconsult = type.includes('reconsult');
+          return isEligibleStatus && !isAlreadyReconsult;
         });
 
         if (matches.length === 0) {

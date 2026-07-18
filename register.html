@@ -50,12 +50,20 @@
       </section>
       <section class="auth-card card" data-animate>
         <h2>Create patient account</h2>
-        <p class="subtext">All fields are validated on the client and submitted to <strong>POST https://api.medicares.me/register</strong>.</p>
+        <p class="subtext">All fields are validated before submission. Email and phone are checked live against our database — duplicates are blocked.</p>
         <form id="patientRegisterForm" class="auth-form">
           <div class="field-group"><label for="fullName">Full name</label><input class="input" id="fullName" name="fullName" autocomplete="name" required /></div>
           <div class="auth-row">
-            <div class="field-group"><label for="registerEmail">Email</label><input class="input" id="registerEmail" name="email" type="email" autocomplete="email" required /></div>
-            <div class="field-group"><label for="phone">Phone number</label><input class="input" id="phone" name="phone" type="tel" autocomplete="tel" required /></div>
+            <div class="field-group">
+              <label for="registerEmail">Email</label>
+              <input class="input" id="registerEmail" name="email" type="email" autocomplete="email" required />
+              <div id="email-check-status" class="field-check-status" aria-live="polite"></div>
+            </div>
+            <div class="field-group">
+              <label for="phone">Phone number</label>
+              <input class="input" id="phone" name="phone" type="tel" autocomplete="tel" required />
+              <div id="phone-check-status" class="field-check-status" aria-live="polite"></div>
+            </div>
           </div>
           <div class="auth-row">
             <div class="field-group"><label for="gender">Gender</label><select class="select" id="gender" name="gender"><option>Female</option><option>Male</option><option>Prefer not to say</option></select></div>
@@ -65,7 +73,12 @@
             <div class="field-group"><label for="registerPassword">Password</label><div class="input-wrap"><input class="input" id="registerPassword" name="password" type="password" autocomplete="new-password" required /><button class="password-toggle" type="button" data-toggle-password="#registerPassword">Show</button></div></div>
             <div class="field-group"><label for="confirmPassword">Confirm password</label><div class="input-wrap"><input class="input" id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required /><button class="password-toggle" type="button" data-toggle-password="#confirmPassword">Show</button></div></div>
           </div>
-          <button class="button button--primary" type="submit">Create account</button>
+          <!-- Registration status banner -->
+          <div id="reg-status-banner" class="lp-login-status-banner" role="alert" aria-live="polite" style="margin-bottom:0.75rem;">
+            <span id="reg-status-icon"></span>
+            <span id="reg-status-text"></span>
+          </div>
+          <button class="button button--primary" type="submit" id="reg-submit-btn">Create account</button>
         </form>
         <p class="form-note" style="margin-top:1rem;">JWT-ready registration flow with AWS backend support.</p>
       </section>

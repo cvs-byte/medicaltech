@@ -17,15 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function notify(title, message, type = 'info') {
+    const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
     const toast = document.createElement('div');
-    toast.className = 'toast';
+    toast.className = `toast toast--${type}`;
+    toast.setAttribute('data-icon', icons[type] || 'ℹ️');
     toast.innerHTML = `
-      <strong>${title}</strong>
-      <div>${message}</div>
+      <div>
+        <strong>${title}</strong>
+        <div>${message}</div>
+      </div>
     `;
-    toast.style.borderLeft = `4px solid ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#2563eb'}`;
     toastStack.appendChild(toast);
-    window.setTimeout(() => toast.remove(), 4200);
+    window.setTimeout(() => toast.remove(), 5000);
   }
 
   function setLoading(button, isLoading, loadingText = 'Loading...') {

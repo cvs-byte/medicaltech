@@ -248,20 +248,29 @@ async function getProfile(options = {}) {
   if (profile) {
     const existingUser = getAuthUser() || {};
     const phoneVal = profile.phoneNumber || profile.phone || profile.phone_number || existingUser.phoneNumber || existingUser.phone || existingUser.phone_number || '';
+    const genderVal = profile.gender || existingUser.gender || '';
+    const dobVal = profile.dateOfBirth || profile.dob || existingUser.dateOfBirth || existingUser.dob || '';
+    const fullNameVal = profile.fullName || profile.name || existingUser.fullName || existingUser.name || profile.email || 'User';
 
-    if (!profile.phoneNumber && phoneVal) profile.phoneNumber = phoneVal;
-    if (!profile.phone && phoneVal) profile.phone = phoneVal;
-
-    setCachedProfile(profile);
-    setAuthUser({
+    const merged = {
       ...existingUser,
-      name: profile.fullName || profile.name || profile.email || existingUser.name || 'User',
+      ...profile,
+      fullName: fullNameVal,
+      name: fullNameVal,
       email: profile.email || existingUser.email || '',
       role: String(profile.role || existingUser.role || '').toLowerCase(),
-      userId: profile.userId || profile.id || existingUser.userId || '',
+      userId: profile.userId || profile.id || existingUser.userId || existingUser.id || '',
+      id: profile.id || profile.userId || existingUser.id || existingUser.userId || '',
       phoneNumber: phoneVal,
-      phone: phoneVal
-    });
+      phone: phoneVal,
+      gender: genderVal,
+      dateOfBirth: dobVal,
+      dob: dobVal
+    };
+
+    Object.assign(profile, merged);
+    setCachedProfile(profile);
+    setAuthUser(profile);
   }
   return profile;
 }

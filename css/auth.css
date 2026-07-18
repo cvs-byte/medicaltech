@@ -156,3 +156,57 @@
   cursor: pointer;
   font-weight: 700;
 }
+
+/* Real-time field availability indicator */
+.field-check-status {
+  min-height: 1.4rem;
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: opacity 200ms ease;
+}
+
+.field-check-status:empty {
+  display: none;
+}
+
+.field-check-status.checking {
+  color: var(--primary);
+}
+
+.field-check-status.available {
+  color: #059669;
+}
+
+.field-check-status.taken {
+  color: #dc2626;
+}
+
+/* Highlight input border when taken */
+.field-group:has(.field-check-status.taken) .input {
+  border-color: rgba(239, 68, 68, 0.55);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.field-group:has(.field-check-status.available) .input {
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.10);
+}
+
+/* Spinner for checking state */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.field-check-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(37, 99, 235, 0.25);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}

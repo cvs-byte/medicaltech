@@ -740,16 +740,16 @@
     <div class="lp-login-modal-card">
       <div class="lp-login-modal-header">
         <h3 id="lp-login-modal-title">Patient Login</h3>
-        <p>Access your health workspace &amp; book faster</p>
+        <p>Sign in with your email address or phone number</p>
         <button type="button" class="lp-login-modal-close" aria-label="Close Login Modal">×</button>
       </div>
       <form id="lp-home-login-form" class="lp-booking-widget-form">
         <div class="lp-form-group">
           <label for="lp-login-email"
-            style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Email
-            Address</label>
-          <input type="email" id="lp-login-email" name="email" class="lp-form-input" placeholder="yourname@email.com"
-            required />
+            style="font-size: 0.78rem; font-weight:700; color: var(--lp-muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--lp-font-manrope); display:block; margin-bottom:0.25rem;">Email or Phone Number</label>
+          <input type="text" id="lp-login-email" name="emailOrPhone" class="lp-form-input"
+            placeholder="yourname@email.com or 9876543210"
+            autocomplete="username" inputmode="email" required />
         </div>
         <div class="lp-form-group">
           <label for="lp-login-password"
@@ -783,6 +783,12 @@
           </label>
           <a href="#" id="lp-forgot-password-link"
             style="color: var(--lp-primary); font-weight: 600; text-decoration: none;">Forgot password?</a>
+        </div>
+
+        <!-- Inline login status message -->
+        <div id="lp-login-status-banner" class="lp-login-status-banner" role="alert" aria-live="polite">
+          <span class="lp-login-status-icon" id="lp-login-status-icon"></span>
+          <span class="lp-login-status-text" id="lp-login-status-text"></span>
         </div>
 
         <button type="submit" id="lp-login-submit-btn" class="lp-btn lp-btn-primary lp-booking-submit-btn"

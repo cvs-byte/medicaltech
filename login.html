@@ -50,9 +50,15 @@
       </section>
       <section class="auth-card card" data-animate>
         <h2>Patient login</h2>
-        <p class="subtext">Enter your email and password to continue. Demo mode falls back to local session storage if the API is offline.</p>
+        <p class="subtext">Enter your email or phone number and password to continue.</p>
         <form id="patientLoginForm" class="auth-form">
-          <div class="field-group"><label for="loginEmail">Email</label><input class="input" id="loginEmail" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field-group">
+            <label for="loginEmail">Email or Phone Number</label>
+            <input class="input" id="loginEmail" name="emailOrPhone" type="text"
+              autocomplete="username" inputmode="email"
+              placeholder="yourname@email.com or 9876543210" required />
+            <span style="font-size:0.82rem; color:var(--muted); margin-top:0.2rem; display:block;">You can use your registered email address or phone number.</span>
+          </div>
           <div class="field-group">
             <label for="loginPassword">Password</label>
             <div class="input-wrap"><input class="input" id="loginPassword" name="password" type="password" autocomplete="current-password" required /><button class="password-toggle" type="button" data-toggle-password="#loginPassword">Show</button></div>
