@@ -447,48 +447,11 @@ const appointments = {
       remoteList = [];
     }
 
-    const localList = loadLocalList(STORAGE_KEYS.appointments, []);
-
-    const mergedMap = new Map();
-    [...remoteList, ...localList].forEach(apt => {
-      if (!apt) return;
-      const key = String(apt.id || apt.appointmentId || `${apt.date || apt.appointment_date}_${apt.time || apt.appointment_time}_${apt.doctorId || apt.doctor_id || apt.doctorEmail}`);
-      mergedMap.set(key, apt);
-    });
-
-    return Array.from(mergedMap.values());
+    return remoteList;
   },
   create: async (payload) => {
-    let result = null;
-    try {
-      result = await apiRequest('/appointments', { method: 'POST', body: JSON.stringify(payload) });
-    } catch (e) {
-      result = { success: true, ...payload, id: `apt-${Date.now()}` };
-    }
-
-    const existing = loadLocalList(STORAGE_KEYS.appointments, []);
-    const newApt = {
-      id: payload.id || result?.id || result?.appointmentId || `apt-${Date.now()}`,
-      patientName: payload.patientName,
-      patientEmail: payload.patientEmail,
-      patientPhone: payload.patientPhone || payload.phone || '',
-      doctorId: String(payload.doctorId || ''),
-      doctorName: payload.doctorName,
-      doctorEmail: payload.doctorEmail,
-      hospital: payload.hospital || payload.hospital_name || '',
-      hospital_name: payload.hospital || payload.hospital_name || '',
-      appointment_date: payload.date || payload.appointment_date || '',
-      date: payload.date || payload.appointment_date || '',
-      appointment_time: payload.time || payload.appointment_time || '',
-      time: payload.time || payload.appointment_time || '',
-      status: 'BOOKED',
-      notes: payload.notes || ''
-    };
-
-    const updated = [newApt, ...existing.filter(a => String(a.id) !== String(newApt.id))];
-    storeLocalList(STORAGE_KEYS.appointments, updated);
-
-    return result || newApt;
+    const response = await apiRequest('/appointments', { method: 'POST', body: JSON.stringify(payload) });
+    return response;
   },
   delete: (payload) => apiRequest('/appointments', { method: 'DELETE', body: JSON.stringify(payload) })
 };
