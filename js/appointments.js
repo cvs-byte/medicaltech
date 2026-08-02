@@ -443,15 +443,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       const source = await fetchDoctors();
-
-      state.doctors = source.map((doctor) => ({
-        id: Number(doctor.id),
-        name: String(doctor.name || doctor.fullName || 'Doctor'),
-        specialization: String(doctor.specialization || doctor.specialty || 'General'),
-        hospital: String(doctor.hospital_name || doctor.hospital || doctor.location || doctor.address || 'N/A'),
-        location: String(doctor.location || doctor.address || doctor.hospital_name || doctor.hospital || 'N/A'),
-        email: String(doctor.email || doctor.doctorEmail || doctor.contactEmail || '')
-      }));
+      state.doctors = MedicaresAPI.normalizeDoctorsList(source);
 
       hydrateFilterOptions();
       renderDoctors();
@@ -479,10 +471,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       const data = await response.json().catch(() => null);
-      return Array.isArray(data) ? data : (data?.items || []);
+      return data;
     } catch (error) {
-      const fallbackResponse = await MedicaresAPI.doctors.list();
-      return Array.isArray(fallbackResponse) ? fallbackResponse : [];
+      const fallbackResponse = await MedicaresAPI.doctors.list().catch(() => null);
+      return fallbackResponse;
     }
   }
 
@@ -777,6 +769,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     try {
+      // Real-time GET double check before POST request
+      const latestBooked = await fetchBookedSlots(state.selectedDoctor.id, payload.date);
+      if (latestBooked.includes(normalizeTimeForCompare(payload.time))) {
+        confirmButton.disabled = false;
+        confirmButton.textContent = originalText;
+        closeModal();
+        notify('Slot Unavailable', 'This time slot has just been booked by another user. Please select a different slot.', 'error');
+        renderSlotGrid();
+        return;
+      }
+
       await MedicaresAPI.appointments.create(payload);
       closeModal();
       bookingForm.reset();

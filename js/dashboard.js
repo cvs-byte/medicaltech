@@ -62,16 +62,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function normalizeDoctors(items) {
-    if (!Array.isArray(items)) return [];
-    return items.map((doctor) => ({
-      id: doctor.id,
-      name: doctor.name || doctor.fullName || 'Doctor',
-      specialization: doctor.specialization || doctor.specialty || 'General',
-      email: doctor.email || doctor.doctorEmail || doctor.contactEmail || '',
-      address: doctor.address || doctor.location || doctor.hospital || '',
-      hospital: doctor.hospital_name || doctor.hospital || doctor.location || doctor.address || 'N/A',
-      location: doctor.location || doctor.address || doctor.hospital_name || doctor.hospital || 'N/A',
-    }));
+    if (window.MedicaresAPI && typeof MedicaresAPI.normalizeDoctorsList === 'function') {
+      return MedicaresAPI.normalizeDoctorsList(items);
+    }
+    const list = Array.isArray(items) ? items : (items?.doctors || items?.items || []);
+    return list.map((doctor) => {
+      const userObj = doctor.user && typeof doctor.user === 'object' ? doctor.user : {};
+      const rawName = doctor.name || doctor.fullName || userObj.name || userObj.fullName || '';
+      const cleanName = String(rawName).trim();
+      const printableName = cleanName ? (cleanName.toLowerCase().startsWith('dr') ? cleanName : `Dr. ${cleanName}`) : 'Doctor';
+      return {
+        id: doctor.id ?? doctor.doctorId ?? userObj.id ?? 0,
+        name: printableName,
+        fullName: printableName,
+        specialization: doctor.specialization || doctor.specialty || 'General',
+        email: doctor.email || doctor.doctorEmail || userObj.email || '',
+        address: doctor.address || doctor.location || doctor.hospital || '',
+        hospital: doctor.hospital_name || doctor.hospital || doctor.location || doctor.address || 'N/A',
+        location: doctor.location || doctor.address || doctor.hospital_name || doctor.hospital || 'N/A',
+      };
+    });
   }
 
   async function loadAppointmentsForRole(roleName, profileData) {
@@ -1004,15 +1014,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[data-admin-delete-doctor]').forEach((button) => {
       button.addEventListener('click', async () => {
-        const id = Number(button.dataset.adminDeleteDoctor || 0);
+        const id = String(button.dataset.adminDeleteDoctor || '').trim();
         if (!id) return;
 
-        if (!confirm('Delete this doctor?')) return;
+        if (!confirm('Are you sure you want to delete this doctor?')) return;
 
         try {
           await MedicaresAPI.doctors.delete({ id });
           notify('Doctor deleted', 'Doctor removed successfully.', 'success');
-          window.location.reload();
+          setTimeout(() => window.location.reload(), 800);
         } catch (error) {
           notify('Delete failed', error.message || 'Unable to delete doctor.', 'error');
         }
@@ -1022,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     form?.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      const id = Number(idField?.value || 0);
+      const id = String(idField?.value || '').trim();
       const name = String(nameField?.value || '').trim();
       const specialization = String(specializationField?.value || '').trim();
       const email = String(emailField?.value || '').trim();
@@ -1048,11 +1058,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           notify('Doctor updated', 'Doctor updated successfully.', 'success');
         } else {
           await MedicaresAPI.doctors.create(payload);
-          notify('Doctor added', 'Doctor created successfully.', 'success');
+          notify('Doctor added', 'Doctor added successfully.', 'success');
         }
         window.location.reload();
       } catch (error) {
-        notify('Save failed', error.message || 'Unable to save doctor.', 'error');
+        notify('Operation failed', error.message || 'Unable to save doctor.', 'error');
       }
     });
 

@@ -541,16 +541,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedDoctor = null;
     let selectedSlot = null;
 
-    const fallbackDoctors = [
-      { id: 1, name: "Dr. Ananya Rao", specialization: "Cardiologist", hospital: "City Care Hospital", email: "ananya.rao@medicares.me" },
-      { id: 2, name: "Dr. Shruti Roy", specialization: "Pediatrician", hospital: "Northside Medical", email: "shruti.roy@medicares.me" },
-      { id: 3, name: "Dr. Rajesh Deshmukh", specialization: "Pediatrician", hospital: "Northside Medical", email: "rajesh.deshmukh@medicares.me" },
-      { id: 4, name: "Dr. Amit Patel", specialization: "Neurologist", hospital: "City Care Hospital", email: "amit.patel@medicares.me" },
-      { id: 5, name: "Dr. Sarah Jenkins", specialization: "Dermatologist", hospital: "Green Valley Clinic", email: "sarah.jenkins@medicares.me" },
-      { id: 6, name: "Dr. Siddharth Sen", specialization: "Dentist", hospital: "City Care Hospital", email: "siddharth.sen@medicares.me" },
-      { id: 7, name: "Dr. Meera Aiyar", specialization: "General Physician", hospital: "Green Valley Clinic", email: "meera.aiyar@medicares.me" }
-    ];
-
     if (dateInput) {
       dateInput.min = new Date().toISOString().split('T')[0];
     }
@@ -599,62 +589,188 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function initDoctors() {
-      try {
-        let doctorsData = [];
-        if (window.MedicaresAPI) {
-          const baseUrl = window.API_URL || MedicaresAPI.API_BASE_URL;
-          const response = await fetch(`${baseUrl}/doctors`).catch(() => null);
-          if (response && response.ok) {
-            const data = await response.json().catch(() => null);
-            doctorsData = Array.isArray(data) ? data : (data?.items || []);
-          } else {
-            doctorsData = await MedicaresAPI.doctors.list().catch(() => []);
-          }
-        }
-
-        loadedDoctors = doctorsData.length > 0 ? doctorsData.map(d => ({
-          id: Number(d.id),
-          name: String(d.name || d.fullName || 'Doctor'),
-          specialization: String(d.specialization || d.specialty || 'General'),
-          hospital: String(d.hospital_name || d.hospital || 'N/A'),
-          email: String(d.email || d.doctorEmail || '')
-        })) : fallbackDoctors;
-
-      } catch (err) {
-        console.warn('Failed to load doctors, using fallbacks', err);
-        loadedDoctors = fallbackDoctors;
-      }
+      let doctorsData = [];
+      let fetchError = false;
 
       if (doctorSelect) {
-        doctorSelect.innerHTML = '<option value="" disabled selected>-- Select Doctor --</option>';
-        loadedDoctors.forEach(doc => {
-          const opt = document.createElement('option');
-          opt.value = doc.id;
-          opt.textContent = `${doc.name} (${doc.specialization})`;
-          doctorSelect.appendChild(opt);
-        });
+        doctorSelect.innerHTML = '<option value="" disabled selected>Loading available doctors...</option>';
+      }
+
+      try {
+        if (window.MedicaresAPI) {
+          const baseUrl = window.API_URL || MedicaresAPI.API_BASE_URL;
+          const token = MedicaresAPI.getAuthToken();
+          const response = await fetch(`${baseUrl}/doctors`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {})
+            }
+          }).catch(() => null);
+
+          if (response && response.ok) {
+            const data = await response.json().catch(() => null);
+            doctorsData = MedicaresAPI.normalizeDoctorsList(data);
+          } else {
+            const fallbackApiRes = await MedicaresAPI.doctors.list().catch(() => null);
+            doctorsData = MedicaresAPI.normalizeDoctorsList(fallbackApiRes);
+            if (!doctorsData.length) {
+              fetchError = true;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load doctors via GET request:', err);
+        doctorsData = [];
+        fetchError = true;
+      }
+
+      loadedDoctors = Array.isArray(doctorsData) ? doctorsData : [];
+
+      if (doctorSelect) {
+        if (loadedDoctors.length > 0) {
+          doctorSelect.innerHTML = '<option value="" disabled selected>-- Select Doctor --</option>';
+          loadedDoctors.forEach(doc => {
+            const opt = document.createElement('option');
+            opt.value = doc.id;
+            opt.textContent = `${doc.name} (${doc.specialization})`;
+            doctorSelect.appendChild(opt);
+          });
+        } else if (fetchError) {
+          doctorSelect.innerHTML = '<option value="" disabled selected>Unable to load doctors (Server error)</option>';
+        } else {
+          doctorSelect.innerHTML = '<option value="" disabled selected>No doctors available</option>';
+        }
       }
     }
 
+    function updateDoctorDetails() {
+      const selectedId = String(doctorSelect?.value || '').trim();
+      if (!selectedId) {
+        selectedDoctor = null;
+        if (hospitalInput) hospitalInput.value = '';
+        return null;
+      }
+
+      selectedDoctor = loadedDoctors.find(d => 
+        String(d.id) === selectedId || 
+        String(d.raw?.id) === selectedId || 
+        String(d.raw?.doctorId) === selectedId
+      ) || null;
+
+      if (selectedDoctor && hospitalInput) {
+        hospitalInput.value = selectedDoctor.hospital || selectedDoctor.hospital_name || selectedDoctor.location || 'N/A';
+      }
+
+      return selectedDoctor;
+    }
+
+    function openBookingReviewModal(payload, onConfirm) {
+      let modal = document.getElementById('lp-booking-review-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'lp-booking-review-modal';
+        modal.className = 'modal';
+        modal.style.zIndex = '999';
+        document.body.appendChild(modal);
+      }
+
+      const [hStr, mStr] = (payload.time || '09:00').split(':');
+      let hr = parseInt(hStr, 10);
+      const suff = hr >= 12 ? 'PM' : 'AM';
+      if (hr === 0) hr = 12;
+      else if (hr > 12) hr -= 12;
+      const timeFormatted = `${hr}:${mStr} ${suff}`;
+
+      modal.innerHTML = `
+        <div class="modal-card" style="max-width: 540px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1); border: 1px solid var(--lp-border, rgba(226,232,240,0.8)); overflow: hidden;">
+          <div class="modal-header" style="background: linear-gradient(135deg, var(--lp-primary, #2563eb) 0%, #1e40af 100%); color: #fff; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <span style="font-size: 1.4rem;">📋</span>
+              <h3 style="margin: 0; color: #fff; font-size: 1.2rem; font-weight: 700; font-family: var(--lp-font-poppins, sans-serif);">Review &amp; Confirm Booking</h3>
+            </div>
+            <button type="button" class="close-review-modal-btn" style="background: transparent; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; line-height: 1; padding: 0;" aria-label="Close">&times;</button>
+          </div>
+
+          <div class="modal-body" style="padding: 1.5rem; background: var(--lp-surface, #ffffff);">
+            <p style="margin-top: 0; margin-bottom: 1.25rem; font-size: 0.88rem; color: var(--lp-muted, #64748b); line-height: 1.5;">Please review your appointment details below before confirming your booking.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: rgba(241, 245, 249, 0.7); padding: 1.1rem; border-radius: 12px; border: 1px solid rgba(226, 232, 240, 0.8); margin-bottom: 1.25rem;">
+              <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; color: var(--lp-muted, #64748b); display: block;">Doctor</span>
+                <strong style="font-size: 0.95rem; color: var(--lp-heading, #0f172a);">${MedicaresAPI.sanitizeText(payload.doctorName)}</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; color: var(--lp-muted, #64748b); display: block;">Specialization</span>
+                <span style="font-size: 0.9rem; color: var(--lp-text, #334155);">${MedicaresAPI.sanitizeText(selectedDoctor?.specialization || 'General')}</span>
+              </div>
+              <div style="grid-column: span 2;">
+                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; color: var(--lp-muted, #64748b); display: block;">Hospital / Location</span>
+                <strong style="font-size: 0.93rem; color: var(--lp-primary, #2563eb);">${MedicaresAPI.sanitizeText(payload.hospital)}</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; color: var(--lp-muted, #64748b); display: block;">Date</span>
+                <strong style="font-size: 0.93rem; color: var(--lp-heading, #0f172a);">${MedicaresAPI.formatDate(payload.date)}</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; color: var(--lp-muted, #64748b); display: block;">Time Slot</span>
+                <strong style="font-size: 0.93rem; color: #16a34a;">${timeFormatted}</strong>
+              </div>
+            </div>
+
+            <div style="border-top: 1px dashed var(--lp-border, #cbd5e1); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem;">
+              <div><strong style="color: var(--lp-muted, #64748b); display: inline-block; width: 110px;">Patient:</strong> <span style="font-weight: 600;">${MedicaresAPI.sanitizeText(payload.patientName)}</span></div>
+              <div><strong style="color: var(--lp-muted, #64748b); display: inline-block; width: 110px;">Email:</strong> <span>${MedicaresAPI.sanitizeText(payload.patientEmail)}</span></div>
+              <div><strong style="color: var(--lp-muted, #64748b); display: inline-block; width: 110px;">Phone:</strong> <span>${MedicaresAPI.sanitizeText(payload.patientPhone)}</span></div>
+              ${payload.notes ? `<div><strong style="color: var(--lp-muted, #64748b); display: inline-block; width: 110px;">Notes:</strong> <span>${MedicaresAPI.sanitizeText(payload.notes)}</span></div>` : ''}
+            </div>
+          </div>
+
+          <div class="modal-footer" style="padding: 1rem 1.5rem; background: rgba(248, 250, 252, 0.9); border-top: 1px solid var(--lp-border, #e2e8f0); display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button type="button" class="close-review-modal-btn lp-btn lp-btn-outline" style="padding: 0.6rem 1.1rem; min-height: 42px; cursor: pointer;">Edit Details</button>
+            <button type="button" id="confirm-booking-btn" class="lp-btn lp-btn-primary" style="padding: 0.6rem 1.3rem; min-height: 42px; background: linear-gradient(135deg, var(--lp-primary, #2563eb) 0%, #1e40af 100%); cursor: pointer;">Confirm &amp; Book Appointment</button>
+          </div>
+        </div>
+      `;
+
+      modal.classList.add('open');
+
+      const closeModal = () => modal.classList.remove('open');
+
+      modal.querySelectorAll('.close-review-modal-btn').forEach(btn => btn.addEventListener('click', closeModal));
+
+      const confirmBtn = modal.querySelector('#confirm-booking-btn');
+      confirmBtn.addEventListener('click', async () => {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Confirming Booking...';
+        try {
+          await onConfirm();
+          closeModal();
+        } catch (e) {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Confirm & Book Appointment';
+        }
+      });
+    }
+
     if (doctorSelect && dateInput) {
+      doctorSelect.addEventListener('change', updateDoctorDetails);
+
       const checkSlots = async () => {
-        const docId = Number(doctorSelect.value);
+        const selectedId = String(doctorSelect.value || '').trim();
         const dateVal = dateInput.value;
 
-        if (!docId || !dateVal) {
+        updateDoctorDetails();
+
+        if (!selectedId || !dateVal) {
           if (slotsSection) slotsSection.style.display = 'none';
           if (captchaGroup) captchaGroup.style.display = 'none';
           submitBtn.disabled = true;
-          submitBtn.textContent = "Select Doctor & Date";
+          submitBtn.textContent = selectedId ? "Select Date to View Slots" : "Select Doctor & Date";
           return;
         }
 
-        selectedDoctor = loadedDoctors.find(d => d.id === docId);
         if (!selectedDoctor) return;
-
-        if (hospitalInput) {
-          hospitalInput.value = selectedDoctor.hospital || 'N/A';
-        }
 
         // If we are on the simplified homepage form, just enable the submit button for redirect
         if (!slotsSection) {
@@ -683,14 +799,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const list = Array.isArray(response) ? response : (response?.appointments || []);
             bookedSlots = list
               .filter(apt => {
-                const status = String(apt.status || '').toUpperCase();
+                if (!apt) return false;
+                const status = String(apt.status || 'BOOKED').toUpperCase();
                 const aptDate = apt.appointment_date || apt.date || '';
-                return status === 'BOOKED' && aptDate === dateVal;
+                const aptDoctorId = String(apt.doctorId || apt.doctor_id || '');
+                const aptDoctorEmail = String(apt.doctorEmail || apt.doctor_email || '').toLowerCase();
+                const selDoctorId = String(selectedDoctor.id || '');
+                const selDoctorEmail = String(selectedDoctor.email || '').toLowerCase();
+
+                const matchesDoctor = (aptDoctorId && aptDoctorId === selDoctorId) ||
+                                      (aptDoctorEmail && aptDoctorEmail === selDoctorEmail) ||
+                                      (!aptDoctorId && !aptDoctorEmail);
+                const matchesDate = (aptDate === dateVal);
+                return (status === 'BOOKED' || status === 'CONFIRMED') && matchesDate && matchesDoctor;
               })
               .map(apt => {
-                const rawTime = apt.appointment_time || apt.time || '';
+                const rawTime = String(apt.appointment_time || apt.time || '').trim();
                 return rawTime.substring(0, 5);
-              });
+              })
+              .filter(Boolean);
           }
 
           const timeSlots = [];
@@ -738,10 +865,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (hr === 0) hr = 12;
             else if (hr > 12) hr -= 12;
 
-            if (isExpired) {
+            if (isBooked) {
+              btn.textContent = `${hr}:${mStr} ${suff} (Booked)`;
+              btn.style.opacity = '0.45';
+              btn.style.background = 'rgba(239, 68, 68, 0.12)';
+              btn.style.color = '#ef4444';
+              btn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+              btn.style.textDecoration = 'line-through';
+              btn.style.cursor = 'not-allowed';
+              btn.title = 'This slot is already booked';
+            } else if (isExpired) {
               btn.textContent = `${hr}:${mStr} ${suff} (Past)`;
               btn.style.opacity = '0.35';
               btn.style.textDecoration = 'line-through';
+              btn.style.cursor = 'not-allowed';
+              btn.title = 'Time slot has passed';
             } else {
               btn.textContent = `${hr}:${mStr} ${suff}`;
             }
@@ -755,7 +893,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeInput.value = slot;
 
                 if (captchaGroup) captchaGroup.style.display = 'block';
-                // Initialize CAPTCHA
                 if (bookingCaptchaCode) setCaptcha(bookingCaptchaCode, bookingCaptchaInput);
 
                 submitBtn.disabled = false;
@@ -779,10 +916,11 @@ document.addEventListener('DOMContentLoaded', () => {
     homeBookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const docId = Number(doctorSelect.value);
+      const selectedId = String(doctorSelect.value || '').trim();
       const dateVal = dateInput.value;
 
-      selectedDoctor = loadedDoctors.find(d => d.id === docId);
+      updateDoctorDetails();
+
       if (!selectedDoctor || !dateVal) return;
 
       // Handle homepage redirection
@@ -823,9 +961,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Reviewing...";
-
       const payload = {
         patientName: name,
         patientEmail: email,
@@ -835,44 +970,72 @@ document.addEventListener('DOMContentLoaded', () => {
         doctorId: String(selectedDoctor.id),
         doctorName: selectedDoctor.name,
         doctorEmail: selectedDoctor.email,
-        hospital: selectedDoctor.hospital,
-        hospital_name: selectedDoctor.hospital,
+        hospital: selectedDoctor.hospital || selectedDoctor.hospital_name || 'N/A',
+        hospital_name: selectedDoctor.hospital || selectedDoctor.hospital_name || 'N/A',
         date: dateVal,
         time: selectedSlot,
         notes: notes
       };
 
-      try {
-        if (window.MedicaresAPI) {
-          await MedicaresAPI.appointments.create(payload);
-          if (window.MedicaresUI) {
-            MedicaresUI.notify('Success', 'Your appointment has been booked successfully!', 'success');
-          }
-          homeBookingForm.reset();
-          if (hospitalInput) hospitalInput.value = 'Auto-filled from selected doctor';
-          slotGrid.innerHTML = '<p class="muted" id="lp-booking-slots-placeholder" style="grid-column: span 4; text-align:center; font-size:0.82rem; color:var(--lp-muted); margin: 0.5rem 0;">Please select a doctor and date first to view available slots.</p>';
-          if (captchaGroup) captchaGroup.style.display = 'none';
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Review Booking";
+      openBookingReviewModal(payload, async () => {
+        // Double check availability via GET request right before POST request
+        let freshBooked = [];
+        try {
+          const freshRes = await MedicaresAPI.appointments.list({
+            doctorEmail: selectedDoctor.email,
+            date: dateVal
+          });
+          const list = Array.isArray(freshRes) ? freshRes : (freshRes?.appointments || []);
+          freshBooked = list
+            .filter(apt => {
+              if (!apt) return false;
+              const status = String(apt.status || 'BOOKED').toUpperCase();
+              const aptDate = apt.appointment_date || apt.date || '';
+              const aptDoctorId = String(apt.doctorId || apt.doctor_id || '');
+              const aptDoctorEmail = String(apt.doctorEmail || apt.doctor_email || '').toLowerCase();
+              const matchesDoctor = (aptDoctorId && aptDoctorId === String(selectedDoctor.id)) ||
+                                    (aptDoctorEmail && aptDoctorEmail === String(selectedDoctor.email).toLowerCase());
+              return (status === 'BOOKED' || status === 'CONFIRMED') && aptDate === dateVal && (matchesDoctor || !aptDoctorEmail);
+            })
+            .map(apt => String(apt.appointment_time || apt.time || '').trim().substring(0, 5));
+        } catch (e) {
+          freshBooked = [];
+        }
 
-          setTimeout(() => {
-            const token = MedicaresAPI.getAuthToken();
-            if (token) {
-              window.location.reload();
-            } else {
-              window.location.reload();
+        if (freshBooked.includes(selectedSlot)) {
+          if (window.MedicaresUI) {
+            MedicaresUI.notify('Slot Unavailable ⚠️', `The slot ${selectedSlot} for ${selectedDoctor.name} has already been booked. Please choose a different time slot.`, 'warning');
+          }
+          if (typeof checkSlots === 'function') checkSlots();
+          throw new Error('Slot already booked.');
+        }
+
+        try {
+          if (window.MedicaresAPI) {
+            await MedicaresAPI.appointments.create(payload);
+            if (window.MedicaresUI) {
+              MedicaresUI.notify('Success 🎉', 'Your appointment has been booked successfully!', 'success');
             }
-          }, 1500);
+            homeBookingForm.reset();
+            if (hospitalInput) hospitalInput.value = 'Auto-filled from selected doctor';
+            slotGrid.innerHTML = '<p class="muted" id="lp-booking-slots-placeholder" style="grid-column: span 4; text-align:center; font-size:0.82rem; color:var(--lp-muted); margin: 0.5rem 0;">Please select a doctor and date first to view available slots.</p>';
+            if (captchaGroup) captchaGroup.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Review Booking";
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1200);
+          }
+        } catch (err) {
+          console.error('Booking failed', err);
+          if (window.MedicaresUI) {
+            MedicaresUI.notify('Booking Failed', err.message || 'Unable to complete your request.', 'error');
+          }
+          setCaptcha(bookingCaptchaCode, bookingCaptchaInput);
+          throw err;
         }
-      } catch (err) {
-        console.error('Booking failed', err);
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Review Booking";
-        if (window.MedicaresUI) {
-          MedicaresUI.notify('Booking Failed', err.message || 'Unable to complete your request.', 'error');
-        }
-        setCaptcha(bookingCaptchaCode, bookingCaptchaInput);
-      }
+      });
     });
 
     initDoctors().then(() => {
