@@ -974,7 +974,10 @@ document.addEventListener('DOMContentLoaded', () => {
         hospital_name: selectedDoctor.hospital || selectedDoctor.hospital_name || 'N/A',
         date: dateVal,
         time: selectedSlot,
-        notes: notes
+        notes: notes,
+        appointmentType: 'NEW',
+        type: 'NEW',
+        bookingType: 'NEW'
       };
 
       openBookingReviewModal(payload, async () => {
@@ -1128,6 +1131,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedReconsultApt = null;
   let selectedReconsultSlot = null;
 
+  function getReconsultCutoffDate(aptDateStr) {
+    if (!aptDateStr) return '';
+    const cleanStr = String(aptDateStr).split('T')[0];
+    const parts = cleanStr.split('-');
+    if (parts.length === 3) {
+      const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      if (!isNaN(d.getTime())) {
+        d.setDate(d.getDate() + 14);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      }
+    }
+    return '';
+  }
+
   if (reconsultDate) {
     reconsultDate.min = new Date().toISOString().split('T')[0];
   }
@@ -1228,6 +1248,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 doctorEmail: apt.doctorEmail || apt.doctor_email || ''
               };
 
+              const aptDateVal = apt.appointment_date || apt.date || '';
+
               if (reconsultDocDisplay) reconsultDocDisplay.value = apt.doctorName || apt.doctor_name || '';
               if (reconsultHospDisplay) reconsultHospDisplay.value = apt.hospital || apt.hospital_name || '';
 
@@ -1239,14 +1261,76 @@ document.addEventListener('DOMContentLoaded', () => {
               if (nameHidden) nameHidden.value = apt.patientName || apt.patient_name || '';
               if (emailHidden) emailHidden.value = apt.patientEmail || apt.patient_email || '';
               if (phoneHidden) phoneHidden.value = apt.patientPhone || apt.phoneNumber || apt.phone || '';
-              if (notesHidden) notesHidden.value = `Follow-up for appointment on ${aptDate}`;
+              if (notesHidden) notesHidden.value = `Follow-up for appointment on ${aptDateVal}`;
 
               if (reconsultForm) reconsultForm.style.display = 'block';
               if (reconsultSlotsSection) reconsultSlotsSection.style.display = 'none';
-              if (reconsultDate) reconsultDate.value = '';
-              if (reconsultSubmitBtn) {
-                reconsultSubmitBtn.disabled = true;
-                reconsultSubmitBtn.textContent = 'Book Follow-up';
+
+              const todayStr = new Date().toISOString().split('T')[0];
+              const maxReconsultDateStr = getReconsultCutoffDate(aptDateVal);
+
+              let lockNoticeEl = document.getElementById('lp-reconsult-lock-notice');
+              if (!lockNoticeEl && reconsultDate) {
+                lockNoticeEl = document.createElement('div');
+                lockNoticeEl.id = 'lp-reconsult-lock-notice';
+                reconsultDate.parentNode.appendChild(lockNoticeEl);
+              }
+
+              const isExpired = maxReconsultDateStr && maxReconsultDateStr < todayStr;
+
+              if (isExpired) {
+                if (reconsultDate) {
+                  reconsultDate.value = '';
+                  reconsultDate.disabled = true;
+                  reconsultDate.min = todayStr;
+                  reconsultDate.removeAttribute('max');
+                }
+                if (lockNoticeEl) {
+                  lockNoticeEl.style.display = 'block';
+                  lockNoticeEl.style.cssText = 'display:block; margin-top:0.5rem; padding:0.65rem 0.85rem; background:rgba(239,68,68,0.08); border:1px solid #ef4444; border-radius:8px; font-size:0.8rem; color:#dc2626; line-height:1.4;';
+                  lockNoticeEl.innerHTML = `
+                    <strong>🔒 Reconsultation Period Expired (>14 Days)</strong><br/>
+                    Reconsultation is only valid within 14 days of original appointment (${aptDateVal}). Cutoff date was <strong>${maxReconsultDateStr}</strong>.<br/>
+                    <span style="font-weight:600; margin-top:0.25rem; display:block; color:#b91c1c;">Slots after 14 days are locked. You need to take a NEW appointment.</span>
+                    <button type="button" id="lp-reconsult-switch-new-btn" class="lp-btn lp-btn-primary" style="margin-top:0.5rem; width:100%; padding:0.45rem; font-size:0.78rem;">
+                      Book New Appointment →
+                    </button>
+                  `;
+                  setTimeout(() => {
+                    const switchBtn = document.getElementById('lp-reconsult-switch-new-btn');
+                    if (switchBtn) {
+                      switchBtn.onclick = () => {
+                        const tabNew = document.querySelector('[data-booking-tab="new"]');
+                        if (tabNew) tabNew.click();
+                      };
+                    }
+                  }, 0);
+                }
+                if (reconsultSubmitBtn) {
+                  reconsultSubmitBtn.disabled = true;
+                  reconsultSubmitBtn.textContent = 'Locked (>14 Days) - Take New Appointment';
+                }
+              } else {
+                if (reconsultDate) {
+                  reconsultDate.value = '';
+                  reconsultDate.disabled = false;
+                  reconsultDate.min = todayStr;
+                  if (maxReconsultDateStr) {
+                    reconsultDate.max = maxReconsultDateStr;
+                  }
+                }
+                if (lockNoticeEl) {
+                  lockNoticeEl.style.display = 'block';
+                  lockNoticeEl.style.cssText = 'display:block; margin-top:0.5rem; padding:0.5rem 0.75rem; background:rgba(37,99,235,0.08); border:1px solid var(--lp-primary); border-radius:8px; font-size:0.78rem; color:var(--lp-text); line-height:1.4;';
+                  lockNoticeEl.innerHTML = `
+                    ℹ️ <strong>Reconsultation Policy:</strong> Valid within 14 days of original appointment (${aptDateVal}).
+                    Slots after <strong>${maxReconsultDateStr}</strong> are locked. For dates beyond 14 days, you must book a NEW appointment.
+                  `;
+                }
+                if (reconsultSubmitBtn) {
+                  reconsultSubmitBtn.disabled = true;
+                  reconsultSubmitBtn.textContent = 'Book Follow-up';
+                }
               }
             });
 
@@ -1270,6 +1354,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!dateVal || !selectedReconsultApt) {
         reconsultSlotsSection.style.display = 'none';
         reconsultSubmitBtn.disabled = true;
+        return;
+      }
+
+      const aptDateVal = selectedReconsultApt.appointment_date || selectedReconsultApt.date || '';
+      const maxReconsultDateStr = getReconsultCutoffDate(aptDateVal);
+
+      if (maxReconsultDateStr && dateVal > maxReconsultDateStr) {
+        if (window.MedicaresUI) {
+          MedicaresUI.notify('Slots Locked 🔒', `Slots after 14 days (${maxReconsultDateStr}) are locked for reconsultation. Please book a New Appointment.`, 'error');
+        }
+        reconsultSlotsSection.style.display = 'none';
+        reconsultSubmitBtn.disabled = true;
+        reconsultSubmitBtn.textContent = 'Slots Locked (>14 Days) - Take New Appointment';
         return;
       }
 
@@ -1316,6 +1413,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const todayDateStr = todayLocal.toISOString().split('T')[0];
 
         const isToday = (selectedDateStr === todayDateStr);
+        const isPastDate = (selectedDateStr < todayDateStr);
+        const isBeyond14Days = (maxReconsultDateStr && selectedDateStr > maxReconsultDateStr);
+
         const currentHour = today.getHours();
         const currentMin = today.getMinutes();
 
@@ -1324,8 +1424,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const isBooked = bookedSlots.includes(slot);
 
           let isExpired = false;
-          const isPastDate = (selectedDateStr < todayDateStr);
-          if (isPastDate) {
+          if (isPastDate || isBeyond14Days) {
             isExpired = true;
           } else if (isToday) {
             const [slotH, slotM] = slot.split(':').map(Number);
@@ -1345,7 +1444,11 @@ document.addEventListener('DOMContentLoaded', () => {
           if (hr === 0) hr = 12;
           else if (hr > 12) hr -= 12;
 
-          if (isExpired) {
+          if (isBeyond14Days) {
+            btn.textContent = `${hr}:${mStr} ${suff} (Locked)`;
+            btn.style.opacity = '0.35';
+            btn.style.textDecoration = 'line-through';
+          } else if (isExpired) {
             btn.textContent = `${hr}:${mStr} ${suff} (Past)`;
             btn.style.opacity = '0.35';
             btn.style.textDecoration = 'line-through';
@@ -1389,6 +1492,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      const aptDateVal = selectedReconsultApt.appointment_date || selectedReconsultApt.date || '';
+      const maxReconsultDateStr = getReconsultCutoffDate(aptDateVal);
+      if (maxReconsultDateStr && reconsultDate.value > maxReconsultDateStr) {
+        if (window.MedicaresUI) MedicaresUI.notify('Validation Error 🔒', 'Slots after 14 days are locked for reconsultation. Please book a New Appointment.', 'error');
+        return;
+      }
+
       reconsultSubmitBtn.disabled = true;
       reconsultSubmitBtn.textContent = 'Booking Follow-up...';
 
@@ -1398,21 +1508,25 @@ document.addEventListener('DOMContentLoaded', () => {
         patientPhone: document.getElementById('lp-reconsult-patient-phone').value,
         phoneNumber: document.getElementById('lp-reconsult-patient-phone').value,
         phone: document.getElementById('lp-reconsult-patient-phone').value,
-        doctorId: String(selectedReconsultApt.doctorId || selectedReconsultApt.doctorId),
-        doctorName: selectedReconsultApt.doctorName,
-        doctorEmail: selectedReconsultApt.doctorEmail,
-        hospital: selectedReconsultApt.hospital,
-        hospital_name: selectedReconsultApt.hospital,
+        doctorId: String(selectedReconsultApt.doctorId || selectedReconsultApt.doctor_id || selectedReconsultApt.id || ''),
+        doctorName: selectedReconsultApt.doctorName || selectedReconsultApt.doctor_name || '',
+        doctorEmail: selectedReconsultApt.doctorEmail || selectedReconsultApt.doctor_email || '',
+        hospital: selectedReconsultApt.hospital || selectedReconsultApt.hospital_name || '',
+        hospital_name: selectedReconsultApt.hospital || selectedReconsultApt.hospital_name || '',
         date: reconsultDate.value,
         time: selectedReconsultSlot,
-        notes: document.getElementById('lp-reconsult-notes').value
+        notes: document.getElementById('lp-reconsult-notes').value,
+        appointmentType: 'RECONSULTATION',
+        type: 'RECONSULTATION',
+        bookingType: 'RECONSULTATION',
+        reconsultedAppointmentId: selectedReconsultApt.id || selectedReconsultApt.appointmentId || ''
       };
 
       try {
         if (window.MedicaresAPI) {
           await MedicaresAPI.appointments.create(payload);
           if (window.MedicaresUI) {
-            MedicaresUI.notify('Success', 'Your reconsultation follow-up has been booked successfully!', 'success');
+            MedicaresUI.notify('Success 🎉', 'Your reconsultation follow-up (Type: RECONSULTATION) has been booked successfully!', 'success');
           }
           reconsultForm.reset();
           reconsultForm.style.display = 'none';

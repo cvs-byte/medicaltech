@@ -765,7 +765,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       hospital_name: String(state.selectedDoctor.hospital || '').trim(),
       date: String(formData.date || '').trim(),
       time: String(formData.time || '').trim(),
-      notes: String(formData.notes || '').trim()
+      notes: String(formData.notes || '').trim(),
+      appointmentType: 'NEW',
+      type: 'NEW',
+      bookingType: 'NEW'
     };
 
     try {
@@ -894,7 +897,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       hospital_name: String(state.selectedDoctor.hospital || '').trim(),
       date: String(formData.date || '').trim(),
       time: String(formData.time || '').trim(),
-      notes: String(formData.notes || '').trim()
+      notes: String(formData.notes || '').trim(),
+      appointmentType: 'RECONSULTATION',
+      type: 'RECONSULTATION',
+      bookingType: 'RECONSULTATION'
     };
 
     try {
@@ -1199,7 +1205,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Reset date and time values for the reconsult form
             const reconsultDateNode = document.getElementById('reconsultDate');
-            if (reconsultDateNode) reconsultDateNode.value = '';
+            if (reconsultDateNode) {
+              reconsultDateNode.value = '';
+              const todayStr = new Date().toISOString().split('T')[0];
+              reconsultDateNode.min = todayStr;
+
+              const aptDateVal = selectedApt.date || selectedApt.appointment_date || '';
+              if (aptDateVal) {
+                const parts = String(aptDateVal).split('T')[0].split('-');
+                if (parts.length === 3) {
+                  const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                  d.setDate(d.getDate() + 14);
+                  const yyyy = d.getFullYear();
+                  const mm = String(d.getMonth() + 1).padStart(2, '0');
+                  const dd = String(d.getDate()).padStart(2, '0');
+                  const maxDateStr = `${yyyy}-${mm}-${dd}`;
+                  if (maxDateStr < todayStr) {
+                    reconsultDateNode.disabled = true;
+                    notify('Reconsultation Expired', `This appointment was on ${aptDateVal}. Reconsultation is only valid within 14 days (cutoff ${maxDateStr}). Please book a New Appointment.`, 'error');
+                  } else {
+                    reconsultDateNode.disabled = false;
+                    reconsultDateNode.max = maxDateStr;
+                  }
+                }
+              }
+            }
             const reconsultTimeNode = document.getElementById('reconsultTime');
             if (reconsultTimeNode) reconsultTimeNode.value = '';
 
