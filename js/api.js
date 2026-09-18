@@ -65,9 +65,6 @@ function clearAuthSession() {
   localStorage.removeItem(STORAGE_KEYS.user);
   localStorage.removeItem(STORAGE_KEYS.legacyUser);
   localStorage.removeItem(STORAGE_KEYS.profileCache);
-  if (typeof window !== 'undefined' && window.MedicaresAI && typeof window.MedicaresAI.clearChat === 'function') {
-    window.MedicaresAI.clearChat();
-  }
 }
 
 function getAuthUser() {

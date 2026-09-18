@@ -86,9 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const redirectTo = 'index.html';
 
         MedicaresAPI.clearAuthSession();
-        if (window.MedicaresAI && typeof window.MedicaresAI.clearChat === 'function') {
-          window.MedicaresAI.clearChat();
-        }
         notify('Signed out', 'Your Medicares session has been cleared.', 'success');
         window.setTimeout(() => {
           window.location.href = redirectTo;
