@@ -541,6 +541,32 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedDoctor = null;
     let selectedSlot = null;
 
+    // Initialize date picker trigger buttons
+    function initDatePickerTriggers() {
+      document.querySelectorAll('.lp-date-picker-trigger').forEach(btn => {
+        if (btn.dataset.initPicker) return;
+        btn.dataset.initPicker = 'true';
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const wrap = btn.closest('.lp-date-picker-wrap');
+          const input = wrap ? wrap.querySelector('input[type="date"]') : null;
+          if (input && !input.disabled) {
+            if (typeof input.showPicker === 'function') {
+              try {
+                input.showPicker();
+              } catch (err) {
+                input.focus();
+              }
+            } else {
+              input.focus();
+            }
+          }
+        });
+      });
+    }
+    initDatePickerTriggers();
+
     if (dateInput) {
       dateInput.min = new Date().toISOString().split('T')[0];
     }
@@ -911,6 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       doctorSelect.addEventListener('change', checkSlots);
       dateInput.addEventListener('change', checkSlots);
+      dateInput.addEventListener('input', checkSlots);
     }
 
     homeBookingForm.addEventListener('submit', async (e) => {
@@ -1349,7 +1376,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (reconsultDate) {
-    reconsultDate.addEventListener('change', async () => {
+    const handleReconsultDate = async () => {
       const dateVal = reconsultDate.value;
       if (!dateVal || !selectedReconsultApt) {
         reconsultSlotsSection.style.display = 'none';
@@ -1474,7 +1501,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error(err);
         reconsultSlotGrid.innerHTML = '<p class="muted" style="grid-column: span 4; text-align:center;">Unable to load slots.</p>';
       }
-    });
+    };
+
+    reconsultDate.addEventListener('change', handleReconsultDate);
+    reconsultDate.addEventListener('input', handleReconsultDate);
   }
 
   if (reconsultForm) {

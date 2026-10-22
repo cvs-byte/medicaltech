@@ -1681,6 +1681,132 @@ html[data-theme='dark'] .navbar-lp.scrolled {
   background: var(--lp-surface-solid);
 }
 
+/* Date Picker Container & Responsive Phone Typepad Handling */
+.lp-date-picker-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.lp-date-picker-wrap .lp-form-input {
+  width: 100%;
+  padding-right: 2.85rem;
+  color-scheme: light;
+}
+
+html[data-theme='dark'] .lp-date-picker-wrap .lp-form-input,
+[data-theme='dark'] .lp-date-picker-wrap .lp-form-input {
+  color-scheme: dark;
+}
+
+/* Ensure mobile tap on mm, dd, yyyy text segments opens the phone's keypad/typepad properly */
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  color: var(--lp-text);
+  font-family: inherit;
+  font-weight: 500;
+  cursor: text;
+}
+
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-text {
+  color: var(--lp-muted);
+  padding: 0 0.2rem;
+}
+
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-month-field,
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-day-field,
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-year-field {
+  color: var(--lp-text);
+  padding: 0.1rem 0.2rem;
+  border-radius: 4px;
+  cursor: text;
+  outline: none;
+}
+
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-month-field:focus,
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-day-field:focus,
+.lp-date-picker-wrap input[type="date"]::-webkit-datetime-edit-year-field:focus {
+  background-color: rgba(37, 99, 235, 0.18);
+  color: var(--lp-primary);
+}
+
+/* Position native calendar indicator over the trigger icon so native click/tap opens calendar */
+.lp-date-picker-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  width: 2.25rem;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* Prominent, styled calendar icon button visible across all themes and devices */
+.lp-date-picker-trigger {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: var(--lp-radius-sm, 8px);
+  color: var(--lp-primary);
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.lp-date-picker-trigger:hover {
+  background: var(--lp-primary);
+  color: #ffffff;
+  border-color: var(--lp-primary);
+  transform: translateY(-50%) scale(1.05);
+}
+
+html[data-theme='dark'] .lp-date-picker-trigger,
+[data-theme='dark'] .lp-date-picker-trigger {
+  background: rgba(37, 99, 235, 0.2);
+  border-color: rgba(37, 99, 235, 0.4);
+  color: #60a5fa;
+}
+
+html[data-theme='dark'] .lp-date-picker-trigger:hover,
+[data-theme='dark'] .lp-date-picker-trigger:hover {
+  background: var(--lp-primary);
+  color: #ffffff;
+}
+
+/* Fallback for standalone native date inputs */
+input[type="date"] {
+  color-scheme: light;
+}
+html[data-theme='dark'] input[type="date"],
+[data-theme='dark'] input[type="date"] {
+  color-scheme: dark;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 0.2rem;
+}
+html[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.2);
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
   .lp-hero-grid {
