@@ -35,7 +35,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (registerForm) {
     bindPasswordToggles(registerForm);
+    bindDatePicker(registerForm);
     registerForm.addEventListener('submit', submitRegister);
+  }
+
+  function bindDatePicker(form) {
+    const dobInput = form.querySelector('#dob') || form.querySelector('input[type="date"]');
+    const dobToggle = form.querySelector('.date-picker-toggle');
+
+    function openPicker() {
+      if (!dobInput || dobInput.disabled) return;
+      if (typeof dobInput.showPicker === 'function') {
+        try {
+          dobInput.showPicker();
+        } catch (e) {
+          dobInput.focus();
+        }
+      } else {
+        dobInput.focus();
+      }
+    }
+
+    if (dobToggle) {
+      dobToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openPicker();
+      });
+    }
+
+    if (dobInput) {
+      // Allow clicking anywhere on the input to open the date picker
+      dobInput.addEventListener('click', () => {
+        openPicker();
+      });
+      // Cap date of birth to today so future dates cannot be selected
+      const today = new Date().toISOString().split('T')[0];
+      dobInput.max = today;
+    }
   }
 
   function bindPasswordToggles(form) {

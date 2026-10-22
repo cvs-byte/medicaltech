@@ -20,9 +20,11 @@
   --radius-md: 16px;
   --radius-sm: 12px;
   --container: 1200px;
+  color-scheme: light;
 }
 
 :root[data-theme='dark'] {
+  color-scheme: dark;
   --background: #07111f;
   --surface: rgba(15, 23, 42, 0.72);
   --surface-strong: #0f172a;
@@ -642,6 +644,25 @@ button, input, select, textarea {
 .textarea:focus {
   border-color: rgba(37, 99, 235, 0.4);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* Native date input indicator styling across themes */
+input[type="date"] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] input[type="date"],
+[data-theme='dark'] input[type="date"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+:root[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.2);
 }
 
 .alert {

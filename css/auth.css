@@ -116,6 +116,64 @@
   cursor: pointer;
 }
 
+.date-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input-wrap input[type="date"] {
+  cursor: pointer;
+  padding-right: 2.85rem;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] .date-input-wrap input[type="date"],
+[data-theme='dark'] .date-input-wrap input[type="date"] {
+  color-scheme: dark;
+}
+
+/* Ensure native calendar picker indicator covers the trigger button for seamless click/tap */
+.date-input-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.date-picker-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.8rem;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1;
+  pointer-events: auto;
+  transition: color 150ms ease, transform 150ms ease;
+}
+
+.date-picker-toggle:hover {
+  color: var(--primary-dark);
+  transform: translateY(-50%) scale(1.08);
+}
+
+:root[data-theme='dark'] .date-picker-toggle,
+[data-theme='dark'] .date-picker-toggle {
+  color: #60a5fa;
+}
+
 .form-links {
   display: flex;
   flex-wrap: wrap;
